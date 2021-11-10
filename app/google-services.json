@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "689799040315",
+    "project_id": "fiery-rarity-324110",
+    "storage_bucket": "fiery-rarity-324110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689799040315:android:60b8e45d24d171ca983b1e",
+        "android_client_info": {
+          "package_name": "com.gracielo.projectta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689799040315-sg2v9ka9md39f6v2uumacot8tpab9e2n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmr_9HWDn6SUSbvBmqVlkXGzFhukvFak8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689799040315-sg2v9ka9md39f6v2uumacot8tpab9e2n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
