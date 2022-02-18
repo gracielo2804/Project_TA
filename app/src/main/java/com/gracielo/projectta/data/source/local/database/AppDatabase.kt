@@ -8,7 +8,7 @@ import com.gracielo.projectta.data.source.local.entity.UserEntity
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 
-@Database(entities = [UserEntity::class,],exportSchema = false,version=1)
+@Database(entities = [UserEntity::class],exportSchema = false,version=1)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun appDao(): AppDao
 

@@ -5,8 +5,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.model.DataUser
+import com.gracielo.projectta.data.model.DataUserProfile
+import com.gracielo.projectta.data.source.local.entity.UserEntity
 
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityLoginBinding
@@ -14,6 +20,8 @@ import com.gracielo.projectta.ui.datadiri.DataDiriActivity
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.ui.register.EmailVerificationActivity
 import com.gracielo.projectta.ui.register.RegisterActivity
+import com.gracielo.projectta.viewmodel.UserViewModel
+import com.gracielo.projectta.viewmodel.ViewModelFactory
 
 class TestLoginActivity : AppCompatActivity() {
 //
@@ -26,9 +34,12 @@ class TestLoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username=binding.usernameLog!!
-        val password=binding.passwordLog!!
-        val btnRegister=binding.btnToRegister!!
+        val viewModel =obtainViewModel(this@TestLoginActivity)
+        viewModel.getUser()?.observe(this,usersObserver)
+
+        val username= binding.usernameLog
+        val password= binding.passwordLog
+        val btnRegister= binding.btnToRegister
         val btnLogin = binding.login
 
 //        //Test Image
@@ -58,11 +69,25 @@ class TestLoginActivity : AppCompatActivity() {
                         startActivity(intent)
                     }
                     else if(it.dataUser?.emailVerified=="1"){
-                        apiServices.getUserProfileData(it.dataUser!!.id){ ApiResponses ->
+                        apiServices.getUserProfileData(it.dataUser.id){ ApiResponses ->
                             if(ApiResponses?.code==1){
+                                val datauser : DataUser = it.dataUser
+                                val dataUserProfile : DataUserProfile = ApiResponses.dataUserProfile!!
+                                val userEntity = UserEntity(
+                                    datauser.id,
+                                    datauser.name,
+                                    datauser.username,
+                                    datauser.email,
+                                    dataUserProfile.height,
+                                    dataUserProfile.weight,
+                                    dataUserProfile.gender,
+                                    dataUserProfile.kalori,
+                                    dataUserProfile.age
+                                )
+                                viewModel.insert(userEntity)
                                 var intentKirim = Intent(this, HomeActivity::class.java)
                                 intentKirim.putExtra("dataUser", it.dataUser)
-                                intentKirim.putExtra("dataUserProfile", it.dataUserProfile)
+                                intentKirim.putExtra("dataUserProfile", ApiResponses.dataUserProfile)
                                 startActivity(intentKirim)
                             }
                             else if(ApiResponses?.code==2){
@@ -81,5 +106,15 @@ class TestLoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+    private fun obtainViewModel(activity: AppCompatActivity): UserViewModel {
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory).get(UserViewModel::class.java)
+    }
+    private val usersObserver = Observer<UserEntity> { users ->
+        if (users != null) {
+            val intentt= Intent(this,HomeActivity::class.java)
+            startActivity(intentt)
+        }
     }
 }

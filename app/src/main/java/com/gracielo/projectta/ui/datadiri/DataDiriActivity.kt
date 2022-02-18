@@ -15,17 +15,23 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.DataUser
 import com.gracielo.projectta.data.model.DataUserProfile
+import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiResponses
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityDataDiriBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
+import com.gracielo.projectta.viewmodel.UserViewModel
+import com.gracielo.projectta.viewmodel.ViewModelFactory
 
 class DataDiriActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityDataDiriBinding
+    private lateinit var viewModel :UserViewModel
 
     var kalori=0.0
     var height=0
@@ -41,10 +47,14 @@ class DataDiriActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityDataDiriBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         if(intent.hasExtra("id")){
             id= intent.getStringExtra("id")!!
         }
+
+        viewModel=obtainViewModel(this@DataDiriActivity)
         val pbar=binding.pbarDataDiri
+
         kaloriText = binding.txtKalori
         var fab=binding.fabNextToBM
         var heightText=binding.etHeight
@@ -137,6 +147,7 @@ class DataDiriActivity : AppCompatActivity() {
             }
 
         })
+
         fab.setOnClickListener {
             if(heightText.text!!.isNotEmpty() && weightText.text!!.isNotEmpty() && ageText.text!!.isNotEmpty() && genderField.text!!.isNotEmpty()){
 
@@ -167,6 +178,18 @@ class DataDiriActivity : AppCompatActivity() {
                                 Log.d("DataDiri",dataUserProfile.toString() + " - " +dataUser.toString())
                                 if(dataUserProfile!=null && dataUser!=null){
                                     val intentKirim = Intent(this,HomeActivity::class.java)
+                                    val userEntity = UserEntity(
+                                        dataUser!!.id,
+                                        dataUser!!.name,
+                                        dataUser!!.username,
+                                        dataUser!!.email,
+                                        dataUserProfile!!.height,
+                                        dataUserProfile!!.weight,
+                                        dataUserProfile!!.gender,
+                                        dataUserProfile!!.kalori,
+                                        dataUserProfile!!.age
+                                    )
+                                    viewModel.insert(userEntity)
                                     intentKirim.putExtra("dataUser",dataUser)
                                     intentKirim.putExtra("dataUserProfile",dataUserProfile)
                                     pbar.visibility= View.INVISIBLE
@@ -203,6 +226,11 @@ class DataDiriActivity : AppCompatActivity() {
     }
     fun changeTextKalori(){
         kaloriText.text=kalori.toString()
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): UserViewModel {
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory).get(UserViewModel::class.java)
     }
 
 }
