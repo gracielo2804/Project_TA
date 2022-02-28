@@ -38,4 +38,8 @@
     <!-- 32% opacity black -->
     <color name="mtrl_scrim_color">#52000000</color>
 
+    <color name="sa_green">#1E9618</color>
+    <color name="sa_green_transparent">#801E9618</color>
+    <color name="sa_green_dark">#146310</color>
+
 </resources>

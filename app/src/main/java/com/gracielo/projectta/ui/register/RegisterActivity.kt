@@ -38,21 +38,33 @@ class RegisterActivity : AppCompatActivity() {
                     email = email.text.toString(),
                     nama = nama.text.toString(),
                 )
-//                Log.d("data",userReg.toString())
-                apiServices.addUser(userReg){
-                    Log.d("data",it.toString())
-                    if (it?.code==1){
-                        Toast.makeText(this, "Registered Successfully", Toast.LENGTH_SHORT).show()
-                        val dataUser = it.dataUser
-
-                        intent = Intent(this,EmailVerificationActivity::class.java)
-                        intent.putExtra("dataUser",dataUser)
-                        startActivity(intent)
-                    }
-                    else{
-                        Toast.makeText(this, "Error Registering new User", Toast.LENGTH_SHORT).show()
+                var statusUsername=false
+                apiServices.checkUsername(username.text.toString()){
+                    if(it?.code==1){
+                        statusUsername=true
                     }
                 }
+                if(statusUsername){
+                    apiServices.addUser(userReg){
+                        Log.d("data",it.toString())
+                        if (it?.code==1){
+                            Toast.makeText(this, "Registered Successfully", Toast.LENGTH_SHORT).show()
+                            val dataUser = it.dataUser
+
+                            intent = Intent(this,EmailVerificationActivity::class.java)
+                            intent.putExtra("dataUser",dataUser)
+                            startActivity(intent)
+                        }
+                        else{
+                            Toast.makeText(this, "Error Registering new User", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                else{
+                    Toast.makeText(this, "Username Already Taken", Toast.LENGTH_SHORT).show()
+                }
+//                Log.d("data",userReg.toString())
+
             }
             else{
                 Toast.makeText(this, "Password and Password Confirmation doesn't match", Toast.LENGTH_SHORT).show()

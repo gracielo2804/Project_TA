@@ -3,6 +3,7 @@ package com.gracielo.projectta.data.source.remote.network
 import android.os.Message
 import com.gracielo.expertsubmission1.core.data.source.remote.response.ListTVResponse
 import com.gracielo.projectta.data.model.AddUsers
+import com.gracielo.projectta.data.model.IngredientListResponse
 import com.gracielo.projectta.data.model.MessageResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -77,6 +78,19 @@ interface ApiEndPoint {
 //    fun registerUser(
 //        @Body userData:AddUsers
 //    ): Call<AddUsers>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun checkUsername(
+        @Field("function") function: String = "checkUsername",
+        @Field("username") username: String,
+    ): Call<MessageResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun getAllIngredients(
+        @Field("function") function: String = "getAllIngredients",
+    ): Call<IngredientListResponse>
 
     @GET("3/discover/tv")
     fun getTV(
