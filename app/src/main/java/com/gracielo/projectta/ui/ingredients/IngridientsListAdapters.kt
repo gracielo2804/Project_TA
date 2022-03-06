@@ -1,4 +1,4 @@
-package com.gracielo.projectta.ui.homepage
+package com.gracielo.projectta.ui.ingredients
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.databinding.IngridientsItemListCheckedBinding
 
 class IngridientsListAdapters(private val callback : IngridientsItemCallback) :
     PagedListAdapter<Ingredients, IngridientsListAdapters.ViewHolder>(DIFF_CALLBACK) {
@@ -30,9 +29,7 @@ class IngridientsListAdapters(private val callback : IngridientsItemCallback) :
         }
     }
 
-    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(
-        itemView
-    ) {
+    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(data: Ingredients) {
             Glide

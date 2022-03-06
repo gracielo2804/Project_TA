@@ -1,7 +1,6 @@
 package com.gracielo.projectta.ui.homepage
 
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,19 +8,17 @@ import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gracielo.projectta.R
-import com.gracielo.projectta.data.model.DataUser
 import com.gracielo.projectta.data.model.DataUserProfile
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.databinding.ActivityHomeBinding
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
-import android.content.DialogInterface
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import kotlin.system.exitProcess
+import com.gracielo.projectta.ui.ingredients.IngridientsList
+import com.gracielo.projectta.ui.setting.SettingActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -49,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
 
         val fabAdd = binding.fabAdd
         fabAdd.setOnClickListener {
-            intent = Intent(this,IngridientsList::class.java)
+            intent = Intent(this, IngridientsList::class.java)
             startActivity(intent)
         }
 
@@ -64,7 +61,9 @@ class HomeActivity : AppCompatActivity() {
 
                 }
                 R.id.mSetting -> {
-
+                    val intent = Intent(this,SettingActivity::class.java)
+                    finish()
+                    startActivity(intent)
                 }
                 R.id.mPerson -> {
 
@@ -94,7 +93,7 @@ class HomeActivity : AppCompatActivity() {
 
             } // A null listener allows the button to dismiss the dialog and take no further action.
             .setNegativeButton(android.R.string.no, null)
-            .setIcon(android.R.drawable.ic_dialog_alert)
+//            .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
     }
 

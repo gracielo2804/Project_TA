@@ -1,17 +1,14 @@
-package com.gracielo.projectta.ui.homepage
+package com.gracielo.projectta.ui.ingredients
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.databinding.IngridientsItemListCheckedBinding
 import com.gracielo.projectta.databinding.IngridientsItemListDeleteBinding
 
 class IngridientsListSelectedAdapters:

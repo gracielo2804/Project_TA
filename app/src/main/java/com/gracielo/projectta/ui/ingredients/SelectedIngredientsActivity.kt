@@ -1,23 +1,12 @@
-package com.gracielo.projectta.ui.homepage
+package com.gracielo.projectta.ui.ingredients
 
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.PagedList
-import androidx.paging.PositionalDataSource
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.databinding.ActivitySelectedIngredientsBinding
 import com.gracielo.projectta.viewmodel.IngredientsViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
-import com.gracielo.projectta.vo.Status
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 class SelectedIngredientsActivity : AppCompatActivity() {
 

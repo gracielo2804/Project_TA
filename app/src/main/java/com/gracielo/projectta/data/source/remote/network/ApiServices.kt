@@ -208,5 +208,25 @@ class ApiServices {
         return resultData
     }
 
+    fun searchRecipe(ingredientsParam:String , onResult: (RecipeResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.searchRecipe(
+            function = "searchRecipe",
+            ingredientsParam = ingredientsParam
+        ).enqueue(
+            object : Callback<RecipeResponse> {
+                override fun onFailure(call: Call<RecipeResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<RecipeResponse>, response: Response<RecipeResponse>) {
+                    val data = response.body()
+                    Log.d("dataapi",data.toString())
+                    onResult(data)
+                }
+            }
+        )
+    }
+
 
 }

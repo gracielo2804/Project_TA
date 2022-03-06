@@ -545,25 +545,30 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <FrameLayout
+        android:id="@+id/framecontainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/framecontainer"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bottomappbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom">
+                android:layout_gravity="bottom"
+                app:elevation="0dp">
+
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottomnavigationbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="16dp"
                     android:background="@android:color/white"
                     app:menu="@menu/bottom_nav_menu" />
             </com.google.android.material.bottomappbar.BottomAppBar>
@@ -573,8 +578,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_24"
-                app:layout_anchor="@+id/bottomappbar"
-                />
+                app:layout_anchor="@+id/bottomappbar" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </FrameLayout>
 
