@@ -33,4 +33,5 @@
     <string name="night_mode_auto">Automatic</string>
     <string name="night_mode_on">Night mode</string>
     <string name="night_mode_off">Day mode</string>
+    <string name="using_ingredients">Using Ingredients :</string>
 </resources>

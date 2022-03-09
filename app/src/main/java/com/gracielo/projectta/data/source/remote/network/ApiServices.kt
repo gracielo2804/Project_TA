@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gracielo.projectta.data.model.*
-import com.gracielo.projectta.data.source.local.entity.Ingredients
+import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
+import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -220,6 +221,26 @@ class ApiServices {
                     onResult(null)
                 }
                 override fun onResponse(call: Call<RecipeResponse>, response: Response<RecipeResponse>) {
+                    val data = response.body()
+                    Log.d("dataapi",data.toString())
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun getRecipeDetail(idRecipe:String , onResult: (RecipeDetailResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.getRecipeDetail(
+            function = "getRecipeDetail",
+            id_recipe = idRecipe
+        ).enqueue(
+            object : Callback<RecipeDetailResponse> {
+                override fun onFailure(call: Call<RecipeDetailResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<RecipeDetailResponse>, response: Response<RecipeDetailResponse>) {
                     val data = response.body()
                     Log.d("dataapi",data.toString())
                     onResult(data)

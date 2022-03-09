@@ -3,14 +3,9 @@ package com.gracielo.projectta.ui.setting
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
-import com.gracielo.projectta.data.model.RecipeResponseItem
-import com.gracielo.projectta.databinding.CardGridLayoutBinding
 import com.gracielo.projectta.databinding.SettingItemListBinding
 
 class SettingListAdapter : RecyclerView.Adapter<SettingListAdapter.ViewHolder>() {

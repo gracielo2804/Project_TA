@@ -1,4 +1,4 @@
-package com.gracielo.projectta.data.model
+package com.gracielo.projectta.data.model.recipe.search
 
 
 import android.os.Parcelable
@@ -23,7 +23,7 @@ data class RecipeResponseItem(
     var missedIngredientCount: Int,
 
     @SerializedName("missedIngredients")
-    var missedIngredients: List<MissedIngredient>,
+    var missedIngredients: List<MissedIngredient>?,
 
     @SerializedName("title")
     var title: String,
@@ -35,5 +35,5 @@ data class RecipeResponseItem(
     var usedIngredientCount: Int,
 
     @SerializedName("usedIngredients")
-    var usedIngredients: List<UsedIngredient>
+    var usedIngredients: List<UsedIngredient>?
 ) : Parcelable

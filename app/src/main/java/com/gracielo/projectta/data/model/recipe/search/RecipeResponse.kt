@@ -1,9 +1,7 @@
-package com.gracielo.projectta.data.model
+package com.gracielo.projectta.data.model.recipe.search
 
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 
 data class RecipeResponse(

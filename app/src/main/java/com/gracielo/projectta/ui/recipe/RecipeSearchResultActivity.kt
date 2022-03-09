@@ -1,12 +1,11 @@
 package com.gracielo.projectta.ui.recipe
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gracielo.projectta.data.model.RecipeResponseItem
+import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityRecipeSearchResultBinding
 import com.gracielo.projectta.viewmodel.IngredientsViewModel
@@ -36,13 +35,20 @@ class RecipeSearchResultActivity : AppCompatActivity() {
             apiServices.searchRecipe(paramIngredients){
                 if(it?.code==1){
                     dataRecipe= it.data as ArrayList<RecipeResponseItem>
+                    dataRecipe.forEach {item->
+                        val image = item.image.split("-")
+                        val imageandext =image[1].split(".")
+                        item.image="${image[0]}-636x393.${imageandext[1]}"
+                    }
                     adapters.setData(dataRecipe)
                 }
             }
         }
 
         adapters.onItemClick = {
-            Log.d("dataRecipe", it.toString())
+            val intent = Intent(this,RecipeDetailActivity::class.java)
+            intent.putExtra("recipe",it)
+            startActivity(intent)
         }
 
         rv_recipe.apply {

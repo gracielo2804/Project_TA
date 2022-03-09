@@ -10,4 +10,10 @@
         <item>@string/pref_night_on</item>
         <item>@string/pref_night_off</item>
     </string-array>
+
+    <string-array name="array_default_value">
+        <item>-</item>
+        <item>-</item>
+        <item>-</item>
+    </string-array>
 </resources>

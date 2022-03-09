@@ -1,8 +1,9 @@
 package com.gracielo.projectta.data.source.remote.network
 
-import android.os.Message
 import com.gracielo.expertsubmission1.core.data.source.remote.response.ListTVResponse
 import com.gracielo.projectta.data.model.*
+import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
+import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -96,6 +97,13 @@ interface ApiEndPoint {
         @Field("function") function: String = "searchRecipe",
         @Field("ingredientsParam") ingredientsParam: String
     ): Call<RecipeResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun getRecipeDetail(
+        @Field("function") function: String = "getRecipeDetail",
+        @Field("id_recipe") id_recipe: String
+    ): Call<RecipeDetailResponse>
 
     @GET("3/discover/tv")
     fun getTV(

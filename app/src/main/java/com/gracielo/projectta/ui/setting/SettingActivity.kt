@@ -10,13 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gracielo.projectta.R
-import com.gracielo.projectta.data.model.DataUser
-import com.gracielo.projectta.data.model.RecipeResponseItem
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.databinding.ActivitySettingBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.ui.login.TestLoginActivity
-import com.gracielo.projectta.ui.recipe.RecipeSearchResultAdapter
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.viewmodel.IngredientsViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel

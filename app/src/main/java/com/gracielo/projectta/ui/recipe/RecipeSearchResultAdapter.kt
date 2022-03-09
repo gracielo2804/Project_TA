@@ -9,9 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
-import com.gracielo.projectta.data.model.RecipeResponseItem
+import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
 import com.gracielo.projectta.databinding.CardGridLayoutBinding
-import com.gracielo.projectta.ui.ingredients.IngridientsListAdapters
 
 class RecipeSearchResultAdapter : RecyclerView.Adapter<RecipeSearchResultAdapter.ViewHolder>() {
 
