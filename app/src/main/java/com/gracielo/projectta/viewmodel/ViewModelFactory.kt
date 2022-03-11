@@ -28,6 +28,9 @@ class ViewModelFactory private constructor(private val appRepository: AppReposit
         else if (modelClass.isAssignableFrom(IngredientsViewModel::class.java)) {
             return IngredientsViewModel(appRepository) as T
         }
+        else if (modelClass.isAssignableFrom(ShoppingListViewModel::class.java)) {
+            return ShoppingListViewModel(appRepository.localDataSource.appDao) as T
+        }
 //        } else if (modelClass.isAssignableFrom(NoteAddUpdateViewModel::class.java)) {
 //            return NoteAddUpdateViewModel(mApplication) as T
 //        }

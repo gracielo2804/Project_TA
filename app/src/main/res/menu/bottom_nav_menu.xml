@@ -3,9 +3,9 @@
     <item android:id="@+id/mHome"
         android:title="Home"
         android:icon="@drawable/ic_home_24"/>
-    <item android:id="@+id/mSearch"
-        android:title="Search"
-        android:icon="@drawable/ic_search_24"/>
+    <item android:id="@+id/mShopList"
+        android:title="Shopping List"
+        android:icon="@drawable/ic_shop_list"/>
     <item android:id="@+id/mplaceholder"
         android:title=""
         />

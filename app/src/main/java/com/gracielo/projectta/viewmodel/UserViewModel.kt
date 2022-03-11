@@ -16,5 +16,4 @@ class UserViewModel (private val appDao: AppDao) : ViewModel()  {
     fun delete(users:UserEntity)= localDataSource?.deleteUser(users)
     fun getUser(): LiveData<UserEntity>? = localDataSource?.getUser()
 
-
 }

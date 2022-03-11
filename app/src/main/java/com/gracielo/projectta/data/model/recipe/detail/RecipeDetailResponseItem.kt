@@ -2,6 +2,7 @@ package com.gracielo.projectta.data.model.recipe.detail
 
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class RecipeDetailResponseItem(
     @SerializedName("aggregateLikes")
@@ -18,6 +19,9 @@ data class RecipeDetailResponseItem(
 
     @SerializedName("cuisines")
     var cuisines: List<Any>,
+
+    @SerializedName("nutrition")
+    var nutrition: Nutrition,
 
     @SerializedName("dairyFree")
     var dairyFree: Boolean,

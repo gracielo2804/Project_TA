@@ -4,6 +4,7 @@ import com.gracielo.expertsubmission1.core.data.source.remote.response.ListTVRes
 import com.gracielo.projectta.data.model.*
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
+import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -105,14 +106,21 @@ interface ApiEndPoint {
         @Field("id_recipe") id_recipe: String
     ): Call<RecipeDetailResponse>
 
-    @GET("3/discover/tv")
-    fun getTV(
-        @Query("api_key") api_key: String = "d41df99ac455e611fbf59daae71c5bf3",
-        @Query("language") language: String = "en-US",
-        @Query("sort_by") sort_by: String = "popularity.desc",
-        @Query("include_adult") include_adult: String = "false",
-        @Query("vote_average.gte") param: Int = 8,
-        @Query("release_date.gte") parameter: String = "2018-01-01",
+    @POST(" ")
+    @FormUrlEncoded
+    fun getSimilarRecipe(
+        @Field("function") function: String = "getSimilarRecipe",
+        @Field("id_recipe") id_recipe: String
+    ): Call<SimilarRecipeResponse>
 
-        ): Call<ListTVResponse>
+//    @GET("3/discover/tv")
+//    fun getTV(
+//        @Query("api_key") api_key: String = "d41df99ac455e611fbf59daae71c5bf3",
+//        @Query("language") language: String = "en-US",
+//        @Query("sort_by") sort_by: String = "popularity.desc",
+//        @Query("include_adult") include_adult: String = "false",
+//        @Query("vote_average.gte") param: Int = 8,
+//        @Query("release_date.gte") parameter: String = "2018-01-01",
+//
+//        ): Call<ListTVResponse>
 }

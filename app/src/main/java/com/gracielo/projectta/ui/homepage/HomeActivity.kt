@@ -57,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.mHome -> {
                     //Do Nothing cz this is the activity currently active
                 }
-                R.id.mSearch -> {
+                R.id.mShopList -> {
 
                 }
                 R.id.mSetting -> {

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.gracielo.projectta.data.model.*
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
+import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -241,6 +242,25 @@ class ApiServices {
                     onResult(null)
                 }
                 override fun onResponse(call: Call<RecipeDetailResponse>, response: Response<RecipeDetailResponse>) {
+                    val data = response.body()
+                    Log.d("dataapi",data.toString())
+                    onResult(data)
+                }
+            }
+        )
+    }
+    fun getSimilarRecipe(idRecipe:String , onResult: (SimilarRecipeResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.getSimilarRecipe(
+            function = "getSimilarRecipe",
+            id_recipe = idRecipe
+        ).enqueue(
+            object : Callback<SimilarRecipeResponse> {
+                override fun onFailure(call: Call<SimilarRecipeResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<SimilarRecipeResponse>, response: Response<SimilarRecipeResponse>) {
                     val data = response.body()
                     Log.d("dataapi",data.toString())
                     onResult(data)

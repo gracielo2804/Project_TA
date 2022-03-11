@@ -6,26 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.recipe.RecipeDetailActivity">
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_add_missing_ingredients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/dark_grey"
-        android:contentDescription="desc"
-        android:text="Add Missing To List"
-        android:textAlignment="center"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+<!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--        android:id="@+id/fab_add_missing_ingredients"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:backgroundTint="@color/dark_grey"-->
+<!--        android:contentDescription="desc"-->
+<!--        android:text="Add Missing To List"-->
+<!--        android:textAlignment="center"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_alignParentEnd="true" />-->
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_make_recipe"
-        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:contentDescription="desc"
-        android:text="Make Recipe"
+        android:text="Make Or Eat This Recipe !"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_alignParentBottom="true"
@@ -72,8 +72,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="64dp"
             android:layout_below="@+id/constraintLayout6"
-            android:layout_marginBottom="64dp"
+            android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingHorizontal="16dp"
             android:scrollbars="vertical">
@@ -83,6 +84,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="-16dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                android:paddingHorizontal="-16dp" />
 
             <TextView
                 android:id="@+id/textInformation"
@@ -105,13 +114,15 @@
                     android:src="@drawable/time" />
 
                 <TextView
+                    android:id="@+id/textTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:text="test"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,7 +134,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:text="Servings : "
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtServingsRecipe"
@@ -132,7 +143,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:text="test"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -147,7 +158,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:text="Calories : "
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtCaloriesRecipe"
@@ -156,7 +167,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:text="test"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -170,7 +181,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:text="Fat : "
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtFatRecipe"
@@ -179,7 +190,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:text="test"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -192,17 +203,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
-                    android:text="Sugar : "
-                    android:textColor="@color/black"/>
+                    android:text="Carbohydrate : "
+                    android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/txtSugarRecipe"
+                    android:id="@+id/txtCarbohydrateRecipe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:text="test"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -217,17 +228,25 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:text="Additional Info : "
-                    android:textColor="@color/black"></TextView>
+                    android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/txtFatRecipe"
+                    android:id="@+id/txtAdditionalInfoRecipe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:text="test"
-                    android:textColor="@color/black"></TextView>
+                    android:textColor="@color/black" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="-16dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                android:paddingHorizontal="-16dp" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -252,14 +271,29 @@
 
             </ListView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="-16dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                android:paddingHorizontal="-16dp" />
+
             <Button
-                android:id="@+id/buttonAddMissingList"
+                android:id="@+id/buttonAddShoppingList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/primary"
-                android:text="Add Missing ingredients to list" />
+                android:text="Add ingredients to shopping list" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="-16dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                android:paddingHorizontal="-16dp" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -279,10 +313,37 @@
                 android:scrollbarStyle="outsideOverlay"
                 android:scrollbars="vertical"
                 android:scrollingCache="true"
-                android:smoothScrollbar="true">
+                android:smoothScrollbar="true"></ListView>
 
-            </ListView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginHorizontal="-16dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                android:paddingHorizontal="-16dp" />
 
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Similar Recipe"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_list_similar_recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_marginHorizontal="-16dp"
+            android:layout_marginVertical="8dp"
+            android:background="#f2f2f2"
+            android:paddingHorizontal="-16dp" />
         </LinearLayout>
 
     </ScrollView>

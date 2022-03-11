@@ -85,7 +85,7 @@ class SettingActivity : AppCompatActivity() {
                     finish()
                     startActivity(intent)
                 }
-                R.id.mSearch -> {
+                R.id.mShopList -> {
 
                 }
                 R.id.mSetting -> {

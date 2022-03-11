@@ -18,7 +18,7 @@ class RecipeSearchResultActivity : AppCompatActivity() {
     private var paramIngredients:String = ""
     val apiServices= ApiServices()
     private var dataRecipe = ArrayList<RecipeResponseItem>()
-    val adapters = RecipeSearchResultAdapter()
+    private val adapters = RecipeSearchResultAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
