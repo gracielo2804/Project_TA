@@ -19,11 +19,25 @@ data class ShoppingListEntity(
     @NonNull
     @ColumnInfo(name="id_user")
     val id_user: String,
+
     @NonNull
     @ColumnInfo(name="id_recipe")
     val id_recipe: String,
 
     @NonNull
+    @ColumnInfo(name="recipe_name")
+    val recipe_name: String,
+
+    @NonNull
     @ColumnInfo(name="ingredient_list")
-    val ingredients_list: String
+    val ingredients_list: String,
+
+//    @NonNull
+//    @ColumnInfo(name="ingredient_list_info")
+//    val ingredients_list_info: String,
+
+//    @NonNull
+//    @ColumnInfo(name="images_link")
+//    val images_link: String,
+
 ):Parcelable

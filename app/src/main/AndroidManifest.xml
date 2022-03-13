@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_TA">
         <activity
+            android:name=".ui.shoppingList.ShoppingListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.recipe.RecipeDetailActivity"
             android:exported="false" />
         <activity

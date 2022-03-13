@@ -14,6 +14,7 @@ import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.databinding.ActivitySettingBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.ui.login.TestLoginActivity
+import com.gracielo.projectta.ui.shoppingList.ShoppingListActivity
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.viewmodel.IngredientsViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
@@ -86,7 +87,9 @@ class SettingActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.mShopList -> {
-
+                    val intent = Intent(this, ShoppingListActivity::class.java)
+                    finish()
+                    startActivity(intent)
                 }
                 R.id.mSetting -> {
                     //Do Nothing cz this is the activity currently active

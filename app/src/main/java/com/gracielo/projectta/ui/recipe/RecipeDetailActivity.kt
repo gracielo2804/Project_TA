@@ -51,17 +51,17 @@ class RecipeDetailActivity : AppCompatActivity() {
         }
         if(idUser!=""){
             shoppingListViewModel.getShoppingList(idUser).observe(this){
+                Log.d("DataShoppingList",it.toString())
                 listShoppingList.addAll(it)
             }
         }
         else{
            withDelay(500){
                shoppingListViewModel.getShoppingList(idUser).observe(this){
+                    Log.d("DataShoppingList",it.toString())
                     listShoppingList.addAll(it)
                }
            }
-
-
         }
 
         var fromSimilar = false
@@ -159,24 +159,22 @@ class RecipeDetailActivity : AppCompatActivity() {
                             var listIngredient = ""
                             for (i in recipeDataDetail?.extendedIngredients?.indices!!){
                                 if(i != recipeDataDetail!!.extendedIngredients.size-1){
-                                    listIngredient += "${recipeDataDetail!!.extendedIngredients[i].name};+"
+                                    listIngredient += "${recipeDataDetail!!.extendedIngredients[i].name} /? ${recipeDataDetail!!.extendedIngredients[i].original} ;-"
                                 }
-                                else listIngredient += recipeDataDetail!!.extendedIngredients[i].name
+                                else listIngredient += "${recipeDataDetail!!.extendedIngredients[i].name} /? ${recipeDataDetail!!.extendedIngredients[i].original}"
                             }
 //                            recipeDataDetail?.extendedIngredients?.forEach {
 //                                listIngredient.add(it.name)
 //                            }
-                            val idShopping_ist = "${idUser}-${idRecipe}"
-                            val shoppingListEntity = ShoppingListEntity(idShopping_ist,idUser,idRecipe,listIngredient)
+                            val idShoppingList = "${idUser}-${idRecipe}"
+                            val shoppingListEntity = ShoppingListEntity(idShoppingList,idUser,idRecipe,recipeDataDetail!!.title,listIngredient)
                             if(listShoppingList.isEmpty()){
                                 shoppingListViewModel.insert(shoppingListEntity)
-                                Toast.makeText(this,"Succesfully Add Recipe Ingredients List To Shopping List",Toast.LENGTH_SHORT).show()
-
                             }
                             else{
                                 var checkRecipe = true
                                 for(i in listShoppingList.indices){
-                                    if(shoppingListEntity.id_recipe==idRecipe){
+                                    if(listShoppingList[i].id_recipe==idRecipe){
                                         checkRecipe=false
                                     }
                                 }
@@ -184,7 +182,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                                     shoppingListViewModel.insert(shoppingListEntity)
                                     Toast.makeText(this,"Succesfully Add Recipe Ingredients List To Shopping List",Toast.LENGTH_SHORT).show()
                                 }
-                                else{
+                                else if (!checkRecipe){
                                     Toast.makeText(this,"This Recipe Ingredients List Already in Your Shopping List",Toast.LENGTH_SHORT).show()
                                 }
                             }

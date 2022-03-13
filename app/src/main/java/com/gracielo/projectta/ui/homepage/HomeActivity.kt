@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData
 import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.ui.ingredients.IngridientsList
 import com.gracielo.projectta.ui.setting.SettingActivity
+import com.gracielo.projectta.ui.shoppingList.ShoppingListActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -58,7 +59,9 @@ class HomeActivity : AppCompatActivity() {
                     //Do Nothing cz this is the activity currently active
                 }
                 R.id.mShopList -> {
-
+                    val intent = Intent(this,ShoppingListActivity::class.java)
+                    finish()
+                    startActivity(intent)
                 }
                 R.id.mSetting -> {
                     val intent = Intent(this,SettingActivity::class.java)
