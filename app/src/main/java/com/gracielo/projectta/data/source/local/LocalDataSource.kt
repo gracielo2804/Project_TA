@@ -9,6 +9,7 @@ import com.gracielo.projectta.data.source.local.database.AppDatabase
 import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import java.util.concurrent.Executors
 
 class LocalDataSource (val appDao: AppDao) {
@@ -42,6 +43,10 @@ class LocalDataSource (val appDao: AppDao) {
     fun deleteUser(user:UserEntity) = Executors.newSingleThreadExecutor().execute(){
         appDao.deleteUser(user)
     }
+
+    fun getUserNutrient():LiveData<UserNutrientsEntity> = appDao.getUserNutrient()
+    fun insertUserNutrient(nutrients: UserNutrientsEntity)= appDao.insertUserNutrient(nutrients)
+    fun updateUserNutrient(nutrients: UserNutrientsEntity)= appDao.updateUserNutrient(nutrients)
 
     fun getUser() : LiveData<UserEntity> = appDao.getUser()
 

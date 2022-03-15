@@ -134,5 +134,4 @@
             app:layout_anchor="@+id/bottomappbar" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

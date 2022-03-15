@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 
-@Database(entities = [UserEntity::class, Ingredients::class,ShoppingListEntity::class],exportSchema = false,version=1)
+@Database(entities = [UserEntity::class, Ingredients::class,ShoppingListEntity::class,UserNutrientsEntity::class],exportSchema = false,version=1)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun appDao(): AppDao
 

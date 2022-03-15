@@ -21,12 +21,15 @@ import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.DataUser
 import com.gracielo.projectta.data.model.DataUserProfile
 import com.gracielo.projectta.data.source.local.entity.UserEntity
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import com.gracielo.projectta.data.source.remote.network.ApiResponses
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityDataDiriBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 class DataDiriActivity : AppCompatActivity() {
 
@@ -156,6 +159,39 @@ class DataDiriActivity : AppCompatActivity() {
                 val dataDiri= DataUserProfile(
                     id,height,weight,gender,kalori,age
                 )
+
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formatted = current.format(formatter)
+                val makslemak = String.format("%.1f", (kalori*0.3)/90).toDouble()
+                val maksgula = String.format("%.1f", (kalori*0.2)/4).toDouble()
+                var makskarbo:Double=0.0
+                if(gender == "Female"){
+                    when {
+                        age<10 -> makskarbo=254.0
+                        age in 13..18 -> makskarbo = 275.0
+                        age in 19..29 -> makskarbo = 309.0
+                        age in 30..49 -> makskarbo = 323.0
+                        age in 50..64 -> makskarbo = 285.0
+                        age in 65..80 -> makskarbo = 285.0
+                        age > 80 -> makskarbo = 232.0
+                    }
+                }
+                else if(gender=="Male"){
+                    when {
+                        age<10 -> makskarbo=254.0
+                        age in 10..12 -> makskarbo = 289.0
+                        age in 13..15 -> makskarbo = 340.0
+                        age in 16..18 -> makskarbo = 368.0
+                        age in 19..29 -> makskarbo = 375.0
+                        age in 30..49 -> makskarbo = 394.0
+                        age in 50..64 -> makskarbo = 349.0
+                        age in 65..80 -> makskarbo = 309.0
+                        age > 80 -> makskarbo = 248.0
+                    }
+                }
+
+                val userNutrientsEntity = UserNutrientsEntity(id,kalori,0.0,makskarbo,0.0,maksgula,0.0,makslemak,0.0,formatted)
                 apiServices.addUserProfileData(dataDiri){
                     if(it?.code==1){
                         var dataUserProfile:DataUserProfile? = null
@@ -190,6 +226,7 @@ class DataDiriActivity : AppCompatActivity() {
                                         dataUserProfile!!.age
                                     )
                                     viewModel.insert(userEntity)
+                                    viewModel.insertUserNutrients(userNutrientsEntity)
                                     intentKirim.putExtra("dataUser",dataUser)
                                     intentKirim.putExtra("dataUserProfile",dataUserProfile)
                                     pbar.visibility= View.INVISIBLE
@@ -198,8 +235,6 @@ class DataDiriActivity : AppCompatActivity() {
                             },
                             2000 // value in milliseconds
                         )
-
-
                     }
 
                 }

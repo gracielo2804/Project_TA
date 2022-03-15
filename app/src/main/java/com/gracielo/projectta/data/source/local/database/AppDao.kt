@@ -3,9 +3,11 @@ package com.gracielo.projectta.data.source.local.database
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
+import com.gracielo.projectta.data.model.recipe.detail.Nutrients
 import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 
 
 @Dao
@@ -34,6 +36,13 @@ interface AppDao {
 
     @Insert(entity = ShoppingListEntity::class)
     fun insertShoppingList(shoppingListEntity: ShoppingListEntity)
+
+    @Query("SELECT * FROM userNutrients")
+    fun getUserNutrient(): LiveData<UserNutrientsEntity>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUserNutrient(nutrients: UserNutrientsEntity)
+    @Update
+    fun updateUserNutrient(nutrients: UserNutrientsEntity)
 
 
     @Update

@@ -18,8 +18,10 @@ import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponseItem
 import com.gracielo.projectta.data.model.recipe.search.MissedIngredient
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityRecipeDetailBinding
+import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.viewmodel.ShoppingListViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
@@ -36,7 +38,9 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var idRecipe:String
     private var listShoppingList = mutableListOf<ShoppingListEntity>()
     private val apiServices = ApiServices()
+    private var calories=0.0; var sugar=0.0; var fat=0.0; var carbohydrate = 0.0
     var idListIngridients = mutableListOf<Int>()
+    var hasMissing = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,7 +125,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                     .error(R.drawable.image_placeholder)
                     .into(binding.recipeImageDetail)
 
-                var hasMissing = false
+
 
                 val listIngredientsString = mutableListOf<String>()
                 for (i in recipeDataDetail!!.extendedIngredients.indices) {
@@ -188,7 +192,6 @@ class RecipeDetailActivity : AppCompatActivity() {
                             }
 
 
-
                         } // A null listener allows the button to dismiss the dialog and take no further action.
                         .setNegativeButton(android.R.string.no, null)
 //            .setIcon(android.R.drawable.ic_dialog_alert)
@@ -227,9 +230,10 @@ class RecipeDetailActivity : AppCompatActivity() {
                 for(i in recipeDataDetail?.nutrition!!.nutrients.indices){
 //                    Log.d("Nutrition Data", recipeDataDetail?.nutrition!!.nutrients[i].toString())
                     val nutrients = recipeDataDetail?.nutrition!!.nutrients[i]
-                    if(nutrients.name=="Calories") binding.txtCaloriesRecipe.text = "${nutrients.amount} ${nutrients.unit}"
-                    else if(nutrients.name=="Fat") binding.txtFatRecipe.text = "${nutrients.amount} ${nutrients.unit}"
-                    else if(nutrients.name=="Carbohydrates") binding.txtCarbohydrateRecipe.text = "${nutrients.amount} ${nutrients.unit}"
+                    if(nutrients.name=="Calories"){ binding.txtCaloriesRecipe.text = "${nutrients.amount} ${nutrients.unit}"; calories = nutrients.amount}
+                    else if(nutrients.name=="Fat"){ binding.txtFatRecipe.text = "${nutrients.amount} ${nutrients.unit}"; fat = nutrients.amount}
+                    else if(nutrients.name=="Carbohydrates"){ binding.txtCarbohydrateRecipe.text = "${nutrients.amount} ${nutrients.unit}" ; carbohydrate = nutrients.amount}
+                    else if(nutrients.name=="Sugar")sugar= nutrients.amount
                 }
                 var additionalInfo =""
                 if(recipeDataDetail!!.diets.isEmpty()){
@@ -270,10 +274,34 @@ class RecipeDetailActivity : AppCompatActivity() {
 //                            startActivity(intent)
 //                        }
 //                    }
-
-
                 }
             }
+        }
+
+        binding.fabMakeRecipe.setOnClickListener {
+            var messageString :String =""
+            val stringMissing = "there are still missing ingredients, it will cause inaccuracies in nutritional data between the recipe and your food. Continuing to eat it?"
+            val stringNotMissing = "Are you sure want to eat this? "
+            if(hasMissing){
+                messageString = "there are still missing ingredients, it will cause inaccuracies in nutritional data between the recipe and your food. Continuing to eat it?"
+            }
+            else if(!hasMissing){
+                messageString ="Are you sure want to eat this? "
+            }
+            AlertDialog.Builder(this)
+                .setTitle("Eat This Food")
+                .setMessage(messageString) // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton("Yes"
+                ) { _, _ ->
+                    eatFood()
+                    val intent = Intent(this,HomeActivity::class.java)
+                    finish()
+                    startActivity(intent)
+                } // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+//            .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
         }
         supportActionBar?.hide()
 
@@ -293,5 +321,22 @@ class RecipeDetailActivity : AppCompatActivity() {
     }
     fun withDelay(delay : Long, block : () -> Unit) {
         Handler().postDelayed(Runnable(block), delay)
+    }
+    fun eatFood(){
+        var userNutrientsEntity:UserNutrientsEntity? = null
+        viewModel.getUserNutrients().observe(this@RecipeDetailActivity){
+            if(it!=null){
+                userNutrientsEntity = it
+            }
+        }
+        withDelay(500){
+            if(userNutrientsEntity!=null){
+                userNutrientsEntity!!.lemak_consumed+=fat
+                userNutrientsEntity!!.karbo_consumed+=carbohydrate
+                userNutrientsEntity!!.gula_consumed+=sugar
+                userNutrientsEntity!!.kalori_consumed+=calories
+                viewModel.updateUserNutrients(userNutrientsEntity!!)
+            }
+        }
     }
 }

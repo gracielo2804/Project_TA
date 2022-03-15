@@ -177,7 +177,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="serif"
-                            android:text="Kalori"
+                            android:text="Calories"
                             android:textColor="#000000"
                             android:textSize="18sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +203,7 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="4dp"
                             android:fontFamily="serif"
-                            android:text="kal"
+                            android:text="calories"
                             android:textColor="#000000"
                             android:textSize="14sp"
                             app:layout_constraintStart_toEndOf="@+id/txtDashboardKalori"
@@ -218,7 +218,7 @@
                             android:fontFamily="serif"
                             android:text="50% Lebih Tinggi"
                             android:textColor="#000000"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             app:layout_constraintStart_toEndOf="@+id/imgDashboardKalori"
                             app:layout_constraintTop_toBottomOf="@+id/txtDashboardKalori" />
 
@@ -270,7 +270,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="serif"
-                            android:text="Gula"
+                            android:text="Sugar"
                             android:textColor="#000000"
                             android:textSize="18sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -311,7 +311,7 @@
                             android:fontFamily="serif"
                             android:text="50% Lebih Tinggi"
                             android:textColor="#000000"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             app:layout_constraintStart_toEndOf="@+id/imgDashboardGula"
                             app:layout_constraintTop_toBottomOf="@+id/txtDashboardGula" />
 
@@ -379,7 +379,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="serif"
-                            android:text="Lemak"
+                            android:text="Fat"
                             android:textColor="#000000"
                             android:textSize="18sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -420,7 +420,7 @@
                             android:fontFamily="serif"
                             android:text="50% Lebih Rendah"
                             android:textColor="#000000"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             app:layout_constraintStart_toEndOf="@+id/imgDashboardLemak"
                             app:layout_constraintTop_toBottomOf="@+id/txtDashboardLemak" />
 
@@ -472,7 +472,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="serif"
-                            android:text="Sodium"
+                            android:text="Carbohydrate"
                             android:textColor="#000000"
                             android:textSize="18sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -498,7 +498,7 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="5dp"
                             android:fontFamily="serif"
-                            android:text="mg"
+                            android:text="gram"
                             android:textColor="#000000"
                             android:textSize="14sp"
                             app:layout_constraintStart_toEndOf="@+id/txtDashboardGaram"
@@ -513,7 +513,7 @@
                             android:fontFamily="serif"
                             android:text="50% Lebih Rendah"
                             android:textColor="#000000"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             app:layout_constraintStart_toEndOf="@+id/imgDashboardGaram"
                             app:layout_constraintTop_toBottomOf="@+id/txtDashboardGaram" />
 

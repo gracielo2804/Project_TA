@@ -86,5 +86,8 @@ dependencies {
     //custom float button
     implementation "com.tunjid.androidx:material:1.0.0-rc06"
 
+    //DateTime Under Android SDK 26
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
     //RecyclerView Alphabetical
 }
