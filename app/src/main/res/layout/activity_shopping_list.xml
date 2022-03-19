@@ -7,7 +7,7 @@
     tools:context=".ui.shoppingList.ShoppingListActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout10"
+        android:id="@+id/headerShoppingList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="16dp"
@@ -24,7 +24,7 @@
 <!--            app:srcCompat="@drawable/back_icon" />-->
 
         <TextView
-            android:id="@+id/txtRecipeNameDetail"
+            android:id="@+id/headerShoppingListTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Shopping List"
@@ -36,6 +36,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/below_shadow"
+        app:layout_constraintBottom_toBottomOf="@id/headerShoppingList"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dropDownSearchByShoppingList"
@@ -46,7 +53,7 @@
         android:layout_marginTop="8dp"
         android:hint="Search By"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout10">
+        app:layout_constraintTop_toBottomOf="@+id/headerShoppingList">
 
         <AutoCompleteTextView
             android:id="@+id/dropDownAutoTextSearchByShoppingList"
@@ -68,7 +75,7 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dropDownSearchByShoppingList"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout10">
+        app:layout_constraintTop_toBottomOf="@+id/headerShoppingList">
 
 
         <com.google.android.material.textfield.TextInputEditText

@@ -74,5 +74,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/primary"
+        style="@style/Widget.Material3.Button.ElevatedButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

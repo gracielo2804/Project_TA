@@ -2,9 +2,11 @@ package com.gracielo.projectta.data.source.remote.network
 
 import com.gracielo.expertsubmission1.core.data.source.remote.response.ListTVResponse
 import com.gracielo.projectta.data.model.*
+import com.gracielo.projectta.data.model.nutrientsHistory.NutrientHistoryResponse
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
 import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
+import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeHistoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -112,6 +114,61 @@ interface ApiEndPoint {
         @Field("function") function: String = "getSimilarRecipe",
         @Field("id_recipe") id_recipe: String
     ): Call<SimilarRecipeResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun insertRecipeDetail(
+        @Field("function") function: String = "insertRecipeDetail",
+        @Field("id_recipe") id_recipe: String,
+        @Field("name") name : String,
+        @Field("ingredients_list") ingredients_list : String,
+        @Field("recipe_type") recipe_type : String,
+        @Field("calories") calories : Double ,
+        @Field("fat") fat: Double,
+        @Field("carbohydrate") carbohydrate: Double,
+        @Field("sugar") sugar: Double,
+        @Field("protein") protein: Double
+    ): Call<MessageResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun insertUserSearchRecipe(
+        @Field("function") function: String = "insertUserSearchRecipe",
+        @Field("id_user") id_users: String,
+        @Field("id_recipe") id_Recipe: String,
+        @Field("ingredients_list") ingredients_list : String,
+    ): Call<MessageResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun saveUserNutrientHistory(
+        @Field("function") function: String = "insertRecipeDetail",
+        @Field("id_users") id_users: String,
+        @Field("tanggal") tanggal : String,
+        @Field("calories") calories : Double ,
+        @Field("fat") fat: Double,
+        @Field("carbohydrate") carbohydrate: Double,
+        @Field("sugar") sugar: Double,
+        @Field("protein") protein: Double
+    ): Call<MessageResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun getUserSearchRecipeHistory(
+        @Field("function") function: String = "getUserSearchRecipeHistory",
+        @Field("id_users") id_users: String,
+    ): Call<SearchRecipeHistoryResponse>
+
+    @POST(" ")
+    @FormUrlEncoded
+    fun getUserNutrientHistory(
+        @Field("function") function: String = "getUserNutrientHistory",
+        @Field("id_users") id_users: String,
+    ): Call<NutrientHistoryResponse>
+
+
+
+
 
 //    @GET("3/discover/tv")
 //    fun getTV(

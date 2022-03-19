@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.databinding.ActivitySettingBinding
+import com.gracielo.projectta.ui.history.HistoryHomeActivity
 import com.gracielo.projectta.ui.homepage.HomeActivity
+import com.gracielo.projectta.ui.ingredients.IngridientsList
 import com.gracielo.projectta.ui.login.TestLoginActivity
 import com.gracielo.projectta.ui.shoppingList.ShoppingListActivity
 import com.gracielo.projectta.util.FunHelper
@@ -77,29 +79,42 @@ class SettingActivity : AppCompatActivity() {
             }
         }
 
+        val fabAdd = binding.fabAdd
+        fabAdd.setOnClickListener {
+            intent = Intent(this, IngridientsList::class.java)
+            startActivity(intent)
+        }
+
         val bottomMenu = binding.bottomnavigationbar
-        bottomMenu.selectedItemId= R.id.mSetting
+        bottomMenu.selectedItemId= R.id.mPerson
         bottomMenu.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.mHome -> {
+
                     val intent = Intent(this,HomeActivity::class.java)
                     finish()
                     startActivity(intent)
                 }
                 R.id.mShopList -> {
-                    val intent = Intent(this, ShoppingListActivity::class.java)
+                    val intent = Intent(this,ShoppingListActivity::class.java)
                     finish()
                     startActivity(intent)
                 }
-                R.id.mSetting -> {
-                    //Do Nothing cz this is the activity currently active
+                R.id.mHistory -> {
+                    val intent = Intent(this, HistoryHomeActivity::class.java)
+                    finish()
+                    startActivity(intent)
                 }
                 R.id.mPerson -> {
-
+                    //Do Nothing cz this is the activity currently active
+//                    val intent = Intent(this,SettingActivity::class.java)
+//                    finish()
+//                    startActivity(intent)
                 }
             }
             true
         }
+        supportActionBar?.hide()
     }
 
     override fun onBackPressed() {

@@ -4,9 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gracielo.projectta.data.model.*
+import com.gracielo.projectta.data.model.nutrientsHistory.NutrientHistoryResponse
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
+import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponseItem
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
 import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
+import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeHistoryResponse
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -268,6 +272,154 @@ class ApiServices {
             }
         )
     }
+    fun insertRecipeDetail(recipeDetail : RecipeDetailResponseItem,  onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        var listIngredient = ""
+        for (i in recipeDetail.extendedIngredients.indices){
+            if(i != recipeDetail.extendedIngredients.size-1){
+                listIngredient += "${recipeDetail.extendedIngredients[i].name} /? ${recipeDetail.extendedIngredients[i].original} ;-"
+            }
+            else listIngredient += "${recipeDetail.extendedIngredients[i].name} /? ${recipeDetail.extendedIngredients[i].original}"
+        }
+        var additionalInfo =""
+        if(recipeDetail.diets.isEmpty()){
+            additionalInfo =" - "
+        }
+        else {
+            for(i in recipeDetail.diets.indices){
+                if(i< recipeDetail.diets.size-1){
+                    additionalInfo += "${recipeDetail.diets[i]} - "
+                }
+                else additionalInfo += recipeDetail.diets[i]
+            }
+        }
+        var calories =0.0
+        var fat =0.0
+        var carbohydrate =0.0
+        var sugar =0.0
+        var protein=0.0
+        for(i in recipeDetail.nutrition.nutrients.indices){
+            val nutrients = recipeDetail.nutrition.nutrients[i]
+            if(nutrients.name=="Calories") calories = nutrients.amount
+            else if(nutrients.name=="Fat") fat = nutrients.amount
+            else if(nutrients.name=="Carbohydrates") carbohydrate = nutrients.amount
+            else if(nutrients.name=="Sugar")sugar= nutrients.amount
+            else if(nutrients.name=="Protein")protein= nutrients.amount
+        }
+        retrofit.insertRecipeDetail(
+            function = "insertRecipeDetail",
+            id_recipe = recipeDetail.id.toString(),
+            name = recipeDetail.title,
+            ingredients_list = listIngredient,
+            recipe_type = additionalInfo,
+            calories = calories,
+            fat = fat,
+            carbohydrate = carbohydrate,
+            sugar = sugar,
+            protein = protein
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+    fun insertUserSearchRecipe(id_user:String, id_recipe:String,ingredientsList:String,  onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.insertUserSearchRecipe(
+            function = "insertUserSearchRecipe",
+            id_users = id_user,
+            ingredients_list = ingredientsList,
+            id_Recipe = id_recipe,
 
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
 
+    fun saveUserNutrientHistory(userNutrients: UserNutrientsEntity ,  onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        var listIngredient = ""
+        var id_user= userNutrients.id
+        var calories =userNutrients.kalori_consumed
+        var fat =userNutrients.lemak_consumed
+        var carbohydrate =userNutrients.karbo_consumed
+        var sugar =userNutrients.gula_consumed
+        var protein=userNutrients.protein_consumed
+        var tanggal =userNutrients.tanggal
+        retrofit.saveUserNutrientHistory(
+            function = "saveUserNutrientHistory",
+            id_users=id_user,
+            tanggal = tanggal,
+            calories = calories,
+            fat = fat,
+            carbohydrate = carbohydrate,
+            sugar = sugar,
+            protein = protein
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun getUserSearchRecipeHistory(id_user:String,  onResult: (SearchRecipeHistoryResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.getUserSearchRecipeHistory(
+            function = "getUserSearchRecipeHistory",
+            id_users = id_user
+        ).enqueue(
+            object : Callback<SearchRecipeHistoryResponse> {
+                override fun onFailure(call: Call<SearchRecipeHistoryResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<SearchRecipeHistoryResponse>, response: Response<SearchRecipeHistoryResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun getUserNutrientHistory(id_user:String,  onResult: (NutrientHistoryResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.getUserNutrientHistory(
+            function = "getUserNutrientHistory",
+            id_users = id_user
+        ).enqueue(
+            object : Callback<NutrientHistoryResponse> {
+                override fun onFailure(call: Call<NutrientHistoryResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<NutrientHistoryResponse>, response: Response<NutrientHistoryResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
 }

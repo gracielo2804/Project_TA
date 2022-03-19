@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_TA">
         <activity
+            android:name=".ui.history.HistoryHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.shoppingList.ShoppingListActivity"
             android:exported="false" />
         <activity
@@ -74,8 +77,7 @@
         </activity>
         <activity
             android:name=".ui.login.TestLoginActivity"
-            android:exported="true"
-            android:label="@string/title_activity_test_login">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

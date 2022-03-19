@@ -35,7 +35,7 @@ class SelectedIngredientsActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
             adapter = adapters
         }
-        fastScroller.setRecyclerView(recyclerView)
+//        fastScroller.setRecyclerView(recyclerView)
 
         viewModel.getSelectedIngredients().observe(this){ listIngredients ->
             if(listIngredients!=null){

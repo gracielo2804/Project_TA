@@ -47,6 +47,14 @@ data class UserNutrientsEntity(
     @ColumnInfo(name="lemak_consumed")
     var lemak_consumed : Double,
 
+    @NonNull
+    @ColumnInfo(name="max_protein")
+    var maxProtein : Double,
+
+    @NonNull
+    @ColumnInfo(name="protein_consumed")
+    var protein_consumed : Double,
+
     @ColumnInfo(name = "date")
     var tanggal : String,
 ): Parcelable

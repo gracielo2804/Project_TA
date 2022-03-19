@@ -5,19 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.homepage.HomeActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerHomePage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.core.widget.NestedScrollView
+        <!--        <ImageView-->
+        <!--            android:id="@+id/imageView6"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="8dp"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:srcCompat="@drawable/back_icon" />-->
+
+        <TextView
+            android:id="@+id/headerHomePageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shopping List"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/below_shadow"
+        app:layout_constraintBottom_toBottomOf="@id/headerHomePage"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
         android:paddingTop="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerHomePage"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="75dp"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -462,7 +500,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/sodium" />
+                                app:srcCompat="@drawable/carbohydrate" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
@@ -531,6 +569,118 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:paddingRight="24dp"
+                        android:background="@drawable/corner_radius"
+                        android:backgroundTint="#FBF8D7">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayoutBawah1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/corner_image"
+                            android:backgroundTint="#FFFFFF"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:id="@+id/imageViewBawah1"
+                                android:layout_width="47dp"
+                                android:layout_height="44dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/protein" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/textViewBawah1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="serif"
+                            android:text="Protein"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutBawah1" />
+
+                        <TextView
+                            android:id="@+id/txtDashboardProtein"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="serif"
+                            android:text="15/30"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewBawah1" />
+
+                        <TextView
+                            android:id="@+id/textViewgramBawah1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="serif"
+                            android:text="gram"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/txtDashboardProtein"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewBawah1" />
+
+                        <TextView
+                            android:id="@+id/txtPersenProtein"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="serif"
+                            android:text="100% Lebih Rendah"
+                            android:layout_marginRight="16dp"
+                            android:textColor="#000000"
+                            android:textSize="11sp"
+                            app:layout_constraintStart_toEndOf="@+id/imgDashboardProtein"
+                            app:layout_constraintTop_toBottomOf="@+id/txtDashboardProtein" />
+
+                        <ImageView
+                            android:id="@+id/imgDashboardProtein"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtDashboardProtein"
+                            app:srcCompat="@drawable/arrowdown" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </LinearLayout>
+
+
+
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyle"
@@ -544,7 +694,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/framecontainer"

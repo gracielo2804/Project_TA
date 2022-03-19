@@ -190,8 +190,9 @@ class DataDiriActivity : AppCompatActivity() {
                         age > 80 -> makskarbo = 248.0
                     }
                 }
+                val maksProtein = weight*1.5
 
-                val userNutrientsEntity = UserNutrientsEntity(id,kalori,0.0,makskarbo,0.0,maksgula,0.0,makslemak,0.0,formatted)
+                val userNutrientsEntity = UserNutrientsEntity(id,kalori,0.0,makskarbo,0.0,maksgula,0.0,makslemak,0.0,maksProtein,0.0,formatted)
                 apiServices.addUserProfileData(dataDiri){
                     if(it?.code==1){
                         var dataUserProfile:DataUserProfile? = null

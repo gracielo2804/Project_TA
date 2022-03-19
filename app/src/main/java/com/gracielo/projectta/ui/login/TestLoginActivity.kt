@@ -5,11 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.DataUser
 import com.gracielo.projectta.data.model.DataUserProfile
 import com.gracielo.projectta.data.source.local.entity.UserEntity
@@ -114,6 +111,7 @@ class TestLoginActivity : AppCompatActivity() {
     private val usersObserver = Observer<UserEntity> { users ->
         if (users != null) {
             val intentt= Intent(this,HomeActivity::class.java)
+            intentt.putExtra("datauserentity",users)
             startActivity(intentt)
         }
     }

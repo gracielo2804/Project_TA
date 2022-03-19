@@ -36,7 +36,7 @@ class IngridientsList : AppCompatActivity(), IngridientsItemCallback {
         val recyclerView = binding.rvIngridientsList
         val fastScroller = binding.fastScroller
         adapters = IngridientsListAdapters(this@IngridientsList)
-        fastScroller.setRecyclerView(recyclerView)
+//        fastScroller.setRecyclerView(recyclerView)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context)

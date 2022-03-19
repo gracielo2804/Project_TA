@@ -188,6 +188,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtFieldNameReg"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/primary"
+        style="@style/Widget.Material3.Button.ElevatedButton"
         app:layout_constraintVertical_bias="0.2" />
 
     <ProgressBar

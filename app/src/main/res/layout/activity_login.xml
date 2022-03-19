@@ -126,8 +126,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="64dp"
         android:text="To Register"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        style="@style/Widget.Material3.Button.ElevatedButton"
         app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintVertical_bias="0.2" />
 
@@ -144,16 +148,5 @@
         app:layout_constraintStart_toStartOf="@+id/txtFieldPasswordLog"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
-
-    <ImageView
-        android:id="@+id/testImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnToRegister"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gracielo.projectta.databinding.ActivityShoppingListBinding
 import com.gracielo.projectta.R
+import com.gracielo.projectta.ui.history.HistoryHomeActivity
 import com.gracielo.projectta.ui.homepage.HomeActivity
+import com.gracielo.projectta.ui.ingredients.IngridientsList
 import com.gracielo.projectta.ui.setting.SettingActivity
 import com.gracielo.projectta.viewmodel.ShoppingListViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
@@ -74,6 +76,12 @@ class ShoppingListActivity : AppCompatActivity() {
 
                 }
             }
+
+            val fabAdd = binding.fabAdd
+            fabAdd.setOnClickListener {
+                intent = Intent(this, IngridientsList::class.java)
+                startActivity(intent)
+            }
             val bottomMenu = binding.bottomnavigationbar
             bottomMenu.selectedItemId= R.id.mShopList
             bottomMenu.setOnItemSelectedListener {
@@ -89,14 +97,16 @@ class ShoppingListActivity : AppCompatActivity() {
 //                        finish()
 //                        startActivity(intent)
                     }
-                    R.id.mSetting -> {
-                        val intent = Intent(this, SettingActivity::class.java)
+                    R.id.mHistory -> {
+                        val intent = Intent(this, HistoryHomeActivity::class.java)
                         finish()
                         startActivity(intent)
 
                     }
                     R.id.mPerson -> {
-
+                        val intent = Intent(this, SettingActivity::class.java)
+                        finish()
+                        startActivity(intent)
                     }
                 }
                 true

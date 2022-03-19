@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.setting.SettingActivity">
+    tools:context=".ui.history.HistoryHomeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/headerSetting"
+        android:id="@+id/headerHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="16dp"
@@ -15,10 +15,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/headerSettingTitle"
+            android:id="@+id/headerHistoryTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Setting"
+            android:text="History"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -33,16 +33,16 @@
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:background="@drawable/below_shadow"
-        app:layout_constraintBottom_toBottomOf="@id/headerSetting"
+        app:layout_constraintBottom_toBottomOf="@id/headerHistory"
         app:layout_constraintStart_toStartOf="parent"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_setting_list"
+        android:id="@+id/rv_history_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerSetting" />
+        app:layout_constraintTop_toBottomOf="@id/headerHistory" />
 
     <FrameLayout
         android:id="@+id/framecontainer"

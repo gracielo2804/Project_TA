@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 
 
 class RecipeDetailActivity : AppCompatActivity() {
+
     private lateinit var binding :ActivityRecipeDetailBinding
     private var recipeData: RecipeResponseItem? = null
     private var recipeDataDetail: RecipeDetailResponseItem? = null
@@ -38,7 +39,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var idRecipe:String
     private var listShoppingList = mutableListOf<ShoppingListEntity>()
     private val apiServices = ApiServices()
-    private var calories=0.0; var sugar=0.0; var fat=0.0; var carbohydrate = 0.0
+    private var calories=0.0; var sugar=0.0; var fat=0.0; var carbohydrate = 0.0;var protein=0.0
     var idListIngridients = mutableListOf<Int>()
     var hasMissing = false
 
@@ -110,7 +111,10 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         apiServices.getRecipeDetail(idRecipe){
             if(it?.code==1){
+
                 recipeDataDetail= it.data
+                apiServices.insertRecipeDetail(recipeDataDetail!!) {}
+                var dataIngredients=""
 //                recipeDataDetail?.image = recipeData!!.image
                 binding.imageView6.setOnClickListener {
                     finish()
@@ -129,8 +133,15 @@ class RecipeDetailActivity : AppCompatActivity() {
 
                 val listIngredientsString = mutableListOf<String>()
                 for (i in recipeDataDetail!!.extendedIngredients.indices) {
-                    val recipe = recipeDataDetail!!.extendedIngredients[i]
                     var ingredientsStringItem = "\u2022 ${recipeDataDetail!!.extendedIngredients[i].original}"
+                    if(i != recipeDataDetail!!.extendedIngredients.size-1){
+                        dataIngredients += "${recipeDataDetail!!.extendedIngredients[i].name}, "
+                    }
+                    else{
+                        dataIngredients += recipeDataDetail!!.extendedIngredients[i].name
+                    }
+
+
                     if(!fromSimilar){
                         for(j in listMissing.indices){
                             if(listMissing[j].id == recipeDataDetail!!.extendedIngredients[i].id ){
@@ -153,6 +164,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                     }
                     listIngredientsString.add(ingredientsStringItem)
                 }
+                apiServices.insertUserSearchRecipe(idUser,idRecipe,dataIngredients){}
                 binding.buttonAddShoppingList.setOnClickListener {
                     AlertDialog.Builder(this)
                         .setTitle("Add To Shopping List")
@@ -233,7 +245,8 @@ class RecipeDetailActivity : AppCompatActivity() {
                     if(nutrients.name=="Calories"){ binding.txtCaloriesRecipe.text = "${nutrients.amount} ${nutrients.unit}"; calories = nutrients.amount}
                     else if(nutrients.name=="Fat"){ binding.txtFatRecipe.text = "${nutrients.amount} ${nutrients.unit}"; fat = nutrients.amount}
                     else if(nutrients.name=="Carbohydrates"){ binding.txtCarbohydrateRecipe.text = "${nutrients.amount} ${nutrients.unit}" ; carbohydrate = nutrients.amount}
-                    else if(nutrients.name=="Sugar")sugar= nutrients.amount
+                    else if(nutrients.name=="Sugar"){binding.txtSugarRecipe.text = "${nutrients.amount} ${nutrients.unit}";sugar= nutrients.amount}
+                    else if(nutrients.name=="Protein"){binding.txtProteinRecipe.text = "${nutrients.amount} ${nutrients.unit}";protein= nutrients.amount}
                 }
                 var additionalInfo =""
                 if(recipeDataDetail!!.diets.isEmpty()){
@@ -335,6 +348,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                 userNutrientsEntity!!.karbo_consumed+=carbohydrate
                 userNutrientsEntity!!.gula_consumed+=sugar
                 userNutrientsEntity!!.kalori_consumed+=calories
+                userNutrientsEntity!!.protein_consumed+=protein
                 viewModel.updateUserNutrients(userNutrientsEntity!!)
             }
         }
