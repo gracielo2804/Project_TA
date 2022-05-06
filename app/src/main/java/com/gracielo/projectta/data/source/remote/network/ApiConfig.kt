@@ -18,7 +18,8 @@ object ApiConfig {
     fun provideApiService(): ApiEndPoint {
         val retrofit = Retrofit.Builder()
             .baseUrl(  //tipe method pada web service
-                "http://192.168.0.109/P10-myservice_php/myservice/master.php/")
+                "https://skripsicielo.masuk.id/")
+//                "http://192.168.0.109/P10-myservice_php/myservice/master.php/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(provideOkHttpClient())
             .build()

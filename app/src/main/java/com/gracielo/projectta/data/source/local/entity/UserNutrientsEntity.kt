@@ -17,7 +17,7 @@ data class UserNutrientsEntity(
 
     @NonNull
     @ColumnInfo(name="max_kalori")
-    val maxKalori : Double,
+    var maxKalori : Double,
 
     @NonNull
     @ColumnInfo(name="kalori_consumed")
@@ -25,7 +25,7 @@ data class UserNutrientsEntity(
 
     @NonNull
     @ColumnInfo(name="max_karbo")
-    val maxKarbo : Double,
+    var maxKarbo : Double,
 
     @NonNull
     @ColumnInfo(name="karbo_consumed")
@@ -33,7 +33,7 @@ data class UserNutrientsEntity(
 
     @NonNull
     @ColumnInfo(name="max_gula")
-    val maxGula : Double,
+    var maxGula : Double,
 
     @NonNull
     @ColumnInfo(name="gula_consumed")
@@ -41,7 +41,7 @@ data class UserNutrientsEntity(
 
     @NonNull
     @ColumnInfo(name="max_lemak")
-    val maxLemak : Double,
+    var maxLemak : Double,
 
     @NonNull
     @ColumnInfo(name="lemak_consumed")

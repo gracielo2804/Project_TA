@@ -49,123 +49,41 @@
         android:layout_height="wrap_content"
         android:fillViewport="true"
         android:paddingTop="10sp"
+        android:paddingBottom="64dp"
         app:layout_constraintTop_toBottomOf="@id/headerHomePage"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="75dp"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:paddingBottom="175dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="serif"
-                    android:text="Welcome, "
-                    android:textColor="#393939"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textUserLoginHome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="serif"
-                    android:text="Gracielo Justine Santoso"
-                    android:textColor="#393939"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toEndOf="@+id/textView"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
+                    android:id="@+id/textViewNutrientHome"
                     android:layout_width="match_parent"
-                    android:layout_height="225dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/corner_radius"
-                    android:backgroundTint="#3c415f"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp"
-                    android:src="@drawable/gradient"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:text="Ayo lakukan scan dan check nutrisi makanan kamu, jadi kesehatanmu dalam jalur yang benar."
-                        android:textAlignment="textEnd"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.483"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:text="Mau Makan Apa Kamu Hari Ini ?"
-                        android:textAlignment="textStart"
-                        android:textColor="#FFFFFF"
-                        android:textSize="22sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/buttonToCamera"
-                        android:layout_width="113dp"
-                        android:layout_height="37dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="28dp"
-                        android:background="@drawable/corner_radius"
-                        android:backgroundTint="#54c1fb"
-                        android:fontFamily="serif"
-                        android:text="Upload Now"
-                        android:textColor="#FFFFFF"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="183dp"
-                    android:layout_height="133dp"
-                    android:layout_marginTop="165dp"
-                    android:scaleType="fitXY"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView"
-                    app:srcCompat="@drawable/food" />
-
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Track Your Daily Nutrition"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <View
+                    android:id="@+id/pemisahTextNutrientHomePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#f2f2f2"
+                    android:paddingHorizontal="-16dp"
+                    app:layout_constraintTop_toBottomOf="@id/textViewNutrientHome"/>
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
@@ -176,7 +94,7 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                    app:layout_constraintTop_toBottomOf="@id/pemisahTextNutrientHomePage">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
@@ -570,7 +488,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
+                    android:id="@+id/linearLayoutProtein"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="20dp"
@@ -675,10 +593,98 @@
                             app:srcCompat="@drawable/arrowdown" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
                 </LinearLayout>
+                <View
+                    android:id="@+id/pemisahHomePage1"
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:layout_marginHorizontal="-16dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#f2f2f2"
+                    android:paddingHorizontal="-16dp"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayoutProtein"/>
 
+                <TextView
+                    android:id="@+id/textViewRecRecipeHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Recommended Recipe"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/pemisahHomePage1"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <View
+                    android:id="@+id/pemisahTextRecHomePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#f2f2f2"
+                    android:paddingHorizontal="-16dp"
+                    app:layout_constraintTop_toBottomOf="@id/textViewRecRecipeHome"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_list_recommended_recipe"
+                    android:layout_width="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/pemisahTextRecHomePage"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <View
+                    android:id="@+id/pemisahHomePage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:layout_marginHorizontal="-16dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#f2f2f2"
+                    android:paddingHorizontal="-16dp"
+                    app:layout_constraintTop_toBottomOf="@id/rv_list_recommended_recipe"/>
+
+                <TextView
+                    android:id="@+id/textViewFavRecipeHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Favourite Recipe"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/pemisahHomePage2"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <View
+                    android:id="@+id/pemisahTextFavHomePage"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#f2f2f2"
+                    android:paddingHorizontal="-16dp"
+                    app:layout_constraintTop_toBottomOf="@id/textViewFavRecipeHome"/>
+
+                <TextView
+                    android:id="@+id/txtEmptyFavouriteHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="You Doesn't Have Any Favourite Recipe"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/pemisahTextFavHomePage"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_list_favourite_recipe"
+                    android:layout_width="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/pemisahTextFavHomePage"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
 
                 <ProgressBar
@@ -686,14 +692,15 @@
                     style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="256dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
     <FrameLayout

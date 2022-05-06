@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/textOrderID"
+            android:layout_width="wrap_content"
+            android:text="alsokoakfs"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/textPemisahOrderTanggal"
+            android:layout_width="wrap_content"
+            android:text="|"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/textOrderID" />
+        <TextView
+            android:id="@+id/textTanggalOrder"
+            android:layout_width="wrap_content"
+            android:text="alsokoakfs"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/textPemisahOrderTanggal"/>
+
+        <ImageView
+            android:id="@+id/memberHistoryIcons"
+            android:layout_marginTop="8dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textOrderID"
+            app:srcCompat="@drawable/female_profile" />
+
+        <TextView
+            android:id="@+id/textPackageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/textOrderID"
+            app:layout_constraintStart_toEndOf="@id/memberHistoryIcons"
+            android:text="Package Name "
+            android:textSize="14sp"
+            />
+        <TextView
+            android:id="@+id/statusTransaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/textPackageName"
+            app:layout_constraintStart_toEndOf="@id/memberHistoryIcons"
+            android:text="Failed"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/textNominalTransaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/statusTransaction"
+            app:layout_constraintStart_toEndOf="@id/memberHistoryIcons"
+            android:text="Rp. 190.000"
+            android:textSize="13sp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginHorizontal="-16dp"
+            android:layout_marginVertical="8dp"
+            android:background="#f2f2f2"
+            android:paddingHorizontal="-8dp"
+            android:paddingVertical="-8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memberHistoryIcons" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

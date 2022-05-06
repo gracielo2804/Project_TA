@@ -1,18 +1,14 @@
 package com.gracielo.projectta.data.source.local.database
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
-import com.gracielo.projectta.data.source.local.entity.UserEntity
-import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
+import com.gracielo.projectta.data.source.local.entity.*
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 
-@Database(entities = [UserEntity::class, Ingredients::class,ShoppingListEntity::class,UserNutrientsEntity::class],exportSchema = true,version=1)
+@Database(entities = [UserEntity::class, Ingredients::class,ShoppingListEntity::class,UserNutrientsEntity::class,FavouriteRecipeEntity::class],exportSchema = true,version=1)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun appDao(): AppDao
 
@@ -37,4 +33,5 @@ abstract class AppDatabase : RoomDatabase(){
                 instance
             }
     }
+
 }

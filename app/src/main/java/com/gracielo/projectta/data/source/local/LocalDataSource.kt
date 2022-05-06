@@ -6,10 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import com.gracielo.projectta.data.source.local.database.AppDao
 import com.gracielo.projectta.data.source.local.database.AppDatabase
-import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
-import com.gracielo.projectta.data.source.local.entity.UserEntity
-import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
+import com.gracielo.projectta.data.source.local.entity.*
 import java.util.concurrent.Executors
 
 class LocalDataSource (val appDao: AppDao) {
@@ -25,7 +22,11 @@ class LocalDataSource (val appDao: AppDao) {
     fun insertIngredients(ingredientsList:List<Ingredients>) = Executors.newSingleThreadExecutor().execute(){
         appDao.insertIngredients(ingredientsList)
     }
-    fun getAllIngredients(): DataSource.Factory<Int,Ingredients>  = appDao.getIngredients()
+//    fun getAllIngredients(): PagingSource<Int,Ingredients>  = appDao.getIngredients()
+//    fun getAllIngredients(): DataSource.Factory<Int,Ingredients>  = appDao.getIngredients()
+    fun getAllIngredients(): LiveData<List<Ingredients>>  = appDao.getIngredients()
+//    fun getSearchIngredients(search:String): DataSource.Factory<Int, IngredientsSearch> = appDao.getSearchIngredients(search)
+    fun getSearchIngredients(search:String): LiveData<List<Ingredients>> = appDao.getSearchIngredients(search)
     fun getSelectedIngredientsPaged(): DataSource.Factory<Int,Ingredients>  = appDao.getSelectedIngredientsPaged()
     fun getSelectedIngredients(): LiveData<List<Ingredients>> = appDao.getSelectedIngredients()
 
@@ -33,11 +34,25 @@ class LocalDataSource (val appDao: AppDao) {
     fun insertShoppingList(shoppingListEntity: ShoppingListEntity) = Executors.newSingleThreadExecutor().execute() {
         appDao.insertShoppingList(shoppingListEntity)
     }
+    fun deleteShoppingList(shoppingListEntity: ShoppingListEntity) = Executors.newSingleThreadExecutor().execute(){
+        appDao.deleteShoppingList(shoppingListEntity)
+    }
+
+    fun getFavRecipe(id_user : String) : LiveData<List<FavouriteRecipeEntity>> = appDao.getFavRecipe(id_user)
+    fun insertFavRecipe(favRecipe: FavouriteRecipeEntity) = Executors.newSingleThreadExecutor().execute() {
+        appDao.insertFavRecipe(favRecipe)
+    }
+    fun insertFavRecipeList(favRecipeList: List<FavouriteRecipeEntity>) = Executors.newSingleThreadExecutor().execute() {
+        appDao.insertListFavRecipe(favRecipeList)
+    }
+    fun deleteFavRecipe(favRecipe: FavouriteRecipeEntity) = Executors.newSingleThreadExecutor().execute(){
+        appDao.deleteFavRecipe(favRecipe)
+    }
 
     fun updateUser(user:UserEntity) = Executors.newSingleThreadExecutor().execute(){
         appDao.updateUser(user)
     }
-    fun updateIngredients(ingredients: Ingredients) = Executors.newSingleThreadExecutor().execute(){
+    fun updateIngredients(ingredients: Ingredients) = Executors.newSingleThreadExecutor().execute{
         appDao.updateIngredients(ingredients)
     }
     fun deleteUser(user:UserEntity) = Executors.newSingleThreadExecutor().execute(){
@@ -47,6 +62,9 @@ class LocalDataSource (val appDao: AppDao) {
     fun getUserNutrient():LiveData<UserNutrientsEntity> = appDao.getUserNutrient()
     fun insertUserNutrient(nutrients: UserNutrientsEntity)= appDao.insertUserNutrient(nutrients)
     fun updateUserNutrient(nutrients: UserNutrientsEntity)= appDao.updateUserNutrient(nutrients)
+    fun deleteUserNutrient(nutrients: UserNutrientsEntity) = Executors.newSingleThreadExecutor().execute(){
+        appDao.deleteUserNutrient(nutrients)
+    }
 
     fun getUser() : LiveData<UserEntity> = appDao.getUser()
 

@@ -9,5 +9,7 @@ data class DataUser(
     val name: String,
     val username: String,
     val email:String,
-    val emailVerified:String
+    val emailVerified:String,
+    val tipe:String,
+    val expired:String
 ):Parcelable

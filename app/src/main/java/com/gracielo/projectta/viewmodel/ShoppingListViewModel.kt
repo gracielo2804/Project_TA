@@ -13,6 +13,7 @@ class ShoppingListViewModel (appDao: AppDao) : ViewModel()  {
 
     fun insert(shoppingListEntity: ShoppingListEntity)= localDataSource.insertShoppingList(shoppingListEntity)
     fun getShoppingList(id_user:String) = localDataSource.getShoppingList(id_user)
+    fun delete(shoppingListEntity: ShoppingListEntity)= localDataSource.deleteShoppingList(shoppingListEntity)
 
 
 }

@@ -34,4 +34,8 @@
     <string name="night_mode_on">Night mode</string>
     <string name="night_mode_off">Day mode</string>
     <string name="using_ingredients">Using Ingredients :</string>
+
+    <string name="MIDTRANS_CLIENT_KEY">SB-Mid-client-olbl-aDjtxLZn3c4</string>
+    <string name="MIDTRANS_SERVER_KEY">SB-Mid-server-nUC5LVKPaZC4M7SxtBhLpULt</string>
+
 </resources>

@@ -11,9 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +26,7 @@ import com.gracielo.projectta.databinding.ActivityDataDiriBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
+import com.jakewharton.threetenabp.AndroidThreeTen
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -40,6 +39,7 @@ class DataDiriActivity : AppCompatActivity() {
     var height=0
     var weight=0
     var age=0
+    var indexActivity=0
     lateinit var kaloriText : TextView
     var gender=""
     lateinit var id: String
@@ -50,6 +50,7 @@ class DataDiriActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityDataDiriBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AndroidThreeTen.init(this)
 
         if(intent.hasExtra("id")){
             id= intent.getStringExtra("id")!!
@@ -69,6 +70,23 @@ class DataDiriActivity : AppCompatActivity() {
         val items = listOf("Male","Female")
         val adapter = ArrayAdapter(this, R.layout.item_gender, items)
         genderField.setAdapter(adapter)
+
+        val itemsDropdown = listOf("Simple Activities, No Exercises", "Light Active with Sport or Exercises 1-3 days a week"
+            ,"Moderately Active with Sport or Exercises 3-5 days a week","Hard Sport or Exercises 6 or 7 days a week",
+            "Doing physical job or an Athlete do very hard Exercises or sport")
+        val adapterDropdown = ArrayAdapter(this, R.layout.list_item_dropdown_search_shopping_list, itemsDropdown)
+
+        val dropdown = binding.dropDownListActivitiesAutoText
+        (dropdown as? AutoCompleteTextView)?.setAdapter(adapterDropdown)
+
+        dropdown.setSelection(0)
+
+        dropdown.onItemClickListener = AdapterView.OnItemClickListener{
+            adapterView, view, i, l ->
+            indexActivity=i
+            hitungkalori()
+
+        }
 
         heightText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -157,14 +175,14 @@ class DataDiriActivity : AppCompatActivity() {
                 pbar.visibility= View.VISIBLE
                 pbar.isIndeterminate=true
                 val dataDiri= DataUserProfile(
-                    id,height,weight,gender,kalori,age
+                    id,height,weight,gender,kalori,indexActivity,age
                 )
 
                 val current = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val formatted = current.format(formatter)
-                val makslemak = String.format("%.1f", (kalori*0.3)/90).toDouble()
-                val maksgula = String.format("%.1f", (kalori*0.2)/4).toDouble()
+                val makslemak = String.format("%.1f", (kalori*0.3)/9).toDouble()
+                val maksgula = String.format("%.1f", (kalori*0.1)/4).toDouble()
                 var makskarbo:Double=0.0
                 if(gender == "Female"){
                     when {
@@ -209,7 +227,7 @@ class DataDiriActivity : AppCompatActivity() {
                                 dataUser=ApiResponses.dataUser
                             }
                         }
-                        Handler(Looper.getMainLooper()).postDelayed(
+                            Handler(Looper.getMainLooper()).postDelayed(
                             {
                                 // This method will be executed once the timer is over
                                 Log.d("DataDiri",dataUserProfile.toString() + " - " +dataUser.toString())
@@ -220,11 +238,14 @@ class DataDiriActivity : AppCompatActivity() {
                                         dataUser!!.name,
                                         dataUser!!.username,
                                         dataUser!!.email,
+                                        dataUser!!.tipe,
+                                        dataUser!!.expired,
                                         dataUserProfile!!.height,
                                         dataUserProfile!!.weight,
                                         dataUserProfile!!.gender,
                                         dataUserProfile!!.kalori,
-                                        dataUserProfile!!.age
+                                        dataUserProfile!!.age,
+                                        dataUserProfile!!.activities
                                     )
                                     viewModel.insert(userEntity)
                                     viewModel.insertUserNutrients(userNutrientsEntity)
@@ -251,13 +272,18 @@ class DataDiriActivity : AppCompatActivity() {
     fun hitungkalori(){
         if(weight>0 && weight>0 && age>0 && gender!=""){
             if(gender=="Male"){
-                kalori = 66 + (13.7 * weight) + (5 * height) + (6.78 * age)
+                kalori = 66 + (13.7 * weight) + (5 * height) - (6.78 * age)
             }
             else if(gender=="Female"){
-                kalori = 655 + (9.6 * weight) + (1.8 * height) + (4.7 * age)
+                kalori = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age)
             }
-            Toast.makeText(baseContext, kalori.toString(),Toast.LENGTH_SHORT).show()
         }
+        if(indexActivity==0)kalori*=1.2
+        else if(indexActivity==1)kalori*=1.375
+        else if(indexActivity==2)kalori*=1.55
+        else if(indexActivity==3)kalori*=1.725
+        else if(indexActivity==4)kalori*=1.9
+        kalori = String.format("%.1f", kalori).toDouble()
         changeTextKalori()
     }
     fun changeTextKalori(){

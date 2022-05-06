@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MissedIngredient(
     @SerializedName("aisle")
-    var aisle: String,
+    var aisle: String?,
 
     @SerializedName("amount")
     var amount: Double,

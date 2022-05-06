@@ -31,9 +31,9 @@ class ViewModelFactory private constructor(private val appRepository: AppReposit
         else if (modelClass.isAssignableFrom(ShoppingListViewModel::class.java)) {
             return ShoppingListViewModel(appRepository.localDataSource.appDao) as T
         }
-//        } else if (modelClass.isAssignableFrom(NoteAddUpdateViewModel::class.java)) {
-//            return NoteAddUpdateViewModel(mApplication) as T
-//        }
+        else if (modelClass.isAssignableFrom(FavRecipeViewModel::class.java)) {
+            return FavRecipeViewModel(appRepository) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }

@@ -24,7 +24,7 @@ class SelectedIngredientsActivity : AppCompatActivity() {
         val fabItemsSelected = binding.fabNumberSelectedIngredients
         val fabBackToList = binding.fabBackToIngredientsList
         val recyclerView = binding.rvIngredientsListSelected
-        val fastScroller = binding.fastScrollerSelected
+//        val fastScroller = binding.fastScrollerSelected
 
         adapters = IngridientsListSelectedAdapters()
         adapters.onItemClick = {

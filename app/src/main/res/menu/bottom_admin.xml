@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/adminSubscription"
+        android:title="Membership"
+        android:icon="@drawable/ic_attach_money_24"/>
+    <item android:id="@+id/adminUser"
+        android:title="User"
+        android:icon="@drawable/ic_person_24"/>
+    <item android:id="@+id/adminRecipe"
+        android:title="Recipe"
+        android:icon="@drawable/ic_menu_book_24"/>
+    <item android:id="@+id/adminIngredients"
+        android:title="Ingredients"
+        android:icon="@drawable/ic_baseline_shopping_bag_24"/>
+
+    <!--    <item android:id="@+id/mSetting"-->
+    <!--        android:title="Setting"-->
+    <!--        android:icon="@drawable/ic_settings_24"/>-->
+</menu>

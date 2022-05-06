@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ExtendedIngredient(
     @SerializedName("aisle")
-    var aisle: String,
+    var aisle: String?,
     @SerializedName("amount")
     var amount: Double,
     @SerializedName("consistency")

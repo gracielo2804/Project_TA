@@ -20,5 +20,6 @@ class UserViewModel (private val appDao: AppDao) : ViewModel()  {
     fun getUserNutrients() = localDataSource.getUserNutrient()
     fun updateUserNutrients(userNutrientsEntity: UserNutrientsEntity) = localDataSource.updateUserNutrient(userNutrientsEntity)
     fun insertUserNutrients(userNutrientsEntity: UserNutrientsEntity) = localDataSource.insertUserNutrient(userNutrientsEntity)
+    fun deleteUserNutrients(userNutrientsEntity: UserNutrientsEntity) = localDataSource.deleteUserNutrient(userNutrientsEntity)
 
 }

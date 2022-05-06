@@ -10,5 +10,6 @@ data class DataUserProfile(
     val weight: Int,
     val gender: String,
     val kalori: Double,
+    val activities: Int,
     val age: Int
 ):Parcelable

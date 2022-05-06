@@ -1,23 +1,27 @@
 package com.gracielo.projectta.ui.recipe
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponseItem
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
+import com.gracielo.projectta.data.model.recipe.searchWithNutrient.DataSearchRecipeResponse
 import com.gracielo.projectta.databinding.CardGridLayoutBinding
 
 class RecipeSearchResultAdapter : RecyclerView.Adapter<RecipeSearchResultAdapter.ViewHolder>() {
 
-    private var listData =  ArrayList<RecipeResponseItem>()
-    var onItemClick: ((RecipeResponseItem) -> Unit)? = null
+    private var listData =  ArrayList<RecipeDetailResponseItem>()
+    var onItemClick: ((RecipeDetailResponseItem) -> Unit)? = null
 
-    fun setData(newListData : List<RecipeResponseItem>?){
+    fun setData(newListData : List<RecipeDetailResponseItem>?){
         if(newListData == null) return
         listData.clear()
         listData.addAll(newListData)
@@ -30,7 +34,7 @@ class RecipeSearchResultAdapter : RecyclerView.Adapter<RecipeSearchResultAdapter
         private val imageView:ImageView = view.findViewById(R.id.image_card_grid)
         private val recipeNameText : TextView = view.findViewById(R.id.text_card_grid)
 
-        fun bindRecipe(recipe: RecipeResponseItem) {
+        fun bindRecipe(recipe: RecipeDetailResponseItem) {
            recipeNameText.text = recipe.title
             Glide
                 .with(itemView.context)
@@ -53,6 +57,11 @@ class RecipeSearchResultAdapter : RecyclerView.Adapter<RecipeSearchResultAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = listData[position]
+//        holder.itemView.setOnClickListener {
+//            val intentKirim = Intent(holder.itemView.context,RecipeDetailActivity::class.java)
+//            intentKirim.putExtra("idrecipe",it.id)
+//            startActivity(holder.itemView.context,intentKirim,null)
+//        }
         holder.bindRecipe(data)
     }
 

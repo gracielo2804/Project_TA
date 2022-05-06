@@ -1,9 +1,11 @@
-package com.gracielo.projectta.ui.ingredients
+    package com.gracielo.projectta.ui.ingredients
 
+import android.content.ClipData.Item
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.paging.AsyncPagedListDiffer
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,22 +13,26 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.Ingredients
+import com.gracielo.projectta.ui.equipment.EquipmentToolsAdapter
+
 
 class IngridientsListAdapters(private val callback : IngridientsItemCallback) :
-    PagedListAdapter<Ingredients, IngridientsListAdapters.ViewHolder>(DIFF_CALLBACK) {
+    RecyclerView.Adapter<IngridientsListAdapters.ViewHolder>() {
+
+    private var listData =  ArrayList<Ingredients>()
+    var onItemClick: ((Ingredients) -> Unit)? = null
     companion object {
 
         private const val TYPE_UNSELECT = 0
         private const val TYPE_SELECTED = 1
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Ingredients>() {
-            override fun areItemsTheSame(oldItem: Ingredients, newItem: Ingredients): Boolean {
-                return oldItem.id == newItem.id
-            }
 
-            override fun areContentsTheSame(oldItem: Ingredients, newItem: Ingredients): Boolean {
-                return oldItem == newItem
-            }
-        }
+    }
+    fun setData(newListData : List<Ingredients>?){
+        if(newListData == null) return
+        listData.clear()
+        listData.addAll(newListData)
+        notifyDataSetChanged()
+
     }
 
     inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -61,18 +67,20 @@ class IngridientsListAdapters(private val callback : IngridientsItemCallback) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item != null) {
-            holder.bind(item)
-        }
+        val data = listData[position]
+        holder.bind(data)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(getItem(position)!!.isSelected){
+        return if(listData[position].isSelected){
             TYPE_SELECTED
         } else TYPE_UNSELECT
     }
 
+
+    override fun getItemCount(): Int {
+        return listData.size
+    }
 
 
 }

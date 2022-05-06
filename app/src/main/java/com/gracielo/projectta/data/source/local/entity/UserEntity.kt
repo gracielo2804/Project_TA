@@ -28,12 +28,20 @@ data class UserEntity(
     val email:String,
 
     @NonNull
+    @ColumnInfo(name="tipe")
+    val tipe:String,
+
+    @NonNull
+    @ColumnInfo(name="expired")
+    val expired:String,
+
+    @NonNull
     @ColumnInfo(name="height")
-    val height: Int,
+    var height: Int,
 
     @NonNull
     @ColumnInfo(name="weight")
-    val weight: Int,
+    var weight: Int,
 
     @NonNull
     @ColumnInfo(name="gender")
@@ -41,9 +49,13 @@ data class UserEntity(
 
     @NonNull
     @ColumnInfo(name="kalori")
-    val kalori: Double,
+    var kalori: Double,
 
     @NonNull
     @ColumnInfo(name="age")
-    val age: Int
+    var age: Int,
+
+    @NonNull
+    @ColumnInfo(name="activities")
+    var activities: Int
 ):Parcelable

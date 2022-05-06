@@ -6,40 +6,64 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
+import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ItemShoppingListBinding
 import com.gracielo.projectta.databinding.ItemShoppingListIngredientsBinding
 
 class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.ViewHolder>() {
 
-    private var listRecipe = ArrayList<String>()
+    private var listRecipe = ArrayList<ShoppingListEntity>()
+    private var listRecipeName = ArrayList<String>()
     private var listIngredients =  mutableMapOf<String,List<String>>()
     private var listIngredientsDetail =  mutableMapOf<String,List<String>>()
     var onItemClick: ((String) -> Unit)? = null
+    private var apiServices = ApiServices()
 
-    fun setData(newListRecipe : List<String>, newlistIngredients : Map<String,List<String>>?, newlistIngredientsDetail : Map<String,List<String>>?){
+    fun setData(newListRecipe : List<ShoppingListEntity>,newListRecipeName : List<String>, newlistIngredients : Map<String,List<String>>?, newlistIngredientsDetail : Map<String,List<String>>?){
         if(newlistIngredients == null || newlistIngredientsDetail == null) return
         listRecipe.clear()
         listIngredients.clear()
         listIngredientsDetail.clear()
         listRecipe.addAll(newListRecipe)
+        listRecipeName.addAll(newListRecipeName)
         listIngredients.putAll(newlistIngredients)
         listIngredientsDetail.putAll(newlistIngredientsDetail)
+        for(i in listRecipe.indices){
+            apiServices.getRecipeName(listRecipe[i].id_recipe){
+                if (it != null) {
+                    if(it.code==1){
+                        listRecipeName.add(it.message)
+                    }
+                }
+
+            }
+        }
         notifyDataSetChanged()
         Log.d("ShoppingList2",listRecipe.toString())
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val binding = ItemShoppingListBinding.bind(view)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemShoppingListBinding.bind(itemView)
         private val recipeName = binding.txtRecipeNameShoppingList
         val rvIngredients = binding.rvIngredientsShoppingList
         val ingredientsAdapter = ShoppingListIngredientsAdapter()
 
-        fun bindRecipe(recipeNameParam: String) {
-            recipeName.text= recipeNameParam
+        fun bindRecipe(recipeData: ShoppingListEntity, position: Int) {
+            recipeName.text= listRecipeName[position]
+            Glide
+                .with(itemView.context)
+                .load("https://spoonacular.com/recipeImages/${recipeData.id_recipe}-556x370.jpg")
+                .apply(RequestOptions().override(100, 100))
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(binding.imageViewRecipeShoppingList)
         }
         init{
-            binding.root.setOnClickListener{onItemClick?.invoke(listRecipe[bindingAdapterPosition])}
+            binding.root.setOnClickListener{onItemClick?.invoke(listRecipeName[bindingAdapterPosition])}
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder=
@@ -50,7 +74,8 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
     override fun getItemCount(): Int = listRecipe.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val recipeName = listRecipe[position]
+        holder.bindRecipe(listRecipe[position],position)
+        val recipeName = listRecipeName[position]
         val listIngredients = listIngredients[recipeName]
         val listIngredientsDetail = listIngredientsDetail[recipeName]
         holder.ingredientsAdapter.setData(listIngredients,listIngredientsDetail)
@@ -58,7 +83,6 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
             layoutManager = LinearLayoutManager(context)
             adapter = holder.ingredientsAdapter
         }
-        holder.bindRecipe(recipeName)
     }
 
 }

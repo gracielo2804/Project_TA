@@ -10,6 +10,8 @@ import kotlinx.parcelize.Parcelize
 data class SearchRecipeDataHistory(
     @SerializedName("id_recipe")
     var idRecipe: String,
+    @SerializedName("recipe_name")
+    var recipe_name: String,
     @SerializedName("ingredients_used")
     var ingredientsUsed: String
 ):Parcelable

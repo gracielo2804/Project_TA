@@ -7,7 +7,7 @@ data class NutrientHistoryResponse(
     @SerializedName("code")
     var code: Int,
     @SerializedName("dataHistory")
-    var dataHistory: List<DataHistory>,
+    var dataHistory: List<NutrientDataHistory>,
     @SerializedName("message")
     var message: String
 )

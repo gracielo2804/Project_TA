@@ -1,7 +1,9 @@
 package com.gracielo.projectta.ui.homepage
 
 import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,53 +13,158 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.DataUserProfile
-import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.databinding.ActivityHomeBinding
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
 import android.view.View
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
-import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
+import com.gracielo.projectta.data.model.recipe.RecipeRecommendation
+import com.gracielo.projectta.data.model.recipeCount.DataCountRecipe
+import com.gracielo.projectta.data.source.local.entity.*
 import com.gracielo.projectta.data.source.remote.network.ApiServices
+import com.gracielo.projectta.notification.DailyReminder
 import com.gracielo.projectta.ui.history.HistoryHomeActivity
 import com.gracielo.projectta.ui.ingredients.IngridientsList
 import com.gracielo.projectta.ui.setting.SettingActivity
 import com.gracielo.projectta.ui.shoppingList.ShoppingListActivity
+import com.gracielo.projectta.util.FunHelper
+import com.gracielo.projectta.viewmodel.FavRecipeViewModel
+import com.gracielo.projectta.viewmodel.ShoppingListViewModel
+import com.gracielo.projectta.vo.Status
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.delay
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
 
     private lateinit var binding: ActivityHomeBinding
-//    var dataUser:DataUser? = null
-    var dataUserProfile:DataUserProfile?=null
-    var dataUserNutrients:UserNutrientsEntity? = null
-    var selectedIngredients = mutableListOf<Ingredients>()
+    private var dataUserNutrients:UserNutrientsEntity? = null
     lateinit var dataUser :UserEntity
     lateinit var viewModel: UserViewModel
+    private lateinit var shoppingListViewModel: ShoppingListViewModel
+    private lateinit var favRecipeViewModel: FavRecipeViewModel
     var apiServices = ApiServices()
+    private var listRecipeCount = mutableListOf<DataCountRecipe>()
+    var recipeRecommendation = mutableListOf<RecipeRecommendation>()
+    private val helper =FunHelper
+    private var listShoppingListUser = mutableListOf<ShoppingListEntity>()
+    private var listFavRecipe = mutableListOf<FavouriteRecipeEntity>()
+    val daily= DailyReminder()
+    private lateinit var recomendationAdapter:RecommendedRecipeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("Test String", R.string.MIDTRANS_CLIENT_KEY.toString())
 
         AndroidThreeTen.init(this)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         binding.progressBar.visibility= View.INVISIBLE
         setContentView(binding.root)
-        dataUser = UserEntity("1","1","1","1",1,1,"1",1.1,1)
-        viewModel = obtainViewModel(this@HomeActivity)
-        viewModel.getUser()?.observeOnce(this){
-            dataUser=it
-            binding.headerHomePageTitle.text="Hi, ${dataUser.name}"
-            binding.textUserLoginHome.text= dataUser.name
-//            binding.txtDashboardKalori.text = "0/${dataUser?.kalori}"
+
+        apiServices.getRecipeCount {
+            if (it?.code==1){
+                listRecipeCount.addAll(it.dataCountRecipe)
+                for(i in 0..2){
+                    val imageurl="https://spoonacular.com/recipeImages/${listRecipeCount[i].idRecipe}-556x370.jpg"
+                    val recommendation = RecipeRecommendation(listRecipeCount[i].idRecipe.toInt()
+                        ,listRecipeCount[i].recipeName,imageurl,"Most Searched")
+                    recipeRecommendation.add(recommendation)
+                }
+            }
         }
-        if(intent.hasExtra("datauserentity"))dataUser=intent.getParcelableExtra("datauserentity")!!
+
+        val receiver = ComponentName(applicationContext, DailyReminder::class.java)
+        applicationContext.packageManager.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+        daily.setDailyReminder(this)
+
+        dataUser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
+        viewModel = obtainViewModel(this@HomeActivity)
+        shoppingListViewModel = helper.obtainShoppingViewModel(this)
+        favRecipeViewModel = helper.obtainFavRecipeViewModel(this)
+        viewModel.getUser().observeOnce(this) {
+            dataUser = it
+            binding.headerHomePageTitle.text = "Hi, ${dataUser.name}"
+            shoppingListViewModel.getShoppingList(it.id).observeOnce(this@HomeActivity){list->
+                listShoppingListUser.addAll(list)
+            }
+            favRecipeViewModel.getFavRecipe(it.id).observe(this){
+                if (it != null) {
+                    when (it.status) {
+                        Status.SUCCESS -> {
+                            listFavRecipe.clear()
+                            val dataFavorite = it.data
+                            listFavRecipe.addAll(dataFavorite!!)
+                            binding.txtEmptyFavouriteHome.visibility=View.INVISIBLE
+                            binding.rvListFavouriteRecipe.visibility=View.VISIBLE
+                            var adapters = FavouriteRecipeAdapter()
+                            adapters.setData(listFavRecipe)
+                            binding.rvListFavouriteRecipe.apply {
+                                layoutManager = LinearLayoutManager(this@HomeActivity,
+                                    LinearLayoutManager.HORIZONTAL,false)
+                                adapter=adapters
+                            }
+                        }
+                        Status.ERROR -> {
+                            Toast.makeText(
+                                this@HomeActivity,
+                                "Check your internet connection",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                for (i in listShoppingListUser.indices){
+                    shoppingListViewModel.delete(listShoppingListUser[i])
+                }
+                Handler(Looper.getMainLooper()).postDelayed({
+                    apiServices.getShoppingListUser(it.id){response->
+                        if (response != null) {
+                            if(response.code==1){
+                                if(response.dataShoppingList.isNotEmpty()){
+                                    for(i in response.dataShoppingList.indices){
+                                        var data = response.dataShoppingList[i]
+                                        var recipename=""
+                                        apiServices.getRecipeDetail(data.idRecipe){recipe->
+                                            if (recipe != null) {
+                                                recipename= recipe.data.title
+                                            }
+                                        }
+                                        var shoppingList = ShoppingListEntity(data.idShoppingList,data.idUsers,data.idRecipe,recipename,data.ingredientsList)
+                                        shoppingListViewModel.insert(shoppingList)
+                                    }
+                                }
+                                else{
+                                    binding.txtEmptyFavouriteHome.visibility=View.VISIBLE
+                                }
+                            }
+                        }
+                    }
+                },500)
+                recomendationAdapter = RecommendedRecipeAdapter(this@HomeActivity)
+                recomendationAdapter.setData(recipeRecommendation)
+                binding.rvListRecommendedRecipe.apply {
+                    adapter=recomendationAdapter
+                    layoutManager=LinearLayoutManager(this@HomeActivity,
+                        LinearLayoutManager.HORIZONTAL,false)
+                }
+
+
+            },1000)
+    //            binding.txtDashboardKalori.text = "0/${dataUser?.kalori}"
+        }
         if(dataUser.height==1){
             Handler(Looper.getMainLooper()).postDelayed({
                 observeuserNutrient()
@@ -134,65 +241,7 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
-    fun ChangeData(){
-        if(dataUserNutrients!=null){
-            binding.txtDashboardKalori.text = dataUserNutrients!!.kalori_consumed.toString() + "/" + dataUserNutrients!!.maxKalori.toString()
-            binding.txtDashboardGula.text = dataUserNutrients!!.gula_consumed.toString() + "/" + dataUserNutrients!!.maxGula.toString()
-            binding.txtDashboardGaram.text = dataUserNutrients!!.karbo_consumed.toString() + "/" + dataUserNutrients!!.maxKarbo.toString()
-            binding.txtDashboardLemak.text = dataUserNutrients!!.lemak_consumed.toString() + "/" + dataUserNutrients!!.maxLemak.toString()
-            binding.txtDashboardProtein.text = dataUserNutrients!!.protein_consumed.toString() + "/" + dataUserNutrients!!.maxProtein.toString()
-            if(dataUserNutrients!!.kalori_consumed>dataUserNutrients!!.maxKalori){
-                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardKalori)
-                val Temp: Double = ((dataUserNutrients!!.kalori_consumed- dataUserNutrients!!.maxKalori)/dataUserNutrients!!.maxKalori) * 100
-                binding.txtPersenKalori.text = Temp.toInt().toString() +"% Higher than daily limit"
-            }
-            else{
-                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardKalori)
-                val Temp: Double = ((dataUserNutrients!!.kalori_consumed- dataUserNutrients!!.maxKalori)/dataUserNutrients!!.maxKalori) * 100
-                binding.txtPersenKalori.text =(Temp.toInt()*-1).toString() +"% Lower than daily limit"
-            }
-            if(dataUserNutrients!!.gula_consumed>dataUserNutrients!!.maxGula){
-                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardGula)
-                val Temp = ((dataUserNutrients!!.gula_consumed-dataUserNutrients!!.maxGula)/dataUserNutrients!!.maxGula) * 100
-                binding.txtPersenGula.text = Temp.toInt().toString() +"% Higher than daily limit"
-            }
-            else{
-                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardGula)
-                val Temp = ((dataUserNutrients!!.gula_consumed-dataUserNutrients!!.maxGula)/dataUserNutrients!!.maxGula) * 100
-                binding.txtPersenGula.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
-            }
-            if(dataUserNutrients!!.karbo_consumed>dataUserNutrients!!.maxKarbo){
-                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardGaram)
-                val Temp = ((dataUserNutrients!!.karbo_consumed-dataUserNutrients!!.maxKarbo)/dataUserNutrients!!.maxKarbo) * 100
-                binding.txtPersenGaram.text = Temp.toInt().toString() +"% Higher than daily limit"
-            }
-            else{
-                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardGaram)
-                val Temp = ((dataUserNutrients!!.karbo_consumed-dataUserNutrients!!.maxKarbo)/dataUserNutrients!!.maxKarbo) * 100
-                binding.txtPersenGaram.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
-            }
-            if(dataUserNutrients!!.lemak_consumed > dataUserNutrients!!.maxLemak){
-                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardLemak)
-                val Temp = ((dataUserNutrients!!.lemak_consumed-dataUserNutrients!!.maxLemak)/dataUserNutrients!!.maxLemak) * 100
-                binding.txtPersenLemak.text = Temp.toInt().toString() +"% Higher than daily limit"
-            }
-            else{
-                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardLemak)
-                val Temp = ((dataUserNutrients!!.lemak_consumed-dataUserNutrients!!.maxLemak)/dataUserNutrients!!.maxLemak) * 100
-                binding.txtPersenLemak.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
-            }
-            if(dataUserNutrients!!.protein_consumed > dataUserNutrients!!.maxProtein){
-                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardProtein)
-                val Temp = ((dataUserNutrients!!.protein_consumed-dataUserNutrients!!.maxProtein)/dataUserNutrients!!.maxProtein) * 100
-                binding.txtPersenProtein.text = Temp.toInt().toString() +"% Higher than daily limit"
-            }
-            else{
-                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardProtein)
-                val Temp = ((dataUserNutrients!!.protein_consumed-dataUserNutrients!!.maxProtein)/dataUserNutrients!!.maxProtein) * 100
-                binding.txtPersenProtein.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
-            }
-        }
-    }
+
     fun observeuserNutrient(){
         viewModel.getUserNutrients().observeOnce(this){
             dataUserNutrients = it
@@ -246,10 +295,77 @@ class HomeActivity : AppCompatActivity() {
                     userNutrientsEntity.protein_consumed=0.0
                     userNutrientsEntity.tanggal=formatted
                 }
+                else {
+
+                }
                 viewModel.updateUserNutrients(userNutrientsEntity)
             }
             ChangeData()
         }
+    }
+
+    fun ChangeData(){
+        if(dataUserNutrients!=null){
+            binding.txtDashboardKalori.text = String.format("%.2f", dataUserNutrients!!.kalori_consumed) + "/" + dataUserNutrients!!.maxKalori.toString()
+            binding.txtDashboardGula.text = String.format("%.2f", dataUserNutrients!!.gula_consumed) + "/" + dataUserNutrients!!.maxGula.toString()
+            binding.txtDashboardGaram.text =String.format("%.2f", dataUserNutrients!!.karbo_consumed) + "/" + dataUserNutrients!!.maxKarbo.toString()
+            binding.txtDashboardLemak.text = String.format("%.2f", dataUserNutrients!!.lemak_consumed) + "/" + dataUserNutrients!!.maxLemak.toString()
+            binding.txtDashboardProtein.text = String.format("%.2f", dataUserNutrients!!.protein_consumed) + "/" + dataUserNutrients!!.maxProtein.toString()
+            if(dataUserNutrients!!.kalori_consumed>dataUserNutrients!!.maxKalori){
+                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardKalori)
+                val Temp: Double = ((dataUserNutrients!!.kalori_consumed- dataUserNutrients!!.maxKalori)/dataUserNutrients!!.maxKalori) * 100
+                binding.txtPersenKalori.text = Temp.toInt().toString() +"% Higher than daily limit"
+            }
+            else{
+                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardKalori)
+                val Temp: Double = ((dataUserNutrients!!.kalori_consumed- dataUserNutrients!!.maxKalori)/dataUserNutrients!!.maxKalori) * 100
+                binding.txtPersenKalori.text =(Temp.toInt()*-1).toString() +"% Lower than daily limit"
+            }
+            if(dataUserNutrients!!.gula_consumed>dataUserNutrients!!.maxGula){
+                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardGula)
+                val Temp = ((dataUserNutrients!!.gula_consumed-dataUserNutrients!!.maxGula)/dataUserNutrients!!.maxGula) * 100
+                binding.txtPersenGula.text = Temp.toInt().toString() +"% Higher than daily limit"
+            }
+            else{
+                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardGula)
+                val Temp = ((dataUserNutrients!!.gula_consumed-dataUserNutrients!!.maxGula)/dataUserNutrients!!.maxGula) * 100
+                binding.txtPersenGula.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
+            }
+            if(dataUserNutrients!!.karbo_consumed>dataUserNutrients!!.maxKarbo){
+                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardGaram)
+                val Temp = ((dataUserNutrients!!.karbo_consumed-dataUserNutrients!!.maxKarbo)/dataUserNutrients!!.maxKarbo) * 100
+                binding.txtPersenGaram.text = Temp.toInt().toString() +"% Higher than daily limit"
+            }
+            else{
+                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardGaram)
+                val Temp = ((dataUserNutrients!!.karbo_consumed-dataUserNutrients!!.maxKarbo)/dataUserNutrients!!.maxKarbo) * 100
+                binding.txtPersenGaram.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
+            }
+            if(dataUserNutrients!!.lemak_consumed > dataUserNutrients!!.maxLemak){
+                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardLemak)
+                val Temp = ((dataUserNutrients!!.lemak_consumed-dataUserNutrients!!.maxLemak)/dataUserNutrients!!.maxLemak) * 100
+                binding.txtPersenLemak.text = Temp.toInt().toString() +"% Higher than daily limit"
+            }
+            else{
+                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardLemak)
+                val Temp = ((dataUserNutrients!!.lemak_consumed-dataUserNutrients!!.maxLemak)/dataUserNutrients!!.maxLemak) * 100
+                binding.txtPersenLemak.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
+            }
+            if(dataUserNutrients!!.protein_consumed > dataUserNutrients!!.maxProtein){
+                Glide.with(this).load(R.drawable.arrowup).into(binding.imgDashboardProtein)
+                val Temp = ((dataUserNutrients!!.protein_consumed-dataUserNutrients!!.maxProtein)/dataUserNutrients!!.maxProtein) * 100
+                binding.txtPersenProtein.text = Temp.toInt().toString() +"% Higher than daily limit"
+            }
+            else{
+                Glide.with(this).load(R.drawable.arrowdown).into(binding.imgDashboardProtein)
+                val Temp = ((dataUserNutrients!!.protein_consumed-dataUserNutrients!!.maxProtein)/dataUserNutrients!!.maxProtein) * 100
+                binding.txtPersenProtein.text = (Temp.toInt()*-1).toString() +"% Lower than daily limit"
+            }
+        }
+    }
+
+    override fun onItemClicked(data: RecipeRecommendation) {
+//        TODO("Not yet implemented")
     }
 
 //    private val usersObserver = Observer<UserEntity> { users ->

@@ -27,6 +27,8 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "String", "MIDTRANS_CLIENT_KEY", "SB-Mid-client-olbl-aDjtxLZn3c4"
+            buildConfigField "String", "MIDTRANS_SERVER_KEY", "SB-Mid-server-nUC5LVKPaZC4M7SxtBhLpULt"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -64,11 +66,11 @@ dependencies {
 
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
-    //Firebase
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+//    //Firebase
+//    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
@@ -79,6 +81,8 @@ dependencies {
 
     //Room
     implementation "androidx.room:room-runtime:2.4.1"
+    implementation "androidx.room:room-ktx:2.4.1"
+//    implementation"androidx.room:room-paging:2.4.1"
     kapt "androidx.room:room-compiler:2.4.1"
     androidTestImplementation "androidx.room:room-testing:2.4.1"
 
@@ -87,7 +91,7 @@ dependencies {
     implementation "androidx.sqlite:sqlite-ktx:2.2.0"
 
     //Paging
-    implementation 'androidx.paging:paging-runtime:2.1.2'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
 
     //custom float button
     implementation "com.tunjid.androidx:material:1.0.0-rc06"
@@ -96,4 +100,26 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
     //RecyclerView Alphabetical
+
+    //Midtrans
+    implementation 'com.midtrans:uikit:1.28.0-SANDBOX' // change the number to the latest version
+    implementation 'com.midtrans:uikit:1.23.1' // change the number to the latest version
+
+    //BarCharts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //WorkManager
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
+    implementation "androidx.preference:preference-ktx:1.2.0"
+
+    //Ribbon
+    implementation "com.github.skydoves:androidribbon:1.0.4"
+
+    //Table
+    implementation 'de.codecrafters.tableview:tableview:2.8.0'
+
+    //Apriori
+    implementation 'com.github.michael-rapp:apriori:2.0.1'
+    api "com.github.michael-rapp:java-util:[2.0.1,2.1.0)"
+    implementation "org.slf4j:slf4j-api:[1.7,1.8)"
 }

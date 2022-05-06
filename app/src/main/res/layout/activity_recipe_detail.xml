@@ -52,17 +52,26 @@
 
         <TextView
             android:id="@+id/txtRecipeNameDetail"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="TextView"
             android:textColor="#000000"
             android:textSize="16sp"
+            android:layout_marginHorizontal="8dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageView6"
+            app:layout_constraintEnd_toStartOf="@+id/imageFavouriteRecipe"
+            app:layout_constraintStart_toEndOf="@+id/imageView6"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <ImageView
+            android:id="@+id/imageFavouriteRecipe"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/favourite_border" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

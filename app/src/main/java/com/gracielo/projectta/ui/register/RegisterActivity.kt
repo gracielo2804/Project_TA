@@ -3,7 +3,10 @@ package com.gracielo.projectta.ui.register
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.gracielo.projectta.data.model.AddUsers
 import com.gracielo.projectta.data.model.DataUser
@@ -14,6 +17,13 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     val apiServices=ApiServices()
+    var checkUsername=false
+    var passUsername=false
+    var passPassword=false
+    var passConpassword=false
+    var checkConPassword=false
+    var passEmail=false
+    var passNama=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +38,96 @@ class RegisterActivity : AppCompatActivity() {
         val nama=binding.nameReg
         val btnAdd=binding.btnReqister
 
+        username.setOnFocusChangeListener{ view, b->
+            if(!b){
+                if(username.text.toString().isEmpty()){
+                    passUsername=false
+                }
+                else{
+                    passUsername=true
+                    binding.txtFieldUsernameReg.error=null
+                    apiServices.checkUsername(username.text.toString()){
+                        if(it?.code==1){
+                            checkUsername=true
+                            binding.txtFieldUsernameReg.error=null
+                        }
+                        else if(it?.code==-2){
+                            checkUsername=false
+                            binding.txtFieldUsernameReg.error = "Username Has Been Taken"
+                        }
+                    }
+                }
+            }
+        }
+        password.setOnFocusChangeListener { view, b ->
+            if(!b){
+                if(password.text.toString().isEmpty()){
+                    passPassword=false
+                }else{
+                    binding.txtFieldPasswordReg.error=null
+                    passPassword=true
+                    if(passConpassword){
+                        if(password.text.toString()!=conpassword.text.toString()){
+                            checkConPassword=false
+                            binding.txtFieldConPasswordReg.error = "Password And Confirmation Password Must Be The Same"
+                            binding.txtFieldConPasswordReg.error = "Password And Confirmation Password Must Be The Same"
+                        }
+                        else{
+                            binding.txtFieldConPasswordReg.error = null
+                            checkConPassword=true
+                        }
+                    }
+                }
+
+            }
+        }
+        conpassword.setOnFocusChangeListener { view, b ->
+            if(!b){
+                if(conpassword.text.toString().isEmpty()){
+                    passConpassword=false
+                }else{
+                    passConpassword=true
+                    binding.txtFieldConPasswordReg.error=null
+                    if(passPassword){
+                        if(password.text.toString()!=conpassword.text.toString()){
+                            checkConPassword=false
+                            binding.txtFieldConPasswordReg.error = "Password And Confirmation Password Must Be The Same"
+                            binding.txtFieldConPasswordReg.error = "Password And Confirmation Password Must Be The Same"
+                        }
+                        else{
+                            binding.txtFieldConPasswordReg.error = null
+                            checkConPassword=true
+                        }
+                    }
+                }
+            }
+        }
+        email.setOnFocusChangeListener{view, b->
+            if(!b){
+                if(email.text.toString().isEmpty()){
+                    passEmail=false
+                }else{
+                    binding.txtFieldEmailReg.error=null
+                    passEmail=true
+                }
+            }
+        }
+        nama.setOnFocusChangeListener{view, b->
+            if(nama.text.toString().isEmpty()){
+                passNama=false
+            }else{
+                binding.txtFieldNameReg.error=null
+                passNama=true
+            }
+        }
+
         btnAdd.setOnClickListener{
-            if(password.text.toString() == conpassword.text.toString()){
+            nama.clearFocus()
+            username.clearFocus()
+            password.clearFocus()
+            conpassword.clearFocus()
+            email.clearFocus()
+            if(checkUsername && checkConPassword && passUsername && passPassword && passConpassword && passEmail &&passNama){
                 val userReg=AddUsers(
                     function = "adduser",
                     id=null,
@@ -44,32 +142,45 @@ class RegisterActivity : AppCompatActivity() {
                         statusUsername=true
                     }
                 }
-                if(statusUsername){
-                    apiServices.addUser(userReg){
-                        Log.d("data",it.toString())
-                        if (it?.code==1){
-                            Toast.makeText(this, "Registered Successfully", Toast.LENGTH_SHORT).show()
-                            val dataUser = it.dataUser
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if(statusUsername){
+                        apiServices.addUser(userReg){
+                            Log.d("data",it.toString())
+                            if (it?.code==1){
+                                Toast.makeText(this, "Registered Successfully", Toast.LENGTH_SHORT).show()
+                                val dataUser = it.dataUser
 
-                            intent = Intent(this,EmailVerificationActivity::class.java)
-                            intent.putExtra("dataUser",dataUser)
-                            startActivity(intent)
-                        }
-                        else{
-                            Toast.makeText(this, "Error Registering new User", Toast.LENGTH_SHORT).show()
+                                intent = Intent(this,EmailVerificationActivity::class.java)
+                                intent.putExtra("dataUser",dataUser)
+                                startActivity(intent)
+                            }
+                            else{
+                                Toast.makeText(this, "Error Registering new User", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
-                }
-                else{
-                    Toast.makeText(this, "Username Already Taken", Toast.LENGTH_SHORT).show()
-                }
-//                Log.d("data",userReg.toString())
-
+                    else{
+                        Toast.makeText(this, "Username Already Taken", Toast.LENGTH_SHORT).show()
+                    }
+                },500)
             }
             else{
-                Toast.makeText(this, "Password and Password Confirmation doesn't match", Toast.LENGTH_SHORT).show()
+                if(!passUsername){
+                    binding.txtFieldUsernameReg.error="This Field Must Be Filled"
+                }
+                if(!passPassword){
+                    binding.txtFieldPasswordReg.error="This Field Must Be Filled"
+                }
+                if(!passConpassword){
+                    binding.txtFieldConPasswordReg.error="This Field Must Be Filled"
+                }
+                if(!passEmail){
+                    binding.txtFieldEmailReg.error="This Field Must Be Filled"
+                }
+                if(!passNama){
+                    binding.txtFieldNameReg.error="This Field Must Be Filled"
+                }
             }
-
         }
 
     }

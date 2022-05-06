@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
@@ -14,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gracielo.projectta.databinding.ActivityShoppingListBinding
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
+import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.ui.history.HistoryHomeActivity
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.ui.ingredients.IngridientsList
@@ -28,10 +32,12 @@ class ShoppingListActivity : AppCompatActivity() {
     lateinit var viewModel: UserViewModel
     lateinit var shoppingListViewModel: ShoppingListViewModel
     private var idUser = ""
-    private var listRecipe = mutableListOf<String>()
+    private var listRecipe = mutableListOf<ShoppingListEntity>()
     private var listIngredients = mutableMapOf<String,List<String>>()
     private var listIngredientsDetail = mutableMapOf<String,List<String>>()
     private val adapters = ShoppingListRecipeAdapter()
+    private var apiServices = ApiServices()
+    private var listRecipeName = ArrayList<String>()
 //    private var shoppingList = mutableMapOf<String,List<String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,10 +54,12 @@ class ShoppingListActivity : AppCompatActivity() {
         withDelay(500){
             shoppingListViewModel.getShoppingList(idUser).observe(this){
                 if(!it.isNullOrEmpty()){
+                    rvShoppingList.visibility= View.VISIBLE
+                    binding.txtShoppingEmpty.visibility=View.INVISIBLE
                     Log.d("ShoppingList",it[0].ingredients_list)
-                    listRecipe.clear(); listIngredients.clear(); listRecipe.clear();
+                    listRecipe.clear(); listIngredients.clear()
                     for(i in it.indices){
-                        listRecipe.add(it[i].recipe_name)
+                        listRecipe.add(it[i])
                         var rawString = it[i].ingredients_list
                         val listIngredientsSplit = mutableListOf<String>()
                         val listIngredientsDetailSplit = mutableListOf<String>()
@@ -61,19 +69,26 @@ class ShoppingListActivity : AppCompatActivity() {
                             listIngredientsSplit.add(ingredientsValue[0])
                             listIngredientsDetailSplit.add(ingredientsValue[1])
                         }
-                        listIngredients.put(listRecipe[i],listIngredientsSplit)
-                        listIngredientsDetail.put(listRecipe[i],listIngredientsDetailSplit)
+                        apiServices.getRecipeName(it[i].id_recipe){response->
+                            listRecipeName.add(response?.message!!)
+                            listIngredients.put(response?.message!!,listIngredientsSplit)
+                            listIngredientsDetail.put(response?.message!!,listIngredientsDetailSplit)
+                        }
                     }
-                    adapters.setData(listRecipe,listIngredients,listIngredientsDetail)
-                    rvShoppingList.apply {
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = adapters
-                    }
-                    rvShoppingList.adapter = adapters
+                    Log.d("DataShoppingList","${listRecipeName.size}")
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        adapters.setData(listRecipe,listRecipeName,listIngredients,listIngredientsDetail)
+                        rvShoppingList.apply {
+                            layoutManager = LinearLayoutManager(context)
+                            adapter = adapters
+                        }
+                        rvShoppingList.adapter = adapters
+                    },500)
 
                 }
                 else{
-
+                    rvShoppingList.visibility= View.INVISIBLE
+                    binding.txtShoppingEmpty.visibility=View.VISIBLE
                 }
             }
 
@@ -121,10 +136,7 @@ class ShoppingListActivity : AppCompatActivity() {
 
         val dropdown = binding.dropDownAutoTextSearchByShoppingList
         (dropdown as? AutoCompleteTextView)?.setAdapter(adapter)
-
         supportActionBar?.hide()
-
-
     }
 
     private fun obtainUserViewModel(activity: AppCompatActivity): UserViewModel {
