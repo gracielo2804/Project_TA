@@ -340,5 +340,32 @@ interface ApiEndPoint {
     @GET("dataIngredient.txt")
     fun getUserSearchtxtFile():Call<ResponseBody>
 
+    @POST("master.php")
+    @FormUrlEncoded
+    fun sendOTPForgotPass(
+        @Field("function") function: String = "sendOTPForgotPass",
+        @Field("username") username: String ,
+        @Field("email") email: String,
+
+    ): Call<MessageResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun verifyResetOTP(
+        @Field("function") function: String = "verifyResetOTP",
+        @Field("username") username: String ,
+        @Field("email") email: String,
+        @Field("otp") otp: String,
+    ): Call<MessageResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun resetPassword(
+        @Field("function") function: String = "resetPassword",
+        @Field("username") username: String ,
+        @Field("email") email: String,
+        @Field("password") password: String,
+    ): Call<MessageResponse>
+
 
 }

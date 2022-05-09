@@ -103,6 +103,7 @@
 
 
 
+
     <!--    <EditText-->
     <!--        android:id="@+id/username"-->
     <!--        android:layout_width="0dp"-->
@@ -218,5 +219,16 @@
         app:layout_constraintStart_toStartOf="@+id/txtFieldPasswordLog"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
+    <TextView
+        android:id="@+id/txtForgotPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btnToRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="@string/forgot_pass"
+        android:textStyle=""
+        android:textColor="@color/black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

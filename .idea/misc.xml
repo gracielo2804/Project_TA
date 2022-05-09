@@ -43,6 +43,9 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_data_diri.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_edit_profile.xml" value="0.33" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_email_verification.xml" value="0.25" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_forgot_password.xml" value="0.13697916666666668" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_forgot_password_input_password.xml" value="0.13697916666666668" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_forgot_password_otp_activity.xml" value="0.33" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_form_input.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_history_home.xml" value="0.12552083333333333" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_home.xml" value="0.18" />

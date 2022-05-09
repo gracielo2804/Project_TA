@@ -1,5 +1,6 @@
 package com.gracielo.projectta.ui.login
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -25,6 +26,8 @@ import com.gracielo.projectta.databinding.ActivityLoginBinding
 import com.gracielo.projectta.ui.admin.AdminHomeActivity
 import com.gracielo.projectta.ui.datadiri.DataDiriActivity
 import com.gracielo.projectta.ui.homepage.HomeActivity
+import com.gracielo.projectta.ui.login.forgotpassword.ForgotPasswordOTPActivity
+import com.gracielo.projectta.ui.login.forgotpassword.ForgotPasswordUsernameEmailActivity
 import com.gracielo.projectta.ui.register.EmailVerificationActivity
 import com.gracielo.projectta.ui.register.RegisterActivity
 import com.gracielo.projectta.viewmodel.UserViewModel
@@ -90,8 +93,10 @@ class TestLoginActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
+        }
+        binding.txtForgotPass.setOnClickListener {
+            val intentt= Intent(this, ForgotPasswordUsernameEmailActivity::class.java)
+            startActivity(intentt)
         }
 
         AndroidThreeTen.init(this)
@@ -313,5 +318,21 @@ class TestLoginActivity : AppCompatActivity() {
             Log.d("FileDownload", "bawah ${e.message}")
             false
         }
+    }
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Exit App")
+            .setMessage("Are you sure you want to exit the application ?") // Specifying a listener allows you to take an action before dismissing the dialog.
+            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setPositiveButton("Yes"
+            ) { _, _ ->
+//                Toast.makeText(this,"Successfully Logout",Toast.LENGTH_SHORT).show()
+                finishAffinity()
+//                viewModel.getUser()?.removeObserver(){}
+
+            } // A null listener allows the button to dismiss the dialog and take no further action.
+            .setNegativeButton(android.R.string.no, null)
+//            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
     }
 }

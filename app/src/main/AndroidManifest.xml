@@ -21,113 +21,127 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_TA"
         tools:replace="android:allowBackup">
-        <activity android:screenOrientation="locked"
+        <activity
+            android:name=".ui.login.forgotpassword.ForgotPasswordInputPasswordActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".ui.login.forgotpassword.ForgotPasswordOTPActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.forgotpassword.ForgotPasswordUsernameEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.admin.ingredients.AdminIngredientActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.admin.recipe.AdminRecipeActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.recipe.RecipeSearchFilterNutrientActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.admin.AdminUserReportActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.admin.AdminHomeActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.equipment.ListAlatMasakActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.setting.EditProfileActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.membership.MembershipHistory"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.membership.BuyMembershipActivity"
             android:exported="false"
+            android:screenOrientation="locked"
             android:theme="@style/Theme.Project_TA.NoActionBar" />
-        <activity android:screenOrientation="locked"
+        <activity
             android:name=".ui.history.searchRecipeHistory.SearchRecipeHistoryActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.history.nutrientHistory.NutrientHistoryActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.history.HistoryHomeActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.shoppingList.ShoppingListActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.recipe.RecipeDetailActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.setting.SettingActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.recipe.RecipeSearchResultActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.ingredients.SelectedIngredientsActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.ingredients.IngridientsList"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.register.EmailVerificationActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-
+            android:exported="true"
+            android:screenOrientation="locked">
         </activity>
-        <activity android:screenOrientation="locked"
+        <activity
             android:name=".ui.TestUploadImage"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            android:exported="true"
+            android:screenOrientation="locked">
         </activity>
-        <activity android:screenOrientation="locked"
+        <activity
             android:name=".ui.datadiri.DataDiriActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.homepage.HomeActivity"
-            android:exported="false" />
-        <activity android:screenOrientation="locked"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
             android:name=".ui.register.RegisterActivity"
-            android:exported="false">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            android:exported="false"
+            android:screenOrientation="locked">
         </activity>
-        <activity android:screenOrientation="locked"
+
+        <activity
             android:name=".ui.login.TestLoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="locked">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:screenOrientation="locked"
+        <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="locked" />
 
         <receiver
             android:name=".notification.DailyReminder"

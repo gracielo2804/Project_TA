@@ -824,6 +824,66 @@ class ApiServices {
             }
         )
     }
+    fun sendOTPForgotPass(username: String,email: String, onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.sendOTPForgotPass(
+            function = "sendOTPForgotPass",
+            username = username,
+            email = email
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun verifyResetOTP(username: String,email: String, otp:String, onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.verifyResetOTP(
+            function = "verifyResetOTP",
+            username = username,
+            email = email,
+            otp=otp
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+    fun resetPassword(username: String,email: String, password: String, onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.resetPassword(
+            function = "resetPassword",
+            username = username,
+            email = email,
+            password =password
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
 
 //    fun getUserSearchtxtFile(){
 //        val retrofit = ApiConfig.provideApiService()
