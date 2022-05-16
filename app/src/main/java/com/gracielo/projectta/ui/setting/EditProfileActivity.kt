@@ -1,5 +1,6 @@
 package com.gracielo.projectta.ui.setting
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -103,6 +104,10 @@ class EditProfileActivity : AppCompatActivity() {
                 binding.txtInputWeightEdit.isEnabled=false
             }
         }
+        binding.btnChangePasswordPage.setOnClickListener {
+            val intentt = Intent(this,ChangePasswordSettingActivity::class.java)
+            startActivity(intentt)
+        }
 
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -160,6 +165,7 @@ class EditProfileActivity : AppCompatActivity() {
         val maksgula = String.format("%.1f", (kalori*0.1)/4).toDouble()
         val maksProtein = dataUser.weight*1.5
 //        binding.txtKaloriEdit.text = kalori.toString()
+
 
 
 

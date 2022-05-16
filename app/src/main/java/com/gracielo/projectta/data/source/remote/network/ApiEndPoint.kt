@@ -17,6 +17,7 @@ import com.gracielo.projectta.data.model.recipe.searchWithNutrient.SearchRecipeN
 import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
 import com.gracielo.projectta.data.model.recipeCount.CountRecipeResponse
 import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeHistoryResponse
+import com.gracielo.projectta.data.model.searchRecipeRecommendation.searchRecipeRecommendationResponse
 import com.gracielo.projectta.data.model.shoppingList.ShoppingListResponse
 import com.gracielo.projectta.data.model.userListEquipment.UserListEquipmentResponse
 import okhttp3.MultipartBody
@@ -365,6 +366,36 @@ interface ApiEndPoint {
         @Field("username") username: String ,
         @Field("email") email: String,
         @Field("password") password: String,
+    ): Call<MessageResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun searchRecipeRecommendation(
+        @Field("function") function: String = "searchRecipeRecommendation",
+        @Field("ingredientsParam") ingredientsParam: String,
+    ): Call<searchRecipeRecommendationResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun searchRecipeVegetarianRecommendation(
+        @Field("function") function: String = "searchRecipeVegetarianRecommendation",
+        @Field("ingredientsParam") ingredientsParam: String,
+    ): Call<searchRecipeRecommendationResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun searchRecipeLowCarb(
+        @Field("function") function: String = "searchRecipeLowCarb",
+        @Field("ingredientsParam") ingredientsParam: String,
+    ): Call<searchRecipeRecommendationResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun changePassword(
+        @Field("function") function: String = "changePassword",
+        @Field("curPassword") curPassword: String,
+        @Field("newPassword") newPassword: String,
+        @Field("id_users") id_users: String,
     ): Call<MessageResponse>
 
 

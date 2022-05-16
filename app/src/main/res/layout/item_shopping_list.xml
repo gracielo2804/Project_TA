@@ -12,16 +12,30 @@
 
         <ImageView
             android:id="@+id/imageViewRecipeShoppingList"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit_profile"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Delete"
+            android:textSize="10sp"
+            app:cornerRadius="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/txtRecipeNameShoppingList"
-            android:layout_width="225dp"
-            android:layout_height="wrap_content"
+            android:layout_width="236dp"
+            android:layout_height="49dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="32dp"
             android:text="TextView"
@@ -30,6 +44,17 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/imageViewRecipeShoppingList"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <View
+            android:id="@+id/pemisahItemRVShoppingList"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginHorizontal="-16dp"
+            android:layout_marginVertical="8dp"
+            android:background="#f2f2f2"
+            android:paddingHorizontal="-16dp"
+            app:layout_constraintTop_toBottomOf="@id/imageViewRecipeShoppingList"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_ingredients_shopping_list"
@@ -41,7 +66,7 @@
             android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageViewRecipeShoppingList" />
+            app:layout_constraintTop_toBottomOf="@id/pemisahItemRVShoppingList" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -266,6 +266,37 @@
                 android:layout_height="wrap_content"
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_marginVertical="2dp"
+            android:background="#f2f2f2" />
+        <TextView
+            android:paddingLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Change Password "/>
+
+        <Button
+            android:id="@+id/btnChangePasswordPage"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:layout_height="wrap_content"
+            android:text="To Change Password Page"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.2"
+            />
+
 <!--        <View-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="12dp"-->

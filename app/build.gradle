@@ -122,4 +122,7 @@ dependencies {
     implementation 'com.github.michael-rapp:apriori:2.0.1'
     api "com.github.michael-rapp:java-util:[2.0.1,2.1.0)"
     implementation "org.slf4j:slf4j-api:[1.7,1.8)"
+
+    //PDF
+    implementation 'com.itextpdf:itextg:5.5.10'
 }

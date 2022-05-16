@@ -35,6 +35,7 @@ import com.gracielo.projectta.viewmodel.ViewModelFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import de.mrapp.apriori.Apriori
 import de.mrapp.apriori.Sorting
+import de.mrapp.apriori.metrics.Confidence
 import okhttp3.ResponseBody
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -57,7 +58,7 @@ class TestLoginActivity : AppCompatActivity() {
 
         apiServices.tempFuncUpdateStatus{  }
         binding.pbarLogin.visibility= View.INVISIBLE
-
+        var dataCountIngredientsString = mutableListOf(arrayOf<String>())
         val viewModel =obtainViewModel(this@TestLoginActivity)
         viewModel.getUser().observeOnce(this){users->
             if (users != null) {
@@ -236,35 +237,6 @@ class TestLoginActivity : AppCompatActivity() {
             }
         }
 
-        val retrofit = ApiConfig.provideApiService()
-        retrofit.getUserSearchtxtFile().enqueue(
-            object : Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.d("dataapi",t.message.toString())
-                }
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    if (response.isSuccessful) {
-                        Log.d("FileDownload", "server contacted and has file")
-                        val writtenToDisk = writeResponseBodyToDisk(response.body()!!)
-                        Log.d("FileDownload", "file download was a success? $writtenToDisk")
-                        if(writtenToDisk){
-                            val minSupport = 0.1
-                            val apriori = Apriori.Builder<NamedItem>(minSupport).create()
-                            val iterable = Iterable { DataIterator(File("${getExternalFilesDir(null)}${File.separator} dataIngredients.txt"))}
-                            val output = apriori.execute(iterable)
-
-                            val frequentItemSets = output.frequentItemSets
-                            val sorting = Sorting.forItemSets().withOrder(Sorting.Order.DESCENDING) //
-                            val sortedFrequentItemSets = frequentItemSets.sort(sorting)
-                            Log.d("OutputApriori",sortedFrequentItemSets.toString())
-                        }
-                    } else {
-                        Log.d("FileDownload", "server contact failed")
-                    }
-                }
-            }
-        )
-
     }
     private fun obtainViewModel(activity: AppCompatActivity): UserViewModel {
         val factory: ViewModelFactory = ViewModelFactory.getInstance(activity.application)
@@ -283,42 +255,7 @@ class TestLoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun writeResponseBodyToDisk(body: ResponseBody): Boolean {
-        return try {
-            // todo change the file location/name according to your needs
-            val futureStudioIconFile =
-                File("${getExternalFilesDir(null)}${File.separator} dataIngredients.txt")
-            var inputStream: InputStream? = null
-            var outputStream: OutputStream? = null
-            try {
-                val fileReader = ByteArray(409600)
-                val fileSize = body.contentLength()
-                var fileSizeDownloaded: Long = 0
-                inputStream = body.byteStream()
-                outputStream = FileOutputStream(futureStudioIconFile)
-                while (true) {
-                    val read: Int = inputStream.read(fileReader)
-                    if (read == -1) {
-                        break
-                    }
-                    outputStream.write(fileReader, 0, read)
-                    fileSizeDownloaded += read.toLong()
-                    Log.d("FileDownload", "file download: $fileSizeDownloaded of $fileSize")
-                }
-                outputStream.flush()
-                true
-            } catch (e: IOException) {
-                Log.d("FileDownload", "atas ${e.message}")
-                false
-            } finally {
-                inputStream?.close()
-                outputStream?.close()
-            }
-        } catch (e: IOException) {
-            Log.d("FileDownload", "bawah ${e.message}")
-            false
-        }
-    }
+
     override fun onBackPressed() {
         AlertDialog.Builder(this)
             .setTitle("Exit App")

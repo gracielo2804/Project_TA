@@ -13,6 +13,8 @@
         <item name="colorSecondary">@color/design_default_color_secondary</item>
         <item name="colorSecondaryVariant">@color/design_default_color_secondary_variant</item>
         <item name="colorOnSecondary">@color/design_default_color_on_secondary</item>
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+<!--        <item name="android:colorAccent" tools:targetApi="lollipop" >@color/colorAccent</item>-->
 
 <!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
 <!--        <item name="colorPrimary">@color/purple_500</item>-->

@@ -20,6 +20,7 @@ import com.gracielo.projectta.data.model.recipe.searchWithNutrient.SearchRecipeN
 import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
 import com.gracielo.projectta.data.model.recipeCount.CountRecipeResponse
 import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeHistoryResponse
+import com.gracielo.projectta.data.model.searchRecipeRecommendation.searchRecipeRecommendationResponse
 import com.gracielo.projectta.data.model.shoppingList.ShoppingListResponse
 import com.gracielo.projectta.data.model.userListEquipment.UserListEquipmentResponse
 import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
@@ -875,6 +876,83 @@ class ApiServices {
             object : Callback<MessageResponse> {
                 override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
                     Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun searchRecipeRecommendation(ingredientsParam:String, onResult: (searchRecipeRecommendationResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.searchRecipeRecommendation(
+            function = "searchRecipeRecommendation",
+           ingredientsParam = ingredientsParam
+        ).enqueue(
+            object : Callback<searchRecipeRecommendationResponse> {
+                override fun onFailure(call: Call<searchRecipeRecommendationResponse>, t: Throwable) {
+                    Log.d("recRecipe",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<searchRecipeRecommendationResponse>, response: Response<searchRecipeRecommendationResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun searchRecipeVegetarianRecommendation(ingredientsParam:String, onResult: (searchRecipeRecommendationResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.searchRecipeVegetarianRecommendation(
+            function = "searchRecipeVegetarianRecommendation",
+            ingredientsParam = ingredientsParam
+        ).enqueue(
+            object : Callback<searchRecipeRecommendationResponse> {
+                override fun onFailure(call: Call<searchRecipeRecommendationResponse>, t: Throwable) {
+                    Log.d("recVege",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<searchRecipeRecommendationResponse>, response: Response<searchRecipeRecommendationResponse>) {
+                    val data = response.body()
+                    Log.d("recVege",response.body().toString())
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun searchRecipeLowCarb(ingredientsParam:String, onResult: (searchRecipeRecommendationResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.searchRecipeLowCarb(
+            function = "searchRecipeLowCarb",
+            ingredientsParam = ingredientsParam
+        ).enqueue(
+            object : Callback<searchRecipeRecommendationResponse> {
+                override fun onFailure(call: Call<searchRecipeRecommendationResponse>, t: Throwable) {
+                    Log.d("recLowCarb",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<searchRecipeRecommendationResponse>, response: Response<searchRecipeRecommendationResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+    fun changePassword(curPassword:String,newPassword:String,id_users:String, onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.changePassword(
+            function = "changePassword",
+            curPassword = curPassword,
+            newPassword = newPassword,
+            id_users = id_users
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
                     onResult(null)
                 }
                 override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {

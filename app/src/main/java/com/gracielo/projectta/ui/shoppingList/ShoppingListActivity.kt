@@ -134,8 +134,8 @@ class ShoppingListActivity : AppCompatActivity() {
         val items = listOf("Recipe", "Ingredients")
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown_search_shopping_list, items)
 
-        val dropdown = binding.dropDownAutoTextSearchByShoppingList
-        (dropdown as? AutoCompleteTextView)?.setAdapter(adapter)
+//        val dropdown = binding.dropDownAutoTextSearchByShoppingList
+//        (dropdown as? AutoCompleteTextView)?.setAdapter(adapter)
         supportActionBar?.hide()
     }
 

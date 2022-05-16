@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.model.recipe.RecipeRecommendation
 import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeDataHistory
 import com.gracielo.projectta.databinding.CardGridLayoutBinding
+import com.gracielo.projectta.ui.homepage.RecommendedItemCallback
 
-class SearchRecipeHistoryGridAdapter : RecyclerView.Adapter<SearchRecipeHistoryGridAdapter.ViewHolder>() {
+class SearchRecipeHistoryGridAdapter(private val callback : SearchRecipeHistoryItemCallback) : RecyclerView.Adapter<SearchRecipeHistoryGridAdapter.ViewHolder>() {
 
     private var listData =  ArrayList<SearchRecipeDataHistory>()
     var onItemClick: ((SearchRecipeDataHistory) -> Unit)? = null
@@ -39,6 +41,9 @@ class SearchRecipeHistoryGridAdapter : RecyclerView.Adapter<SearchRecipeHistoryG
                 .error(R.drawable.image_placeholder)
                 .timeout(30000)
                 .into(imageView)
+            itemView.setOnClickListener{
+                callback.onItemClicked(recipe)
+            }
         }
         init{
             binding.root.setOnClickListener{onItemClick?.invoke(listData[bindingAdapterPosition])}
@@ -56,4 +61,8 @@ class SearchRecipeHistoryGridAdapter : RecyclerView.Adapter<SearchRecipeHistoryG
         holder.bindRecipe(data)
     }
 
+}
+
+interface SearchRecipeHistoryItemCallback {
+    fun onItemClicked(data: SearchRecipeDataHistory)
 }

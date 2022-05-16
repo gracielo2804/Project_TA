@@ -288,7 +288,7 @@
                 android:id="@+id/fab_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_24"
+                android:src="@drawable/search_black"
                 app:layout_anchor="@+id/bottomappbar" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </FrameLayout>

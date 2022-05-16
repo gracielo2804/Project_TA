@@ -42,6 +42,10 @@ class ForgotPasswordUsernameEmailActivity : AppCompatActivity() {
                     }
                 }
             }
+            else{
+                binding.pbarForgotPassUsernameEmail.visibility = View.INVISIBLE
+                Toast.makeText(this,"Username and Email input must be fiiled",Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

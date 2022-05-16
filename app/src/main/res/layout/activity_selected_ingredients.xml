@@ -5,16 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ingredients.SelectedIngredientsActivity">
-
-    <TextView
-        android:id="@+id/tvTitleIngredientsSelected"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerIngredientSelectList"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="List of Selected Ingredients"
+        android:paddingVertical="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageBackIngredientSelectList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/back_icon" />
+
+
+        <TextView
+            android:id="@+id/headerIngredientsListTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected Ingredients List "
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/imageBackIngredientSelectList"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:id="@+id/shadowHeaderListSelectedIngredients"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/below_shadow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerIngredientSelectList"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_ingredients_list_selected"
@@ -24,7 +55,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleIngredientsSelected" />
+        app:layout_constraintTop_toBottomOf="@id/shadowHeaderListSelectedIngredients" />
 
     <com.gracielo.projectta.ui.fastScroller.fastScroller
         android:id="@+id/fastScrollerSelected"

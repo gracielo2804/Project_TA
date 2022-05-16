@@ -4,11 +4,15 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Typeface
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
@@ -31,8 +35,13 @@ import com.gracielo.projectta.databinding.ActivityAdminHomeBinding
 import com.gracielo.projectta.ui.admin.chart.ChartValueCustomFormatter
 import com.gracielo.projectta.ui.admin.ingredients.AdminIngredientActivity
 import com.gracielo.projectta.ui.admin.recipe.AdminRecipeActivity
+import com.itextpdf.text.Document
+import com.itextpdf.text.Paragraph
+import com.itextpdf.text.pdf.PdfWriter
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.threeten.bp.format.DateTimeFormatter
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,6 +73,53 @@ class AdminHomeActivity : AppCompatActivity() {
         binding = ActivityAdminHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AndroidThreeTen.init(this)
+
+//        binding.btnTestPDF.setOnClickListener {
+//            //create object of Document class
+//            val mDoc = Document()
+//            //pdf file name
+//            val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis())
+//            //pdf file path
+//            val filePath= "${getExternalFilesDir(null)}/ $mFileName.pdf"
+//            val mFilePath = Environment.getExternalStorageDirectory().toString() + "/" + mFileName +".pdf"
+//            try {
+//                //create instance of PdfWriter class
+//                PdfWriter.getInstance(mDoc, FileOutputStream(filePath))
+//
+//                //open the document for writing
+//                mDoc.open()
+//
+//                //get text from EditText i.e. textEt
+//                val mText = "abc123"
+//
+//                //add author of the document (metadata)
+//                mDoc.addAuthor("Gracielo Justine")
+//
+//                //add paragraph to the document
+//                mDoc.add(Paragraph(mText))
+//
+//                //close document
+//                mDoc.close()
+//
+//                //show file saved message with file name and path
+//                Toast.makeText(this, "$mFileName.pdf\nis saved to\n$filePath", Toast.LENGTH_SHORT).show()
+//            }
+//            catch (e: Exception){
+//                //if anything goes wrong causing exception, get and show exception message
+//                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+//            }
+//        }
+
+        binding.btnTestPDF.setOnClickListener {
+            val pdfDocument = PdfDocument()
+            val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
+            val page = pdfDocument.startPage(pageInfo)
+            page.canvas.drawText("asdf",0f,0f,Paint())
+            pdfDocument.finishPage(page)
+            val filePath = File(getExternalFilesDir(null), "bitmapPdf.pdf")
+            pdfDocument.writeTo(FileOutputStream(filePath))
+            pdfDocument.close()
+        }
 
         val bottomNavBar = binding.adminBottomMenu
         bottomNavBar.selectedItemId = R.id.adminSubscription

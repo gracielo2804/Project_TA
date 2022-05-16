@@ -90,13 +90,13 @@ class DailyReminder : BroadcastReceiver() {
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setContentIntent(pendingIntent)
-            .setSmallIcon(R.drawable.ic_notifications)
+            .setSmallIcon(R.drawable.logo_apps)
             .setContentTitle("Eat Reminder")
             .setStyle(notificationStyle)
             .setContentText(contentText)
             .setAutoCancel(true)
             .setSound(alarmSound)
-            .setVibrate(longArrayOf(500, 500, 500, 500, 500))
+            .setVibrate( longArrayOf(0, 500, 1000))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
 
@@ -111,9 +111,9 @@ class DailyReminder : BroadcastReceiver() {
                 NotificationChannel(NOTIFICATION_CHANNEL_ID,NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
 
             channel.enableLights(true)
-            channel.lightColor = Color.RED
+            channel.lightColor = Color.WHITE
             channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(500, 500, 500, 500, 500)
+            channel.vibrationPattern = longArrayOf(0, 500, 1000)
             channel.setSound(ringtoneManager, audioAttributes)
             notificationManager.createNotificationChannel(channel)
         }

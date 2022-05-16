@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Project TA</string>
+    <string name="app_name">Healthy Foods</string>
     <!--    <string name="title_activity_test_login">TestLoginActivity</string>-->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

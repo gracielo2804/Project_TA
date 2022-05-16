@@ -88,9 +88,14 @@ class RecipeSearchResultActivity : AppCompatActivity() {
                         binding.rvSearchResult.visibility=View.VISIBLE
                         binding.txtEmptySearchRecipeResult.visibility=View.INVISIBLE
                         dataRecipe.forEach {item->
-                            val image = item.image.split("-")
-                            val imageandext =image[1].split(".")
-                            item.image="${image[0]}-636x393.${imageandext[1]}"
+                            if(item.image.isNullOrEmpty()){
+                                item.image=""
+                            }
+                            else {
+                                val image = item.image.split("-")
+                                val imageandext =image[1].split(".")
+                                item.image="${image[0]}-636x393.${imageandext[1]}"
+                            }
                         }
                         if(listNutrientParam.isNullOrEmpty()){
 
@@ -231,8 +236,10 @@ class RecipeSearchResultActivity : AppCompatActivity() {
         adapters.onItemClick = {
             apiServices.insertUserSearchRecipe(dataUser.id,it.id.toString(),listIngredientsSearch,it.title){}
             apiServices.getEquipmentFromRecipe(it.id.toString()){response->
-                for (i in response?.data?.equipment?.indices!!){
-                    apiServices.insertEquipment(response.data.equipment[i].name,response.data.equipment[i].image){}
+                if(response!=null){
+                    for (i in response.data.equipment.indices){
+                        apiServices.insertEquipment(response.data.equipment[i].name,response.data.equipment[i].image){}
+                    }
                 }
             }
             val intent = Intent(this,RecipeDetailActivity::class.java)

@@ -57,7 +57,7 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
             Glide
                 .with(itemView.context)
                 .load("https://spoonacular.com/recipeImages/${recipeData.id_recipe}-556x370.jpg")
-                .apply(RequestOptions().override(100, 100))
+//                .apply(RequestOptions().override(100, 100))
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .into(binding.imageViewRecipeShoppingList)
