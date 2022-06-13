@@ -1,7 +1,6 @@
 package com.gracielo.projectta.ui.datadiri
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,16 +10,17 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.widget.*
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.ViewModel
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.DataUser
 import com.gracielo.projectta.data.model.DataUserProfile
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
-import com.gracielo.projectta.data.source.remote.network.ApiResponses
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityDataDiriBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity

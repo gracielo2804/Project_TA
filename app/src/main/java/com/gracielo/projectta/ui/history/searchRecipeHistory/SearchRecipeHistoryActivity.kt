@@ -1,14 +1,14 @@
 package com.gracielo.projectta.ui.history.searchRecipeHistory
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeDataHistory
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivitySearchRecipeHistoryBinding
@@ -37,15 +37,23 @@ class SearchRecipeHistoryActivity : AppCompatActivity(),SearchRecipeHistoryItemC
                     if(historyData!=null){
                         val listTemp = historyData.searchRecipeDataHistory
                         val list= mutableListOf<SearchRecipeDataHistory>()
-                        for (i in listTemp.size-1 downTo 0){
-                            list.add(listTemp[i])
+                        if(listTemp!=null){
+                            binding.txtEmptySearchRecipeHistory.visibility = View.INVISIBLE
+                            for (i in listTemp.size-1 downTo 0){
+                                list.add(listTemp[i])
+                            }
+                            Log.d("list hist",list.toString())
+                            adapters.setData(list)
+                            binding.rvNutritentHistory.apply {
+                                layoutManager = GridLayoutManager(this@SearchRecipeHistoryActivity,2)
+                                adapter = adapters
+                            }
                         }
-                        Log.d("list hist",list.toString())
-                        adapters.setData(list)
-                        binding.rvNutritentHistory.apply {
-                            layoutManager = GridLayoutManager(this@SearchRecipeHistoryActivity,2)
-                            adapter = adapters
+                        else{
+                            binding.txtEmptySearchRecipeHistory.visibility = View.VISIBLE
+
                         }
+
                     }
                 }
             }

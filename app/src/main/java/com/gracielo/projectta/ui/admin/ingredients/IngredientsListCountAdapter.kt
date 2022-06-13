@@ -1,14 +1,11 @@
 package com.gracielo.projectta.ui.admin.ingredients
 
-import android.R
 import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.gracielo.projectta.data.model.countIngredients.DataCountIngredients
-import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
-import com.gracielo.projectta.data.source.remote.network.ApiServices
 import de.codecrafters.tableview.TableDataAdapter
 
 
@@ -29,7 +26,7 @@ class IngredientsListCountAdapter(context: Context, listDatas: ArrayList<DataCou
 
 
     override fun getCellView(rowIndex: Int, columnIndex: Int, parentView: ViewGroup?): View? {
-       val dataIngredients= listData[rowIndex]
+        val dataIngredients= listData[rowIndex]
         return when (columnIndex) {
             0 ->   renderColumn2(dataIngredients.name)
             1 -> renderColumn2(dataIngredients.count.toString())

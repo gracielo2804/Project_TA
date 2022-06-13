@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -38,7 +38,6 @@ import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.viewmodel.IngredientsViewModel
 import com.gracielo.projectta.viewmodel.ShoppingListViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
-import kotlin.math.log
 
 class SettingActivity : AppCompatActivity() {
 
@@ -77,7 +76,6 @@ class SettingActivity : AppCompatActivity() {
             if(it.gender=="Male"){binding.userPicture.setImageResource(R.drawable.male_profile)} else if(it.gender=="Female"){binding.userPicture.setImageResource(R.drawable.female_profile)}
             binding.textUserName.text=it.name
             if(it.tipe=="0"){
-
                 binding.textTipe.text="Trial"
                 binding.textTipe.setTextColor(Color.BLACK)
             } else if(it.tipe=="1"){
@@ -100,16 +98,8 @@ class SettingActivity : AppCompatActivity() {
             binding.textExpired.text=expired[0]
             binding.emailUser.text=it.email
 
-            apiServices.getUserSelectedEquipment(it.id){userEquipment->
-                if(userEquipment?.code==-2){
-                    binding.rvListEquipmentUser.visibility= View.INVISIBLE
-                    binding.noItemEquipmentUser.visibility= View.VISIBLE
-                }
-                else{
-                    binding.rvListEquipmentUser.visibility= View.VISIBLE
-                    binding.noItemEquipmentUser.visibility= View.INVISIBLE
-                }
-            }
+
+            refreshEquipment()
             shoppingListViewModel.getShoppingList(it.id).observeOnce(this){list->
                 listShoppingListUser.addAll(list)
             }
@@ -119,7 +109,9 @@ class SettingActivity : AppCompatActivity() {
             layoutManager  = LinearLayoutManager(this@SettingActivity,LinearLayoutManager.HORIZONTAL,false)
             adapter=adapterequipment
         }
-        refreshEquipment()
+        Handler(Looper.getMainLooper()).postDelayed({
+
+        },500)
         binding.btnEditEquipmentsSelected.setOnClickListener {
             val intent = Intent(this,ListAlatMasakActivity::class.java)
             startActivity(intent)
@@ -131,15 +123,15 @@ class SettingActivity : AppCompatActivity() {
         }
         rv_setting = binding.rvSettingList
         Handler(Looper.getMainLooper()).postDelayed({
-            settingList.add("Logout")
+            settingList.add("Notification Settings")
             if(dataUser.tipe=="0"){
                 settingList.add("Buy Membership")
             }
             else {
-                settingList.add("Extend Membership")
+                settingList.add("Change Membership")
             }
-
             settingList.add("Membership Subscription History")
+            settingList.add("Logout")
             adapters.setData(settingList)
 
             rv_setting.apply {
@@ -182,8 +174,12 @@ class SettingActivity : AppCompatActivity() {
                         .setNegativeButton(android.R.string.no, null)
                         .show()
                 }
-                "Extend Membership" ->{
-                    Toast.makeText(this,"Extend",Toast.LENGTH_SHORT).show()
+                "Change Membership" ->{
+                    val userType= dataUser.tipe
+                    var intentKirim = Intent(this, BuyMembershipActivity::class.java)
+                    intentKirim.putExtra("Change","Change")
+                    intentKirim.putExtra("Tipe",dataUser.tipe)
+                    startActivity(intentKirim)
                 }
                 "Buy Membership" ->{
                     val intent = Intent(this, BuyMembershipActivity::class.java)
@@ -191,6 +187,10 @@ class SettingActivity : AppCompatActivity() {
                 }
                 "Membership Subscription History" ->{
                     val intent = Intent(this, MembershipHistory::class.java)
+                    startActivity(intent)
+                }
+                "Notification Settings"->{
+                    val intent = Intent(this, NotificationSettingActivity::class.java)
                     startActivity(intent)
                 }
             }
@@ -276,6 +276,8 @@ class SettingActivity : AppCompatActivity() {
                 }
                 apiServices.getUserSelectedEquipment(dataUser.id){
                     if(it?.code==1){
+                        binding.rvListEquipmentUser.visibility= View.VISIBLE
+                        binding.noItemEquipmentUser.visibility= View.INVISIBLE
                         dataEquipmentUser = it.dataEquipment
                         var listIdEquipmentUser = dataEquipmentUser.ListIDEquipment.split(", ")
                         for (i in listIdEquipmentUser.indices){
@@ -289,6 +291,10 @@ class SettingActivity : AppCompatActivity() {
                                 listAllEquipmentAdapters.add(dataeqp)
                             }
                         }
+                    }
+                    else if(it?.code==-2){
+                        binding.rvListEquipmentUser.visibility= View.INVISIBLE
+                        binding.noItemEquipmentUser.visibility= View.VISIBLE
                     }
                 }
 

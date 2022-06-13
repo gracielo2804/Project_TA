@@ -1,11 +1,8 @@
 package com.gracielo.projectta.data.source.local
 
-import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import com.gracielo.projectta.data.source.local.database.AppDao
-import com.gracielo.projectta.data.source.local.database.AppDatabase
 import com.gracielo.projectta.data.source.local.entity.*
 import java.util.concurrent.Executors
 
@@ -31,6 +28,8 @@ class LocalDataSource (val appDao: AppDao) {
     fun getSelectedIngredients(): LiveData<List<Ingredients>> = appDao.getSelectedIngredients()
 
     fun getShoppingList(id_user : String) : LiveData<List<ShoppingListEntity>> = appDao.getShoppingList(id_user)
+    fun getShoppingListFilterIngredients(id_user : String, ingredients:String) : LiveData<List<ShoppingListEntity>> = appDao.getShoppingListFilterIngredients(id_user,ingredients)
+    fun getShoppingListFilterRecipe(id_user : String, recipe:String) : LiveData<List<ShoppingListEntity>> = appDao.getShoppingListFilterRecipe(id_user,recipe)
     fun insertShoppingList(shoppingListEntity: ShoppingListEntity) = Executors.newSingleThreadExecutor().execute() {
         appDao.insertShoppingList(shoppingListEntity)
     }

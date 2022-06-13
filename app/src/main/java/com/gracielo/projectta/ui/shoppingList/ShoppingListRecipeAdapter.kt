@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ItemShoppingListBinding
-import com.gracielo.projectta.databinding.ItemShoppingListIngredientsBinding
 
 class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.ViewHolder>() {
 
@@ -53,7 +51,7 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
         val ingredientsAdapter = ShoppingListIngredientsAdapter()
 
         fun bindRecipe(recipeData: ShoppingListEntity, position: Int) {
-            recipeName.text= listRecipeName[position]
+            recipeName.text= listRecipe[position].recipe_name
             Glide
                 .with(itemView.context)
                 .load("https://spoonacular.com/recipeImages/${recipeData.id_recipe}-556x370.jpg")
@@ -75,7 +73,7 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindRecipe(listRecipe[position],position)
-        val recipeName = listRecipeName[position]
+        val recipeName = listRecipe[position].recipe_name
         val listIngredients = listIngredients[recipeName]
         val listIngredientsDetail = listIngredientsDetail[recipeName]
         holder.ingredientsAdapter.setData(listIngredients,listIngredientsDetail)

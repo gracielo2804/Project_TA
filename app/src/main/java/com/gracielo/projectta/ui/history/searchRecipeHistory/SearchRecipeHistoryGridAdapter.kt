@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
-import com.gracielo.projectta.data.model.recipe.RecipeRecommendation
 import com.gracielo.projectta.data.model.searchRecipeHistory.SearchRecipeDataHistory
 import com.gracielo.projectta.databinding.CardGridLayoutBinding
-import com.gracielo.projectta.ui.homepage.RecommendedItemCallback
 
 class SearchRecipeHistoryGridAdapter(private val callback : SearchRecipeHistoryItemCallback) : RecyclerView.Adapter<SearchRecipeHistoryGridAdapter.ViewHolder>() {
 

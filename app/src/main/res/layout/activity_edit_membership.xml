@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.admin.membership.EditMembershipActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerAdminEditMembership"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/headerAdminHomeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Membership Plan"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/imageviewadminshow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="50dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/below_shadow"
+        app:layout_constraintBottom_toBottomOf="@id/headerAdminEditMembership"
+        app:layout_constraintStart_toStartOf="parent" />
+    <ScrollView
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/headerAdminEditMembership"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutMembershipBasic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/my_border"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/headerAdminEditMembership"
+                app:layout_constraintStart_toStartOf="parent">
+                <TextView
+                    android:id="@+id/textBuyMembershipBasic"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipBasic"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Basic Plan"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/txtHargaBasic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Rp. 79.000,-"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipBasic"
+                    app:layout_constraintTop_toBottomOf="@+id/textBasicFeature" />
+
+                <TextView
+                    android:id="@+id/textBasicFeature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\u2022 Detect Ingreidients from photo \n\u2022 Get Recipe Recomendation \n\u2022 Save Your Favourite Recipe"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipBasic"
+                    app:layout_constraintTop_toBottomOf="@id/textBuyMembershipBasic" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditBasic"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Edit Price"
+                    android:textSize="10sp"
+                    app:cornerRadius="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textBasicFeature" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditBasic"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Input new price here"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnEditBasic">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditBasicPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/imageListBuyMembershipBasic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/basic_plan"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:id="@+id/pemisahBuy1"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutMembershipBasic"
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutMembershipLowCarb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/my_border"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/pemisahBuy1"
+                app:layout_constraintStart_toStartOf="parent">
+                <TextView
+                    android:id="@+id/textBuyMembershipLowCarb"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipLowCarb"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Low Carb Plan"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/txtHargaLowCarb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Rp. 149.000,-"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipLowCarb"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\u2022 All Basic Plan Features \n\u2022 Get Low Carb Recipe Recomendation"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipLowCarb"
+                    app:layout_constraintTop_toBottomOf="@id/textBuyMembershipLowCarb" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditLowCarb"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Edit Price"
+                    android:textSize="10sp"
+                    app:cornerRadius="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                <ImageView
+                    android:id="@+id/imageListBuyMembershipLowCarb"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/carb"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditLowCarb"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Input new price here"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnEditLowCarb">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditLowPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/pemisahBuy2"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutMembershipLowCarb"
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutMembershipVegetarian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/my_border"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/pemisahBuy2"
+                app:layout_constraintStart_toStartOf="parent">
+                <TextView
+                    android:id="@+id/textBuyMembershipVegetarian"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipVegetarian"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Vegetarian Plan"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/txtVegetarianPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Rp. 149.000,-"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipVegetarian"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewVegetarianFeatures" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditVegetarian"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Input new price here"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnEditVegetarian">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditVegetarianPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/textViewVegetarianFeatures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\u2022 All Basic Plan Features \n\u2022 Get Vegetarian Recipe Recomendation"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipVegetarian"
+                    app:layout_constraintTop_toBottomOf="@id/textBuyMembershipVegetarian" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditVegetarian"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Edit Price"
+                    android:textSize="10sp"
+                    app:cornerRadius="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewVegetarianFeatures" />
+
+                <ImageView
+                    android:id="@+id/imageListBuyMembershipVegetarian"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/vege"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/pemisahBuy3"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp"
+                android:background="#f2f2f2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutMembershipVegetarian"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutMembershipAllInOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/my_border"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/pemisahBuy3"
+                app:layout_constraintStart_toStartOf="parent">
+                <TextView
+                    android:id="@+id/textBuyMembershipAllInOne"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipAllInOne"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="All In One Plan"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/txtAllInOnePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Rp. 199.000,-"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipAllInOne"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAllInOneFeatures" />
+
+                <TextView
+                    android:id="@+id/textViewAllInOneFeatures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\u2022 All Basic Plan Features \n\u2022 You Can Get Vegetarian and \nLow Carb Recipe Recomendation"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipAllInOne"
+                    app:layout_constraintTop_toBottomOf="@id/textBuyMembershipAllInOne" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditAllInOne"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Edit Price"
+                    android:textSize="10sp"
+                    app:cornerRadius="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAllInOneFeatures" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditAllInOne"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Input new price here"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnEditAllInOne">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditAllInOnePlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/imageListBuyMembershipAllInOne"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/vege"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

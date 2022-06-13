@@ -1,16 +1,14 @@
 package com.gracielo.projectta.ui.recipe
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponseItem
-import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
-import com.gracielo.projectta.data.model.recipe.searchWithNutrient.DataSearchRecipeResponse
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityRecipeSearchResultBinding

@@ -7,7 +7,7 @@ data class searchRecipeRecommendationResponse(
     @SerializedName("code")
     var code: Int,
     @SerializedName("data")
-    var dataSearchRecommendation: DataSearchRecommendation,
+    var dataSearchRecommendation: List<DataSearchRecommendation>,
     @SerializedName("message")
     var message: String
 )

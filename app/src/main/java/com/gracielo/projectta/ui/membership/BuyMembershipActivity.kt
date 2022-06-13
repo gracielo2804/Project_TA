@@ -1,19 +1,24 @@
 package com.gracielo.projectta.ui.membership
 
+import android.app.AlertDialog
+import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.model.membershipPackage.DataMembership
+import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityBuyMembershipBinding
+import com.gracielo.projectta.notification.DailyReminder
+import com.gracielo.projectta.ui.login.TestLoginActivity
 import com.gracielo.projectta.ui.setting.SettingListAdapter
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.util.FunHelper.observeOnce
+import com.gracielo.projectta.viewmodel.ShoppingListViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.midtrans.sdk.corekit.core.MidtransSDK
@@ -26,6 +31,9 @@ import com.midtrans.sdk.corekit.models.snap.TransactionResult
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.text.NumberFormat
+import java.util.Locale
+import kotlin.collections.ArrayList
 
 
 class BuyMembershipActivity : AppCompatActivity() {
@@ -33,16 +41,16 @@ class BuyMembershipActivity : AppCompatActivity() {
     private lateinit var binding:ActivityBuyMembershipBinding
     lateinit var viewModel: UserViewModel
     var helper=FunHelper
-    private var membershipList = ArrayList<String>()
-    val adapters = SettingListAdapter()
     lateinit var dataUser : UserEntity
-    val itemDetails1 = ItemDetails("1", 79000.0, 1, "Basic Plan")
-    val itemDetails2 = ItemDetails("2", 149000.0, 1, "Vegetarian Plan ")
-    val itemDetails3 = ItemDetails("3", 149000.0, 1, "Low Carb Plan")
-    val itemDetails4 = ItemDetails("4", 199000.0, 1, "All in One Plan")
+    var listPackage = mutableListOf<DataMembership>()
     var itemDetailsList = ArrayList<ItemDetails>()
     var hargaList=ArrayList<Int>()
     val apiServices = ApiServices()
+
+    private var listShoppingListUser = mutableListOf<ShoppingListEntity>()
+    private lateinit var shoppingListViewModel: ShoppingListViewModel
+    val daily= DailyReminder()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,38 +58,91 @@ class BuyMembershipActivity : AppCompatActivity() {
         setContentView(binding.root)
         AndroidThreeTen.init(this)
 
+        if(intent.hasExtra("Expired")){
+            Log.d("Expired","Masuk Account Expired")
+            binding.layoutAlertMessage.visibility= View.VISIBLE
+        }
+        if(intent.hasExtra("Change")){
+            Log.d("Change","Masuk Account Change")
+            val tipe = intent.getStringExtra("Tipe")
+            if(tipe=="1"){
 
-        itemDetailsList.add(itemDetails1)
-        itemDetailsList.add(itemDetails2)
-        itemDetailsList.add(itemDetails3)
-        itemDetailsList.add(itemDetails4)
+            }
+            else if(tipe=="2"){
+                binding.layoutMembershipBasic.visibility = View.GONE
+                binding.pemisahBuy1.visibility = View.GONE
+                binding.layoutMembershipLowCarb.visibility = View.GONE
+                binding.pemisahBuy2.visibility = View.GONE
+            }
+            else if(tipe=="3"){
+                binding.layoutMembershipBasic.visibility = View.GONE
+                binding.pemisahBuy1.visibility = View.GONE
+                binding.layoutMembershipVegetarian.visibility = View.GONE
+                binding.pemisahBuy3.visibility = View.GONE
+            }
+            else if(tipe=="4"){
+                binding.layoutMembershipBasic.visibility = View.GONE
+                binding.pemisahBuy1.visibility = View.GONE
+                binding.layoutMembershipVegetarian.visibility = View.GONE
+                binding.pemisahBuy3.visibility = View.GONE
+                binding.layoutMembershipLowCarb.visibility = View.GONE
+                binding.pemisahBuy2.visibility = View.GONE
 
-        hargaList.add(itemDetails1.price.toInt())
-        hargaList.add(itemDetails2.price.toInt())
-        hargaList.add(itemDetails3.price.toInt())
-        hargaList.add(itemDetails4.price.toInt())
+            }
+
+            binding.layoutAlertMessage.visibility= View.GONE
+        }
+        else binding.layoutAlertMessage.visibility= View.GONE
+
+        apiServices.getMembershipPackage {
+            if(it?.code==1){
+                listPackage.addAll(it.dataMembership)
+                for(i in listPackage.indices){
+                    val itemDetail = ItemDetails((i+1).toString(), listPackage[i].price.toDouble(), 1,listPackage[i].name)
+                    itemDetailsList.add(itemDetail)
+                    hargaList.add(listPackage[i].price)
+
+                    val formatter = NumberFormat.getCurrencyInstance(Locale.GERMANY)
+                    val numbertemp = formatter.format(listPackage[i].price)
+                    val number = numbertemp.split(",")[0]
+
+                    if(listPackage[i].idPackage=="1"){
+                        binding.txtHargaBasic.text = "Rp. ${number},-"
+                    }
+                    else if(listPackage[i].idPackage=="2"){
+                        binding.txtVegetarianPrice.text = "Rp. ${number},-"
+                    }
+                    else if(listPackage[i].idPackage=="3"){
+                        binding.txtHargaLowCarb.text = "Rp. ${number},-"
+                    }
+                    else if(listPackage[i].idPackage=="4"){
+                        binding.txtAllInOnePrice.text = "Rp. ${number},-"
+                    }
+                }
+            }
+        }
+
 
         dataUser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
 
         viewModel=helper.obtainUserViewModel(this)
+        shoppingListViewModel = helper.obtainShoppingViewModel(this)
         viewModel.getUser().observeOnce(this){
             dataUser=it
+            shoppingListViewModel.getShoppingList(it.id).observeOnce(this){list->
+                listShoppingListUser.addAll(list)
+            }
         }
 
-        membershipList.add("Basic Plan")
-        membershipList.add("Vegetarian Plan")
-        membershipList.add("Low Carb Plan")
-        membershipList.add("All in One Plan")
-        adapters.setData(membershipList)
 
         binding.btnBuyBasic.setOnClickListener {
             initMidtrans(0)
         }
-        binding.btnBuyLowCarb.setOnClickListener {
-            initMidtrans(2)
-        }
         binding.btnBuyVegetarian.setOnClickListener {
             initMidtrans(1)
+        }
+        binding.btnBuyLowCarb.setOnClickListener {
+            initMidtrans(2)
         }
         binding.btnBuyAllInOne.setOnClickListener {
             initMidtrans(3)
@@ -90,11 +151,41 @@ class BuyMembershipActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    override fun onBackPressed() {
+        if(intent.hasExtra("Expired")){
+            AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout from this user ?")
+                .setPositiveButton("Yes"
+                ) { _, _ ->
+                    daily.cancelAlarm(this)
+                    viewModel.delete(dataUser)
+                    viewModel.getUserNutrients().observeOnce(this){userNutrients->
+                        apiServices.saveUserNutrientHistory(userNutrients){}
+                        viewModel.deleteUserNutrients(userNutrients)
+                    }
+                    if(listShoppingListUser.size>0){
+                        for(i in listShoppingListUser.indices){
+                            shoppingListViewModel.delete(listShoppingListUser[i])
+                        }
+                    }
+                    helper.deleteAllSelectedIngredients(this)
+                    val intent = Intent(this, TestLoginActivity::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                }
+                .setNegativeButton(android.R.string.no, null)
+                .show()
+        }
+        else finish()
+
+    }
+
 
     fun initMidtrans(itemSelected:Int){
 
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddhhmmss ")
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMddhhmmss")
         val formatterDatetime = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss ")
         val formatted = current.format(formatter)
         val formattedDatetime = current.format(formatter)

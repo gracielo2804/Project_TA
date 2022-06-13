@@ -26,6 +26,7 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/ic_settings_24.xml" value="0.136" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/ic_shop_list.xml" value="0.136" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/my_border.xml" value="0.194" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/my_border_blue.xml" value="0.194" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/notification_alert.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/ribbon.xml" value="0.134" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/drawable/search_black.xml" value="0.1215" />
@@ -36,13 +37,14 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout-w936dp/activity_form_input.xml" value="0.12431693989071038" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout-w936dp/activity_test_login.xml" value="0.1133879781420765" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout-w936dp/card_grid_layout_user_most_search.xml" value="0.67" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_home.xml" value="0.33" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_home.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_ingredient.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_recipe.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_user_report.xml" value="0.12447916666666667" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_buy_membership.xml" value="0.33" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_buy_membership.xml" value="0.2584745762711864" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_change_password_setting.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_data_diri.xml" value="0.25" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_edit_membership.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_edit_profile.xml" value="0.33" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_email_verification.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_forgot_password.xml" value="0.13697916666666668" />
@@ -55,6 +57,7 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_list_alat_masak.xml" value="0.18" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_membership_history.xml" value="0.25" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_notification_setting.xml" value="0.22" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_nutrient_history.xml" value="0.17074275362318841" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_recipe_detail.xml" value="0.20704467353951891" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_recipe_search_filter_nutrient.xml" value="0.25" />
@@ -64,7 +67,7 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_search_recipe_history.xml" value="0.17074275362318841" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_selected_ingredients.xml" value="0.1" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_setting.xml" value="0.3178869323447637" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_shopping_list.xml" value="0.25" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_shopping_list.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_shopping_list_detail.xml" value="0.17074275362318841" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_test_login.xml" value="0.33" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_test_upload_image.xml" value="0.18" />
@@ -93,13 +96,22 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/membership_history_item.xml" value="0.47441217150760717" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/my_border.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/nutrient_history_item.xml" value="0.22" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/pdf_history_membership.xml" value="0.105078125" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/pdf_membership_detail_report.xml" value="0.14" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/pdf_membership_report.xml" value="0.12" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/pdf_shoppping_list.xml" value="0.105078125" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/register123.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/setting_item_list.xml" value="0.22" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/bottom_admin.xml" value="0.12552083333333333" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1515625" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/gender_menu.xml" value="0.1" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/menu_admin_ingredients_recipe.xml" value="0.11041666666666666" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/menu_admin_membership.xml" value="0.2" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/menu_admin_user.xml" value="0.17777777777777778" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/menu_detect_photo.xml" value="0.17777777777777778" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/menu/recipe_favourite.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/xml/network_security_config.xml" value="0.1" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/xml/root_preferences.xml" value="0.12972972972972974" />
       </map>
     </option>
   </component>
@@ -108,5 +120,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.12" />
+      </ProjectState>
+    </option>
   </component>
 </project>

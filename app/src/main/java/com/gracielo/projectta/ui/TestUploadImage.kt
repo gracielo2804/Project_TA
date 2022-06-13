@@ -1,31 +1,21 @@
 package com.gracielo.projectta.ui
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.gracielo.projectta.databinding.ActivityTestUploadImageBinding
-
 import android.content.Intent
 import android.database.Cursor
-import android.widget.Toast
-
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.gracielo.projectta.data.source.remote.network.ApiConfig
-import com.gracielo.projectta.data.source.remote.network.ApiEndPoint
+import androidx.appcompat.app.AppCompatActivity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
+import com.gracielo.projectta.databinding.ActivityTestUploadImageBinding
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.create
-
-import retrofit2.converter.gson.GsonConverterFactory
-
-import retrofit2.Retrofit
-
 import java.io.File
 
 

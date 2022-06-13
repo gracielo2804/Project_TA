@@ -1,10 +1,10 @@
 package com.gracielo.projectta.ui.setting
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityChangePasswordSettingBinding

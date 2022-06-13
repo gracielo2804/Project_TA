@@ -39,4 +39,8 @@
     <string name="MIDTRANS_CLIENT_KEY">SB-Mid-client-olbl-aDjtxLZn3c4</string>
     <string name="MIDTRANS_SERVER_KEY">SB-Mid-server-nUC5LVKPaZC4M7SxtBhLpULt</string>
 
+    <string name="pref_key_notify">key_notification</string>
+    <string name="pref_notify_name">Notification</string>
+    <string name="pref_notify_summary">Daily reminder for eat time</string>
+
 </resources>

@@ -2,11 +2,9 @@ package com.gracielo.projectta.ui.recipe
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.gracielo.projectta.databinding.ActivityRecipeSearchFilterNutrientBinding
 
 class RecipeSearchFilterNutrientActivity : AppCompatActivity() {
@@ -401,25 +399,25 @@ class RecipeSearchFilterNutrientActivity : AppCompatActivity() {
 
             minCaloriesText.clearFocus()
             maxCaloriesText.clearFocus()
-            val intent = Intent()
-            
-            intent.putExtra("minCalories",minCalories)
-            intent.putExtra("maxCalories",maxCalories)
+val intent = Intent()
 
-            intent.putExtra("minSugar",minSugar)
-            intent.putExtra("maxSugar",maxSugar)
+intent.putExtra("minCalories",minCalories)
+intent.putExtra("maxCalories",maxCalories)
 
-            intent.putExtra("minProtein",minProtein)
-            intent.putExtra("maxProtein",maxProtein)
+intent.putExtra("minSugar",minSugar)
+intent.putExtra("maxSugar",maxSugar)
 
-            intent.putExtra("minCarbohydrate",minCarbohydrate)
-            intent.putExtra("maxCarbohydrate",maxCarbohydrate)
+intent.putExtra("minProtein",minProtein)
+intent.putExtra("maxProtein",maxProtein)
 
-            intent.putExtra("minFat",minFat)
-            intent.putExtra("maxFat",maxFat)
+intent.putExtra("minCarbohydrate",minCarbohydrate)
+intent.putExtra("maxCarbohydrate",maxCarbohydrate)
 
-            setResult(Activity.RESULT_OK,intent)
-            finish()
+intent.putExtra("minFat",minFat)
+intent.putExtra("maxFat",maxFat)
+
+setResult(Activity.RESULT_OK,intent)
+finish()
         }
         
     }

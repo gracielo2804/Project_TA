@@ -1,12 +1,9 @@
 package com.gracielo.projectta.data.source
 
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
-import androidx.paging.PagedList
-import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
 //import androidx.paging.PagingData
+import androidx.lifecycle.LiveData
+import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.data.source.local.entity.IngredientsSearch
 import com.gracielo.projectta.vo.Resource
 
 interface AppDataSource {

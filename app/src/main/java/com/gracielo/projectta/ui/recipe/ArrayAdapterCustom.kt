@@ -1,15 +1,14 @@
 package com.gracielo.projectta.ui.recipe
 
-import android.widget.ArrayAdapter
-import com.gracielo.projectta.R
+
 import android.content.Context
 import android.text.Html
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.TextView
-
-
-import android.view.LayoutInflater
+import com.gracielo.projectta.R
 
 
 class ArrayAdapterCustom(private val mContext: Context, list: List<String>) :

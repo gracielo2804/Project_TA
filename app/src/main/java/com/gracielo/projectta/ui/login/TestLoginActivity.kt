@@ -1,6 +1,7 @@
 package com.gracielo.projectta.ui.login
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -13,36 +14,29 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.gracielo.projectta.apriori.DataIterator
-import com.gracielo.projectta.apriori.NamedItem
 import com.gracielo.projectta.data.model.DataUser
 import com.gracielo.projectta.data.model.DataUserProfile
 import com.gracielo.projectta.data.model.nutrientsHistory.NutrientDataHistory
+import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
-import com.gracielo.projectta.data.source.remote.network.ApiConfig
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityLoginBinding
 import com.gracielo.projectta.ui.admin.AdminHomeActivity
 import com.gracielo.projectta.ui.datadiri.DataDiriActivity
 import com.gracielo.projectta.ui.homepage.HomeActivity
-import com.gracielo.projectta.ui.login.forgotpassword.ForgotPasswordOTPActivity
 import com.gracielo.projectta.ui.login.forgotpassword.ForgotPasswordUsernameEmailActivity
+import com.gracielo.projectta.ui.membership.BuyMembershipActivity
 import com.gracielo.projectta.ui.register.EmailVerificationActivity
 import com.gracielo.projectta.ui.register.RegisterActivity
+import com.gracielo.projectta.ui.shoppingList.ShoppingListActivity
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
-import de.mrapp.apriori.Apriori
-import de.mrapp.apriori.Sorting
-import de.mrapp.apriori.metrics.Confidence
-import okhttp3.ResponseBody
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.*
+import java.text.SimpleDateFormat
 
 class TestLoginActivity : AppCompatActivity() {
 //
@@ -55,6 +49,13 @@ class TestLoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AndroidThreeTen.init(this)
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatted = current.format(formatter)
+        val df = SimpleDateFormat("yyyy-MM-dd")
+
+
 
         apiServices.tempFuncUpdateStatus{  }
         binding.pbarLogin.visibility= View.INVISIBLE
@@ -87,8 +88,22 @@ class TestLoginActivity : AppCompatActivity() {
                                     dataUserProfile.activities
                                 )
                                 viewModel.insert(userEntity)
-                                val intentt= Intent(this,HomeActivity::class.java)
-                                startActivity(intentt)
+                                val expiredDate= df.parse(userEntity.expired)
+                                val currentDate = df.parse(formatted)
+                                if(expiredDate.after(currentDate)){
+                                    settingSharedPreferences()
+                                    val intentt= Intent(this,HomeActivity::class.java)
+                                    startActivity(intentt)
+                                    binding.pbarLogin.visibility=View.INVISIBLE
+                                }
+                                else{
+                                    Toast.makeText(this,"Account Expired",Toast.LENGTH_SHORT).show()
+                                    binding.pbarLogin.visibility=View.INVISIBLE
+                                    var intentKirim = Intent(this, BuyMembershipActivity::class.java)
+                                    intentKirim.putExtra("Expired","Expired")
+                                    startActivity(intentKirim)
+                                }
+
                             }
                         }
                     }
@@ -98,12 +113,10 @@ class TestLoginActivity : AppCompatActivity() {
         binding.txtForgotPass.setOnClickListener {
             val intentt= Intent(this, ForgotPasswordUsernameEmailActivity::class.java)
             startActivity(intentt)
+            binding.pbarLogin.visibility=View.INVISIBLE
         }
 
-        AndroidThreeTen.init(this)
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val formatted = current.format(formatter)
+
 
         val username= binding.usernameLog
         val password= binding.passwordLog
@@ -123,6 +136,7 @@ class TestLoginActivity : AppCompatActivity() {
             val intentKirim = Intent(this, RegisterActivity::class.java)
             intentKirim.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
             startActivity(intentKirim)
+             binding.pbarLogin.visibility=View.INVISIBLE
         }
         btnLogin.setOnClickListener {
             binding.pbarLogin.visibility= View.VISIBLE
@@ -134,6 +148,7 @@ class TestLoginActivity : AppCompatActivity() {
                         val intent = Intent(this, AdminHomeActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                         startActivity(intent)
+                        binding.pbarLogin.visibility=View.INVISIBLE
                     }
                     else
                     {
@@ -144,6 +159,7 @@ class TestLoginActivity : AppCompatActivity() {
                             intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                             intent.putExtra("dataUser",it.dataUser)
                             startActivity(intent)
+                            binding.pbarLogin.visibility=View.INVISIBLE
                         }
                         else if(it.dataUser?.emailVerified=="1"){
                             apiServices.getUserProfileData(it.dataUser.id){ ApiResponses ->
@@ -195,10 +211,9 @@ class TestLoginActivity : AppCompatActivity() {
                                     }
                                     val maksProtein = userEntity.weight*1.5
                                     var userNutrientsEntity = UserNutrientsEntity(userEntity.id,userEntity.kalori,0.0,makskarbo,0.0,maksgula,0.0,makslemak,0.0,maksProtein,0.0,formatted)
-                                    var intentKirim = Intent(this, HomeActivity::class.java)
+
                                     apiServices.getUserNutrientHistory(datauser.id){ nutrientHistory ->
                                         nutrientHistoryList.addAll(nutrientHistory!!.dataHistory)
-
                                     }
                                     Handler(Looper.getMainLooper()).postDelayed({
                                         if(nutrientHistoryList.size==0 || nutrientHistoryList.isNullOrEmpty()){
@@ -216,14 +231,31 @@ class TestLoginActivity : AppCompatActivity() {
                                             }
                                         }
                                         viewModel.insertUserNutrients(userNutrientsEntity)
+                                        val expiredDate= df.parse(userEntity.expired)
+                                        val currentDate = df.parse(formatted)
+                                        if(expiredDate.after(currentDate)){
+                                            settingSharedPreferences()
+                                            var intentKirim = Intent(this, HomeActivity::class.java)
+                                            startActivity(intentKirim)
+                                            binding.pbarLogin.visibility=View.INVISIBLE
+                                        }
+                                        else{
+                                            Toast.makeText(this,"Account Expired",Toast.LENGTH_SHORT).show()
+                                            binding.pbarLogin.visibility=View.INVISIBLE
+                                            var intentKirim = Intent(this, BuyMembershipActivity::class.java)
+                                            intentKirim.putExtra("Expired","Expired")
+                                            startActivity(intentKirim)
+
+
+                                        }
                                     },500)
-                                    startActivity(intentKirim)
                                 }
                                 else if(ApiResponses?.code==2){
                                     var intentKirim = Intent(this, DataDiriActivity::class.java)
                                     intentKirim.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                                     intentKirim.putExtra("id", it.dataUser.id)
                                     startActivity(intentKirim)
+                                    binding.pbarLogin.visibility=View.INVISIBLE
                                 }
                             }
                         }
@@ -271,5 +303,25 @@ class TestLoginActivity : AppCompatActivity() {
             .setNegativeButton(android.R.string.no, null)
 //            .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
+    }
+    fun settingSharedPreferences(){
+        val sharedPreference =  getSharedPreferences("Notification Time", Context.MODE_PRIVATE)
+        var editor = sharedPreference.edit()
+        if(!sharedPreference.contains("Breakfast")){
+            editor.putString("Breakfast","06:00")
+            editor.commit()
+        }
+        if(!sharedPreference.contains("Lunch")){
+            editor.putString("Lunch","12:00")
+            editor.commit()
+        }
+        if(!sharedPreference.contains("Dinner")){
+            editor.putString("Dinner","18:00")
+            editor.commit()
+        }
+        if(!sharedPreference.contains("Notification")){
+            editor.putBoolean("Notification",true)
+            editor.commit()
+        }
     }
 }

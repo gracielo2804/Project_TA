@@ -26,6 +26,12 @@ interface AppDao {
     @Query("SELECT * FROM shopping_list where id_user=:id_user")
     fun getShoppingList(id_user:String): LiveData<List<ShoppingListEntity>>
 
+    @Query("SELECT * FROM shopping_list where id_user=:id_user and recipe_name LIKE '%' || :recipe || '%'")
+    fun getShoppingListFilterRecipe(id_user:String, recipe:String): LiveData<List<ShoppingListEntity>>
+
+    @Query("SELECT * FROM shopping_list where id_user=:id_user and recipe_name LIKE '%' || :ingredients || '%'")
+    fun getShoppingListFilterIngredients(id_user:String, ingredients:String): LiveData<List<ShoppingListEntity>>
+
     @Query("SELECT * FROM favourite_recipe where id_user=:id_user")
     fun getFavRecipe(id_user:String): LiveData<List<FavouriteRecipeEntity>>
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = FavouriteRecipeEntity::class)
@@ -44,7 +50,7 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = Ingredients::class)
     fun insertIngredients(ingredientsList: List<Ingredients>)
 
-    @Insert(entity = ShoppingListEntity::class)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertShoppingList(shoppingListEntity: ShoppingListEntity)
 
     @Query("SELECT * FROM userNutrients")

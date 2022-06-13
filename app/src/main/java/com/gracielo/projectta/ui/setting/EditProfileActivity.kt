@@ -1,14 +1,13 @@
 package com.gracielo.projectta.ui.setting
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.appcompat.app.AppCompatActivity
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
@@ -63,10 +62,10 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.btnEditAge.setOnClickListener {
             if(binding.btnEditAge.text=="Edit"){
-                binding.btnEditAge.text="Simpan"
+                binding.btnEditAge.text="Save"
                 binding.txtInputUmurEdit.isEnabled=true
             }
-            else if(binding.btnEditAge.text=="Simpan"){
+            else if(binding.btnEditAge.text=="Save"){
                 dataUser.age=binding.etUmurEdit.text.toString().toInt()
                 updateDataUser()
                 userViewModel.update(dataUser)
@@ -78,10 +77,10 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.btnEditHeight.setOnClickListener {
             if(binding.btnEditHeight.text=="Edit"){
-                binding.btnEditHeight.text="Simpan"
+                binding.btnEditHeight.text="Save"
                 binding.txtInputHeightEdit.isEnabled=true
             }
-            else if(binding.btnEditHeight.text=="Simpan"){
+            else if(binding.btnEditHeight.text=="Save"){
                 dataUser.height=binding.etHeightEdit.text.toString().toInt()
                 updateDataUser()
                 userViewModel.update(dataUser)
@@ -92,10 +91,10 @@ class EditProfileActivity : AppCompatActivity() {
         }
         binding.btnEditWeight.setOnClickListener {
             if(binding.btnEditWeight.text=="Edit"){
-                binding.btnEditWeight.text="Simpan"
+                binding.btnEditWeight.text="Save"
                 binding.txtInputWeightEdit.isEnabled=true
             }
-            else if(binding.btnEditWeight.text=="Simpan"){
+            else if(binding.btnEditWeight.text=="Save"){
                 dataUser.weight=binding.etWeightEdit.text.toString().toInt()
                 updateDataUser()
                 userViewModel.update(dataUser)

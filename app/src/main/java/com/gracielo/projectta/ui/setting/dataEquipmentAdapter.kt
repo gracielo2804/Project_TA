@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.listEquipment.DataEquipment
-import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponseItem
 import com.gracielo.projectta.databinding.CardGridLayoutBinding
 
 class dataEquipmentAdapter : RecyclerView.Adapter<dataEquipmentAdapter.ViewHolder>() {

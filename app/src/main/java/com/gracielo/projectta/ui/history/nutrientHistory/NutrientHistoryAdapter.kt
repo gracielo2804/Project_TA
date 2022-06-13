@@ -3,15 +3,9 @@ package com.gracielo.projectta.ui.history.nutrientHistory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.model.nutrientsHistory.NutrientDataHistory
-import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
-import com.gracielo.projectta.databinding.CardGridLayoutBinding
 import com.gracielo.projectta.databinding.NutrientHistoryItemBinding
 
 class NutrientHistoryAdapter : RecyclerView.Adapter<NutrientHistoryAdapter.ViewHolder>() {

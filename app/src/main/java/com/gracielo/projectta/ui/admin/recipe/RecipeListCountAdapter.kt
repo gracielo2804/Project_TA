@@ -1,15 +1,11 @@
 package com.gracielo.projectta.ui.admin.recipe
 
-import android.R
 import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.gracielo.projectta.data.model.countIngredients.DataCountIngredients
 import com.gracielo.projectta.data.model.recipeCount.DataCountRecipe
-import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
-import com.gracielo.projectta.data.source.remote.network.ApiServices
 import de.codecrafters.tableview.TableDataAdapter
 
 

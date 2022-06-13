@@ -4,33 +4,31 @@ import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.gracielo.projectta.R
-import com.gracielo.projectta.data.model.DataUserProfile
-import com.gracielo.projectta.databinding.ActivityHomeBinding
-import com.gracielo.projectta.viewmodel.UserViewModel
-import com.gracielo.projectta.viewmodel.ViewModelFactory
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.WorkManager
 import com.bumptech.glide.Glide
+import com.gracielo.projectta.R
 import com.gracielo.projectta.apriori.DataIterator
 import com.gracielo.projectta.apriori.NamedItem
 import com.gracielo.projectta.data.model.recipe.RecipeRecommendation
 import com.gracielo.projectta.data.model.recipeCount.DataCountRecipe
-import com.gracielo.projectta.data.source.local.entity.*
+import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
+import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
+import com.gracielo.projectta.data.source.local.entity.UserEntity
+import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import com.gracielo.projectta.data.source.remote.network.ApiConfig
 import com.gracielo.projectta.data.source.remote.network.ApiServices
+import com.gracielo.projectta.databinding.ActivityHomeBinding
 import com.gracielo.projectta.notification.DailyReminder
 import com.gracielo.projectta.ui.history.HistoryHomeActivity
 import com.gracielo.projectta.ui.ingredients.IngridientsList
@@ -40,12 +38,13 @@ import com.gracielo.projectta.ui.shoppingList.ShoppingListActivity
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.viewmodel.FavRecipeViewModel
 import com.gracielo.projectta.viewmodel.ShoppingListViewModel
+import com.gracielo.projectta.viewmodel.UserViewModel
+import com.gracielo.projectta.viewmodel.ViewModelFactory
 import com.gracielo.projectta.vo.Status
 import com.jakewharton.threetenabp.AndroidThreeTen
 import de.mrapp.apriori.Apriori
 import de.mrapp.apriori.Sorting
 import de.mrapp.apriori.metrics.Confidence
-import kotlinx.coroutines.delay
 import okhttp3.ResponseBody
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -151,13 +150,7 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
                                 if(response.dataShoppingList.isNotEmpty()){
                                     for(i in response.dataShoppingList.indices){
                                         var data = response.dataShoppingList[i]
-                                        var recipename=""
-                                        apiServices.getRecipeDetail(data.idRecipe){recipe->
-                                            if (recipe != null) {
-                                                recipename= recipe.data.title
-                                            }
-                                        }
-                                        var shoppingList = ShoppingListEntity(data.idShoppingList,data.idUsers,data.idRecipe,recipename,data.ingredientsList)
+                                        var shoppingList = ShoppingListEntity(data.idShoppingList,data.idUsers,data.idRecipe,data.recipeName,data.ingredientsList)
                                         shoppingListViewModel.insert(shoppingList)
                                     }
                                 }
@@ -225,217 +218,255 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
 
 
         supportActionBar?.hide()
-        val retrofit = ApiConfig.provideApiService()
-        retrofit.getUserSearchtxtFile().enqueue(
-            object : Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.d("dataapi",t.message.toString())
-                }
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    if (response.isSuccessful) {
-                        val writtenToDisk = writeResponseBodyToDisk(response.body()!!)
-                        if(writtenToDisk){
-                            val minSupport = 0.07
-                            val apriori = Apriori.Builder<NamedItem>(minSupport).generateRules(0.75).create()
-                            val iterable = Iterable { DataIterator(File("${getExternalFilesDir(null)}${File.separator} dataIngredients.txt")) }
-                            val output = apriori.execute(iterable)
-                            val ruleSet = output.ruleSet
-                            val frequentItemSets = output.frequentItemSets
-                            val sorting = Sorting.forItemSets().withOrder(Sorting.Order.DESCENDING)//
-                            val sortedFrequentItemSets = frequentItemSets.sort(sorting)
-                            val sortingRules = Sorting.forAssociationRules().withOrder(Sorting.Order.DESCENDING).byOperator(
-                                Confidence()
-                            )
-                            val sortedRules = ruleSet?.sort(sortingRules)
-                            sortedRules?.forEach {
-//                                Log.d("Get Item $ctr",it.toString())
-                                var itemsetTemp = it.body.toString()
-                                var predictTemp = it.head.toString()
-
-                                itemsetTemp = itemsetTemp.replace("[","")
-                                itemsetTemp= itemsetTemp.replace("]","")
-
-                                predictTemp = predictTemp.replace("[","")
-                                predictTemp = predictTemp.replace("]","")
-
-                                val listItemItemSetTemp=itemsetTemp.split(',')
-                                val listItemPredictTemp = predictTemp.split(',')
-
-                                listStringItemset.add(listItemItemSetTemp.toTypedArray())
-                                listStringPredict.add(listItemPredictTemp.toTypedArray())
-//                                Log.d("Get Item Body $ctr",it.body.toString())
-//                                Log.d("Get Item Head $ctr",it.head.toString())
-//                                ctr++
-                            }
-                            listStringPredict.removeAt(0)
-                            listStringItemset.removeAt(0)
-                            listStringItemset.forEach{
-                                var stringShow=""
-                                it.forEach {contain->
-                                    val abc = contain.trim()
-                                    stringShow+="$abc "
+        Handler(Looper.getMainLooper()).postDelayed({
+            if(dataUser.tipe!="0"){
+                val retrofit = ApiConfig.provideApiService()
+                val path = "dataIngredient_${dataUser.id}.txt"
+                apiServices.maketextdataingredients(dataUser.id){
+                    if(it?.code==1){
+                        retrofit.getUserSearchtxtFile(path).enqueue(
+                            object : Callback<ResponseBody> {
+                                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                    Log.d("dataapi",t.message.toString())
                                 }
+                                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                                    if (response.isSuccessful) {
+                                        val writtenToDisk = writeResponseBodyToDisk(response.body()!!)
+                                        if(writtenToDisk){
+                                            val minSupport = 0.07
+                                            val apriori = Apriori.Builder<NamedItem>(minSupport).generateRules(0.75).create()
+                                            val iterable = Iterable { DataIterator(File("${getExternalFilesDir(null)}${File.separator}dataIngredient_${dataUser.id}.txt")) }
+                                            val output = apriori.execute(iterable)
+                                            val ruleSet = output.ruleSet
+                                            val frequentItemSets = output.frequentItemSets
+                                            val sorting = Sorting.forItemSets().withOrder(Sorting.Order.DESCENDING)//
+                                            val sortedFrequentItemSets = frequentItemSets.sort(sorting)
+                                            val sortingRules = Sorting.forAssociationRules().withOrder(Sorting.Order.DESCENDING).byOperator(
+                                                Confidence()
+                                            )
+                                            val sortedRules = ruleSet?.sort(sortingRules)
+                                            sortedRules?.forEach {
+                                                var itemsetTemp = it.body.toString()
+                                                var predictTemp = it.head.toString()
+
+                                                itemsetTemp = itemsetTemp.replace("[","")
+                                                itemsetTemp= itemsetTemp.replace("]","")
+
+                                                predictTemp = predictTemp.replace("[","")
+                                                predictTemp = predictTemp.replace("]","")
+
+                                                val listItemItemSetTemp=itemsetTemp.split(',')
+                                                val listItemPredictTemp = predictTemp.split(',')
+
+                                                listStringItemset.add(listItemItemSetTemp.toTypedArray())
+                                                listStringPredict.add(listItemPredictTemp.toTypedArray())
+                                            }
+                                            listStringPredict.removeAt(0)
+                                            listStringItemset.removeAt(0)
+                                            listStringItemset.forEach{
+                                                var stringShow=""
+                                                it.forEach {contain->
+                                                    val abc = contain.trim()
+                                                    stringShow+="$abc "
+                                                }
 //                                Log.d("ListItemItemSet ",stringShow)
-                            }
-                            listStringPredict.forEach{
-                                var stringShow=""
-                                it.forEach {contain->
-                                    val abc = contain.trim()
-                                    stringShow+="$abc "
-                                }
+                                            }
+                                            listStringPredict.forEach{
+                                                var stringShow=""
+                                                it.forEach {contain->
+                                                    val abc = contain.trim()
+                                                    stringShow+="$abc "
+                                                }
 //                                Log.d("ListItemPredict ",stringShow)
-                            }
-                            for(i in listStringItemset.indices){
-                                var listitemset = listStringItemset[i]
-                                var listpredict = listStringPredict[i]
-                                var stringItemSetPredict=""
-                                listitemset.forEach {
-                                        contain->
-                                    var abc = contain.trim()
-                                    abc = abc.replace("_"," ")
-                                    stringItemSetPredict+="$abc,"
-                                }
-                                for(j in listpredict.indices){
-                                    if(j == listpredict.size-1){
-                                        var abc = listpredict[j].trim()
-                                        abc = abc.replace("_"," ")
-                                        stringItemSetPredict+= abc
-                                    }
-                                    else{
-                                        val abc = listpredict[j].trim()
-                                        stringItemSetPredict+="$abc,"
-                                    }
-                                }
-                                aprioriListItemPredict.add(stringItemSetPredict)
-                            }
-//                            aprioriListItemPredict.forEach{
-//                                Log.d("ListItemSetPredictApriori ",it)
-//                            }
-                            for (i in 0..2){
-                                apiServices.searchRecipeRecommendation(aprioriListItemPredict[i]){
-                                    if(it?.dataSearchRecommendation?.id!=null){
-                                        val newRecommend= RecipeRecommendation(
-                                            it.dataSearchRecommendation.id!!,it.dataSearchRecommendation.title!!,
-                                            it.dataSearchRecommendation.image!!,"Basic"
-                                        )
-                                        recipeRecommendation.add(newRecommend)
-                                    }
-                                }
-                                apiServices.searchRecipeVegetarianRecommendation(aprioriListItemPredict[i]){
-                                    if(it?.dataSearchRecommendation?.id!=null){
-                                        val newRecommend= RecipeRecommendation(
-                                            it.dataSearchRecommendation.id!!,it.dataSearchRecommendation.title!!,
-                                            it.dataSearchRecommendation.image!!,"Vegetarian"
-                                        )
-                                        recipeRecommendation.add(newRecommend)
-                                    }
-                                }
-                                apiServices.searchRecipeLowCarb(aprioriListItemPredict[i]){
-                                    if(it?.dataSearchRecommendation?.id!=null){
-                                        val newRecommend= RecipeRecommendation(
-                                            it.dataSearchRecommendation.id!!,it.dataSearchRecommendation.title!!,
-                                            it.dataSearchRecommendation.image!!,"Low Carb"
-                                        )
-                                        recipeRecommendation.add(newRecommend)
-                                    }
-                                }
+                                            }
+                                            for(i in listStringItemset.indices){
+                                                var listitemset = listStringItemset[i]
+                                                var listpredict = listStringPredict[i]
+                                                var stringItemSetPredict=""
+                                                listitemset.forEach {
+                                                        contain->
+                                                    var abc = contain.trim()
+                                                    abc = abc.replace("_"," ")
+                                                    stringItemSetPredict+="$abc,"
+                                                }
+                                                for(j in listpredict.indices){
+                                                    if(j == listpredict.size-1){
+                                                        var abc = listpredict[j].trim()
+                                                        abc = abc.replace("_"," ")
+                                                        stringItemSetPredict+= abc
+                                                    }
+                                                    else{
+                                                        val abc = listpredict[j].trim()
+                                                        stringItemSetPredict+="$abc,"
+                                                    }
+                                                }
+                                                aprioriListItemPredict.add(stringItemSetPredict)
+                                            }
+                                            aprioriListItemPredict.forEach{
+                                                Log.d("ListItemSetPredictApriori ",it)
+                                            }
+                                            for (i in 0..2){
+                                                if(dataUser.tipe=="1"){searchRecommendedBasic(i)}
+                                                else if(dataUser.tipe=="2"){searchRecommendedVege(i)}
+                                                else if(dataUser.tipe=="3"){searchRecommendedLowCarb(i)}
+                                                else if(dataUser.tipe=="4"){searchRecommendedLowCarb(i);searchRecommendedVege(i)}
+
 //                                Log.d("Data Recommendation",recipeRecommendation.toString())
-                            }
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                var recipeRecommendationTemp = mutableListOf<RecipeRecommendation>()
-                                var recipeRecommendationTempIsi = recipeRecommendation
-                                Log.d("sizeRec","${recipeRecommendationTempIsi.size}")
-                                Log.d("sizeRec", recipeRecommendationTempIsi.toString())
-                                for (q in 0..3){
-                                    Log.d("sizeRecLoop","${recipeRecommendationTempIsi.size}")
-                                    when (q) {
-                                        0 -> {
-                                            //Most Searched
-                                            for(j in recipeRecommendationTempIsi.indices){
-                                                if(recipeRecommendationTempIsi[j].tipe=="Most Searched"){
-                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[j])
-                                                }
                                             }
-                                        }
-                                        1 -> {
-                                            //Basic
-                                            for(a in recipeRecommendationTempIsi.indices){
-                                                if(recipeRecommendationTempIsi[a].tipe=="Basic"){
-                                                    var checkRemove=false
-                                                    var removeindex=0
-                                                    for(b in recipeRecommendationTemp.indices){
-                                                        if(recipeRecommendationTemp[b].recipeId==recipeRecommendationTempIsi[a].recipeId
-                                                            && recipeRecommendationTemp[b].tipe!="Basic"){
-                                                            checkRemove=true
-                                                            removeindex=b
+                                            Handler(Looper.getMainLooper()).postDelayed({
+                                                var recipeRecommendationTemp = mutableListOf<RecipeRecommendation>()
+                                                var recipeRecommendationTempIsi = recipeRecommendation
+                                                Log.d("sizeRec","${recipeRecommendationTempIsi.size}")
+                                                Log.d("sizeRec", recipeRecommendationTempIsi.toString())
+                                                for (q in 0..3){
+                                                    Log.d("sizeRecLoop","${recipeRecommendationTempIsi.size}")
+                                                    when (q) {
+                                                        0 -> {
+                                                            //Most Searched
+                                                            for(j in recipeRecommendationTempIsi.indices){
+                                                                if(recipeRecommendationTempIsi[j].tipe=="Most Searched"){
+                                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[j])
+                                                                }
+                                                            }
+                                                        }
+                                                        1 -> {
+                                                            //Basic
+                                                            for(a in recipeRecommendationTempIsi.indices){
+                                                                if(recipeRecommendationTempIsi[a].tipe=="Basic"){
+                                                                    var checkRemove=false
+                                                                    var removeindex=0
+                                                                    for(b in recipeRecommendationTemp.indices){
+                                                                        if(recipeRecommendationTemp[b].recipeId==recipeRecommendationTempIsi[a].recipeId
+                                                                            && recipeRecommendationTemp[b].tipe!="Basic"){
+                                                                            checkRemove=true
+                                                                            removeindex=b
+                                                                        }
+                                                                    }
+                                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[a])
+                                                                    if(checkRemove)recipeRecommendationTemp.removeAt(removeindex)
+                                                                }
+                                                            }
+                                                        }
+                                                        2 -> {
+                                                            //Vegetarian
+                                                            for(a in recipeRecommendationTempIsi.indices){
+                                                                if(recipeRecommendationTempIsi[a].tipe=="Vegetarian"){
+                                                                    var checkRemove=false
+                                                                    var removeindex=0
+                                                                    for(b in recipeRecommendationTemp.indices){
+                                                                        if(recipeRecommendationTemp[b].recipeId==recipeRecommendationTempIsi[a].recipeId
+                                                                            && recipeRecommendationTemp[b].tipe!="Vegetarian"){
+                                                                            checkRemove=true
+                                                                            removeindex=b
+                                                                        }
+                                                                    }
+                                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[a])
+                                                                    if(checkRemove)recipeRecommendationTemp.removeAt(removeindex)
+                                                                }
+                                                            }
+                                                        }
+                                                        3 -> {
+                                                            //Low Carb
+                                                            for(a in recipeRecommendationTempIsi.indices){
+                                                                if(recipeRecommendationTempIsi[a].tipe=="Low Carb"){
+                                                                    var checkRemove=false
+                                                                    var removeindex=0
+                                                                    for(b in recipeRecommendationTemp.indices){
+                                                                        if(recipeRecommendationTemp[b].recipeId==recipeRecommendationTempIsi[a].recipeId
+                                                                            && recipeRecommendationTemp[b].tipe!="Low Carb"){
+                                                                            checkRemove=true
+                                                                            removeindex=b
+                                                                        }
+                                                                    }
+                                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[a])
+                                                                    if(checkRemove)recipeRecommendationTemp.removeAt(removeindex)
+                                                                }
+                                                            }
                                                         }
                                                     }
-                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[a])
-                                                    if(checkRemove)recipeRecommendationTemp.removeAt(removeindex)
+                                                    Log.d("recipeRec", recipeRecommendationTemp.toString())
                                                 }
-                                            }
-                                        }
-                                        2 -> {
-                                            //Vegetarian
-                                            for(a in recipeRecommendationTempIsi.indices){
-                                                if(recipeRecommendationTempIsi[a].tipe=="Vegetarian"){
-                                                    var checkRemove=false
-                                                    var removeindex=0
-                                                    for(b in recipeRecommendationTemp.indices){
-                                                        if(recipeRecommendationTemp[b].recipeId==recipeRecommendationTempIsi[a].recipeId
-                                                            && recipeRecommendationTemp[b].tipe!="Vegetarian"){
-                                                            checkRemove=true
-                                                            removeindex=b
-                                                        }
-                                                    }
-                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[a])
-                                                    if(checkRemove)recipeRecommendationTemp.removeAt(removeindex)
-                                                }
-                                            }
-                                        }
-                                        3 -> {
-                                            //Low Carb
-                                            for(a in recipeRecommendationTempIsi.indices){
-                                                if(recipeRecommendationTempIsi[a].tipe=="Low Carb"){
-                                                    var checkRemove=false
-                                                    var removeindex=0
-                                                    for(b in recipeRecommendationTemp.indices){
-                                                        if(recipeRecommendationTemp[b].recipeId==recipeRecommendationTempIsi[a].recipeId
-                                                            && recipeRecommendationTemp[b].tipe!="Low Carb"){
-                                                            checkRemove=true
-                                                            removeindex=b
-                                                        }
-                                                    }
-                                                    recipeRecommendationTemp.add(recipeRecommendationTempIsi[a])
-                                                    if(checkRemove)recipeRecommendationTemp.removeAt(removeindex)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    Log.d("recipeRec", recipeRecommendationTemp.toString())
-                                }
-                                recipeRecommendation.clear()
-                                recipeRecommendation.addAll(recipeRecommendationTemp)
-                                recomendationAdapter.setData(recipeRecommendation)
-                                recomendationAdapter.notifyDataSetChanged()
-                            },4000)
+                                                recipeRecommendation.clear()
+                                                recipeRecommendation.addAll(recipeRecommendationTemp)
+                                                recomendationAdapter.setData(recipeRecommendation)
+                                                recomendationAdapter.notifyDataSetChanged()
+                                            },4000)
 
 
 //                            Log.d("OutputApriori",sortedFrequentItemSets.toString())
 //                            Log.d("OutputAprioriRule",sortedRules.toString())
-                        }
-                    } else {
-                        Log.d("FileDownload", "server contact failed")
+                                        }
+                                    } else {
+                                        Log.d("FileDownload", "server contact failed")
+                                    }
+                                }
+                            }
+                        )
                     }
                 }
             }
-        )
-
+        },500)
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): UserViewModel {
         val factory: ViewModelFactory = ViewModelFactory.getInstance(activity.application)
         return ViewModelProvider(activity, factory).get(UserViewModel::class.java)
+    }
+    fun searchRecommendedBasic(index:Int){
+        apiServices.searchRecipeRecommendation(aprioriListItemPredict[index]){
+            if(it?.code==1){
+                val dataRecomendation = it.dataSearchRecommendation
+                dataRecomendation.forEach {recipe->
+                    val newRecommend= RecipeRecommendation(
+                        recipe.id!!,recipe.title!!,
+                        recipe.image!!,"Basic"
+                    )
+                    recipeRecommendation.add(newRecommend)
+                }
+            }
+//            if(it?.dataSearchRecommendation?.id!=null){
+//                val newRecommend= RecipeRecommendation(
+//                    it.dataSearchRecommendation.id!!,it.dataSearchRecommendation.title!!,
+//                    it.dataSearchRecommendation.image!!,"Basic"
+//                )
+//                recipeRecommendation.add(newRecommend)
+//            }
+        }
+    }
+    fun searchRecommendedLowCarb(index:Int){
+        apiServices.searchRecipeLowCarb(aprioriListItemPredict[index]){
+            if(it?.code==1){
+                val dataRecomendation = it.dataSearchRecommendation
+                dataRecomendation.forEach {recipe->
+                    val newRecommend= RecipeRecommendation(
+                        recipe.id!!,recipe.title!!,
+                        recipe.image!!,"Low Carb"
+                    )
+                    recipeRecommendation.add(newRecommend)
+                }
+            }
+//            if(it?.dataSearchRecommendation?.id!=null){
+//                val newRecommend= RecipeRecommendation(
+//                    it.dataSearchRecommendation.id!!,it.dataSearchRecommendation.title!!,
+//                    it.dataSearchRecommendation.image!!,"Low Carb"
+//                )
+//                recipeRecommendation.add(newRecommend)
+//            }
+        }
+    }
+    fun searchRecommendedVege(index:Int){
+        apiServices.searchRecipeVegetarianRecommendation(aprioriListItemPredict[index]){
+            if(it?.code==1){
+                val dataRecomendation = it.dataSearchRecommendation
+                dataRecomendation.forEach {recipe->
+                    val newRecommend= RecipeRecommendation(
+                        recipe.id!!,recipe.title!!,
+                        recipe.image!!,"Vegetarian"
+                    )
+                    recipeRecommendation.add(newRecommend)
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -591,7 +622,7 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
         return try {
             // todo change the file location/name according to your needs
             val futureStudioIconFile =
-                File("${getExternalFilesDir(null)}${File.separator} dataIngredients.txt")
+                File("${getExternalFilesDir(null)}${File.separator}dataIngredient_${dataUser.id}.txt")
             var inputStream: InputStream? = null
             var outputStream: OutputStream? = null
             try {

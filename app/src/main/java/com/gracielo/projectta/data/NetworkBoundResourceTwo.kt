@@ -16,10 +16,10 @@
 
 package com.gracielo.projectta.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.gracielo.projectta.data.source.remote.network.ApiResponses
 import com.gracielo.projectta.util.AppExecutors
 import com.gracielo.projectta.vo.Resource

@@ -19,5 +19,7 @@ data class DataAllUser(
     @SerializedName("tipe")
     var tipe: String,
     @SerializedName("username")
-    var username: String
+    var username: String,
+    @SerializedName("last_login")
+    var last_login: String
 )

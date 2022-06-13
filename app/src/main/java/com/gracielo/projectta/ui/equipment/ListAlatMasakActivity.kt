@@ -1,10 +1,10 @@
 package com.gracielo.projectta.ui.equipment
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gracielo.projectta.data.model.listEquipment.DataEquipment
@@ -13,7 +13,6 @@ import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityListAlatMasakBinding
 import com.gracielo.projectta.ui.ingredients.DataEquipmentAdapter
-import com.gracielo.projectta.ui.setting.dataEquipmentAdapter
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.util.FunHelper.observeOnce
 import com.gracielo.projectta.viewmodel.UserViewModel

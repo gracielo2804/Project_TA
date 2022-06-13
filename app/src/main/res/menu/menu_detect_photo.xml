@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_picture_camera"
+        android:title="Take New Picture From Camera" />
+    <item
+        android:id="@+id/menu_picture_gallery"
+        android:title="Choose From Gallery" />
+</menu>

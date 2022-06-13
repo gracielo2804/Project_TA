@@ -27,6 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
@@ -35,10 +36,31 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutAlertMessage"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@drawable/my_border_red"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/headerBuyMembership"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:textColor="#6e0000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your account is expired please buy membership to keep using the apps features "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/headerBuyMembership"
+        app:layout_constraintTop_toBottomOf="@id/layoutAlertMessage"
         app:layout_constraintStart_toStartOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -66,7 +88,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/txtHargaBasic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -146,7 +168,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/textLowCarbPrice"
+                    android:id="@+id/txtHargaLowCarb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -227,7 +249,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/textVegetarianPrice"
+                    android:id="@+id/txtVegetarianPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -309,7 +331,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/textAllInOnePrice"
+                    android:id="@+id/txtAllInOnePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

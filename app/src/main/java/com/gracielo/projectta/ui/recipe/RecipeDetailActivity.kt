@@ -12,11 +12,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -26,24 +24,18 @@ import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponseItem
 import com.gracielo.projectta.data.model.recipe.search.MissedIngredient
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
 import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
-import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
+import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityRecipeDetailBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
-import com.gracielo.projectta.ui.ingredients.IngridientsListAdapters
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.viewmodel.FavRecipeViewModel
 import com.gracielo.projectta.viewmodel.ShoppingListViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
-import com.gracielo.projectta.vo.Resource
 import com.gracielo.projectta.vo.Status
-import com.jakewharton.threetenabp.AndroidThreeTen
-import kotlinx.coroutines.delay
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 
 
 class RecipeDetailActivity : AppCompatActivity() {
@@ -63,6 +55,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private var calories=0.0; var sugar=0.0; var fat=0.0; var carbohydrate = 0.0;var protein=0.0
     var idListIngridients = mutableListOf<Int>()
     var hasMissing = false
+    lateinit var datauser:UserEntity
     var isFavorite=false
     companion object
     {
@@ -77,12 +70,14 @@ class RecipeDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityRecipeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        datauser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
 
         viewModel = obtainUserViewModel(this)
         shoppingListViewModel = obtainShoppingListViewModel(this)
         favRecipeViewModel = helper.obtainFavRecipeViewModel(this)
         viewModel.getUser().observe(this){
             idUser = it.id
+            datauser=it
         }
         if(idUser!=""){
             shoppingListViewModel.getShoppingList(idUser).observe(this){
@@ -101,15 +96,50 @@ class RecipeDetailActivity : AppCompatActivity() {
                     Log.d("DataShoppingList",it.toString())
                     listShoppingList.addAll(it)
                }
-               ObserveFavRecipe()
-               if(listFavRecipe.isEmpty()){
-                   binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
-                   binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
+               if(datauser.tipe!="0"){
+                   ObserveFavRecipe()
+                   if(listFavRecipe.isEmpty()){
+                       binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
+                       binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
+                   }
                }
+
            }
 
         }
         binding.imageFavouriteRecipe.setOnClickListener {
+            if(datauser.tipe=="0"){
+                AlertDialog.Builder(this)
+                    .setTitle("Limited Features")
+                    .setMessage("Please buy membership plan to use this features") // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton("Close"
+                    ) { _, _ ->
+                    } // A null listener allows the button to dismiss the dialog and take no further action.
+                    .show()
+            }
+            else{
+                Log.d("ClickImage","Click")
+                if(it.tag==R.drawable.favourite_border){
+                    val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
+                    val dataFavRecipe = FavouriteRecipeEntity(idFavRecipe,idUser,recipeDataDetail?.id.toString())
+                    favRecipeViewModel.insertFavRecipe(dataFavRecipe)
+                    apiServices.InsertUpdateFavouriteRecipe(dataFavRecipe){}
+                    binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_fill)
+                    binding.imageFavouriteRecipe.setTag(R.drawable.favourite_fill)
+                    Toast.makeText(this@RecipeDetailActivity,"Added to Favourite",Toast.LENGTH_SHORT).show()
+
+                }
+                else if(it.tag==R.drawable.favourite_fill){
+                    val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
+                    val dataFavRecipe = FavouriteRecipeEntity(idFavRecipe,idUser,recipeDataDetail?.id.toString())
+                    favRecipeViewModel.deleteFavRecipe(dataFavRecipe)
+                    apiServices.InsertUpdateFavouriteRecipe(dataFavRecipe){}
+                    binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
+                    binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
+                    Toast.makeText(this@RecipeDetailActivity,"Removed From Favourite",Toast.LENGTH_SHORT).show()
+                }
+            }
             Log.d("ClickImage","Click")
             if(it.tag==R.drawable.favourite_border){
                 val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
@@ -695,12 +725,15 @@ class RecipeDetailActivity : AppCompatActivity() {
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.notification_alert))
             .setContentTitle("Daily Nutrition")
             .setContentText("Your Daily ${title} Consumption Exceeds Your Daily Limit")
+            .setVibrate( longArrayOf(0, 250, 500))
             .setAutoCancel(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             /* Create or update. */
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             channel.description = CHANNEL_NAME
+            channel.enableVibration(true)
+            channel.vibrationPattern = longArrayOf(0, 250, 500)
             mBuilder.setChannelId(CHANNEL_ID)
             mNotificationManager.createNotificationChannel(channel)
         }

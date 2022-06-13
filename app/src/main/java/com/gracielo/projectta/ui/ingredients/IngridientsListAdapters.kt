@@ -1,22 +1,17 @@
     package com.gracielo.projectta.ui.ingredients
 
-import android.content.ClipData.Item
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.AsyncPagedListDiffer
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.ui.equipment.EquipmentToolsAdapter
 
 
-class IngridientsListAdapters(private val callback : IngridientsItemCallback) :
+    class IngridientsListAdapters(private val callback : IngridientsItemCallback) :
     RecyclerView.Adapter<IngridientsListAdapters.ViewHolder>() {
 
     private var listData =  ArrayList<Ingredients>()

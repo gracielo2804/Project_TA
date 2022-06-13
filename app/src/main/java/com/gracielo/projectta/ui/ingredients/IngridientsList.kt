@@ -1,39 +1,59 @@
 package com.gracielo.projectta.ui.ingredients
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.Ingredients
 import com.gracielo.projectta.data.source.local.entity.IngredientsSearch
+import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityIngridientsListBinding
+import com.gracielo.projectta.tflite.Classifier
+import com.gracielo.projectta.tflite.newClassifier
 import com.gracielo.projectta.ui.recipe.RecipeSearchFilterNutrientActivity
 import com.gracielo.projectta.ui.recipe.RecipeSearchResultActivity
 import com.gracielo.projectta.util.FunHelper
-import com.gracielo.projectta.util.FunHelper.observeOnce
 import com.gracielo.projectta.viewmodel.IngredientsViewModel
+import com.gracielo.projectta.viewmodel.UserViewModel
 import com.gracielo.projectta.viewmodel.ViewModelFactory
 import com.gracielo.projectta.vo.Resource
 import com.gracielo.projectta.vo.Status
-import kotlin.math.max
+import org.tensorflow.lite.support.label.Category
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class IngridientsList : AppCompatActivity(), IngridientsItemCallback ,IngridientsListSearchsItemCallback{
 
     private lateinit var binding:ActivityIngridientsListBinding
     private lateinit var  viewModel: IngredientsViewModel
+    private lateinit var userViewModel:UserViewModel
     var helper = FunHelper
     private lateinit var  adapters: IngridientsListAdapters
     private lateinit var  adaptersearch: IngridientsListSearchsAdapters
@@ -44,19 +64,47 @@ class IngridientsList : AppCompatActivity(), IngridientsItemCallback ,Ingridient
     var stringIngredients=""
     var stringIngredientsV2=""
 
+    lateinit var datauser: UserEntity
+
     var maxCalories=0;var minCalories=0
     var maxSugar=0;var minSugar=0
     var maxProtein=0;var minProtein=0
     var maxCarbohydrate=0;var minCarbohydrate=0
     var maxFat=0;var minFat=0
 
+    private val mInputSize = 224
+    private val mModelPath = "model.tflite"
+    private val mLabelPath = "label.txt"
+    private lateinit var classifier: Classifier
+
+    var tempUri : Uri? = null
+    var picturePath:String? = null
+    var filegambarcamera:File? = null
+
+    companion object{
+        private const val MY_CAMERA_PERMISSION_CODE = 111
+        private const val CAMERA_REQUEST = 1888
+        private const val GALLERY_REQUEST = 1010
+    }
+
+    private fun initClassifier() {
+        classifier = Classifier(assets, mModelPath, mLabelPath, mInputSize)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityIngridientsListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        datauser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
+
+        initClassifier()
 
         viewModel= obtainViewModel(this)
+        userViewModel = helper.obtainUserViewModel(this)
+        userViewModel.getUser().observe(this){
+            datauser=it
+        }
 
         fabItemsSelected = binding.fabListIngredientsSelected
         fabSearchRecipe = binding.fabSearchRecipe
@@ -231,57 +279,14 @@ class IngridientsList : AppCompatActivity(), IngridientsItemCallback ,Ingridient
             }
         }
 
-//        viewModel.getIngredients().observeOnce(this){ listIngredients ->
-//            if(listIngredients!=null){
-//                when(listIngredients.status){
-//                    Status.SUCCESS -> {
-//                        recyclerView.adapter?.let { adapters ->
-//                            when (adapters) {
-//                                is IngridientsListAdapters -> {
-//                                    adapters.submitList(listIngredients.data)
-//                                    adapters.notifyDataSetChanged()
-//                                }
-//                            }
-//                        }
-//                    }
-//                    Status.ERROR -> {
-//                        Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        }
-
 
         binding.imageBackIngredientList.setOnClickListener {
             finish()
         }
         binding.btnSearchIngredients.setOnClickListener {
             recyclerView.adapter=adaptersearch
-            viewModel.getSearchIngredients(binding.etIngredientsSearch.text.toString()).observe(this
-            ) { listIngredients ->
-                viewModel.getSearchIngredients(binding.etIngredientsSearch.text.toString())
-                    .removeObservers(this@IngridientsList)
-                if (listIngredients != null) {
-                    when (listIngredients.status) {
-                        Status.SUCCESS -> {
-                            recyclerView.adapter?.let { adapters ->
-                                when (adapters) {
-                                    is IngridientsListSearchsAdapters -> {
-                                        adapters.setData(listIngredients.data)
-                                    }
-                                }
-                            }
-                        }
-                        Status.ERROR -> {
-                            Toast.makeText(
-                                this@IngridientsList,
-                                "Error Search Ingredients",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
+            val name= binding.etIngredientsSearch.text.toString()
+            searchIngredients(name)
         }
 
         fabSearchRecipe.setOnClickListener {
@@ -340,6 +345,23 @@ class IngridientsList : AppCompatActivity(), IngridientsItemCallback ,Ingridient
                 return@setOnKeyListener  false
             }
         }
+
+        binding.btnUsePhoto.setOnClickListener {
+            if(datauser.tipe=="0"){
+                AlertDialog.Builder(this)
+                    .setTitle("Limited Features")
+                    .setMessage("Please buy membership plan to use this features") // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton("Close"
+                    ) { _, _ ->
+                    } // A null listener allows the button to dismiss the dialog and take no further action.
+                    .show()
+            }
+            else{
+                showPopup(it)
+
+            }
+        }
     }
 
     private fun obtainViewModel(activity:AppCompatActivity): IngredientsViewModel {
@@ -360,6 +382,183 @@ class IngridientsList : AppCompatActivity(), IngridientsItemCallback ,Ingridient
         return Ingredients(data.id,data.name,data.image,data.isSelected)
     }
 
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(this, v)
+        popup.inflate(R.menu.menu_detect_photo)
+        val menu = popup.menu
+        popup.setOnMenuItemClickListener(object: PopupMenu.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                return when (item?.itemId) {
+                    R.id.menu_picture_camera -> {
+                        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                        {
+                            requestPermissions(Array(10){ Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                        }
+                        else
+                        {
+                            val f = File("${getExternalFilesDir(null)}/imgShot")
+                            val photoURI = FileProvider.getUriForFile(this@IngridientsList, "${packageName}.provider", f)
+                            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply { putExtra(
+                                MediaStore.EXTRA_OUTPUT, photoURI) }
+                            if(cameraIntent.resolveActivity(packageManager) != null){
+                                var photoFile_: File? = null
+                                try {
+                                    photoFile_ = createImageFile()
+                                } catch (ex: IOException) {
+                                }
+                                if (photoFile_ != null) {
+                                    picturePath = photoFile_.absolutePath
+                                }
+                                // Continue only if the File was successfully created
+                                // Continue only if the File was successfully created
+                                if (photoFile_ != null) {
+                                    val photoURI_ = FileProvider.getUriForFile(
+                                        this@IngridientsList,
+                                        "com.gracielo.projectta.provider", photoFile_
+                                    )
+                                    tempUri=photoURI
+                                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI_)
+                                    resultCameraLauncher.launch(cameraIntent)
+                                }
+                            }
+                        }
+                        true
+                    }
+                    R.id.menu_picture_gallery -> {
+                        var intent=Intent(Intent.ACTION_GET_CONTENT)
+                        intent.type= "image/*"
+                        resultGalleryLauncher.launch(intent)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        })
+        popup.show()
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File? {
+        // Create an image file name
+        val timeStamp_: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName_ = "JPEG_" + timeStamp_ + "_"
+        val storageDir_ = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image_ = File.createTempFile(
+            imageFileName_,  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir_ /* directory */
+        )
+
+        // Save a file: path for use with ACTION_VIEW intents
+        picturePath = image_.absolutePath
+        return image_
+    }
 
 
+    var resultGalleryLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+    { result->
+        if(result.resultCode== RESULT_OK){
+            if(result.data!=null){
+                olahFoto("Gallery",result.data,null)
+//                binding.gambarHasil.setImageURI(data?.data)
+            }
+
+        }
+    }
+
+    var resultCameraLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+    { result->
+        if(result.resultCode== RESULT_OK){
+            try {
+                val file_ = File(picturePath)
+                val uri_ = FileProvider.getUriForFile(
+                    this,
+                    "com.gracielo.projectta.provider", file_
+                )
+//                binding.gambarHasil.setImageURI(uri_)
+                olahFoto("Camera",null,uri_)
+                filegambarcamera=file_
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun olahFoto(from : String,dataIntent : Intent?, dataUri:Uri?){
+        if(from=="Gallery"){
+            binding.imageToDetect.setImageURI(dataIntent?.data)
+        }
+        else if(from=="Camera"){
+            binding.imageToDetect.setImageURI(dataUri)
+        }
+        var bitmapss = drawableToBitmap(binding.imageToDetect.drawable)
+        var resize: Bitmap = Bitmap.createScaledBitmap(bitmapss!!, 224, 224, true)
+
+        val classifier = newClassifier(resize,this)
+        var result = classifier.detectImage()
+
+        var resultBig = mutableListOf<Category>()
+        result.forEach {
+            if(it.score>0.3)resultBig.add(it)
+        }
+        if(resultBig.isEmpty()){
+            Toast.makeText(this,"Can't detect the object in the photo",Toast.LENGTH_SHORT).show()
+        }
+        else{
+            resultBig.forEach {
+                binding.etIngredientsSearch.setText(it.label)
+                binding.btnSearchIngredients.performClick()
+                binding.etIngredientsSearch.setText("")
+                searchIngredients(it.label)
+            }
+            Log.d("Classifier", resultBig.toString())
+        }
+    }
+
+    private fun drawableToBitmap(drawable: Drawable): Bitmap? {
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+        var width = drawable.intrinsicWidth
+        width = if (width > 0) width else 1
+        var height = drawable.intrinsicHeight
+        height = if (height > 0) height else 1
+        val bitmap = Bitmap.createBitmap(
+            width, height,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.getHeight())
+        drawable.draw(canvas)
+        return bitmap
+    }
+
+    private fun searchIngredients(name:String){
+        Log.d("SearchIngredients",name)
+        viewModel.getSearchIngredients(name).observe(this
+        ) { listIngredients ->
+            viewModel.getSearchIngredients(name)
+                .removeObservers(this@IngridientsList)
+            if (listIngredients != null) {
+                when (listIngredients.status) {
+                    Status.SUCCESS -> {
+                        recyclerView.adapter?.let { adapters ->
+                            when (adapters) {
+                                is IngridientsListSearchsAdapters -> {
+                                    adapters.setData(listIngredients.data)
+                                }
+                            }
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(
+                            this@IngridientsList,
+                            "Error Search Ingredients",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
 }

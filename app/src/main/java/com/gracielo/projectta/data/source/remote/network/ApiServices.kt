@@ -11,6 +11,7 @@ import com.gracielo.projectta.data.model.countIngredients.CountIngredientsRespon
 import com.gracielo.projectta.data.model.favouriteRecipe.DataFavRecipe
 import com.gracielo.projectta.data.model.favouriteRecipe.FavouriteRecipeResponse
 import com.gracielo.projectta.data.model.listEquipment.AllEquipmentResponse
+import com.gracielo.projectta.data.model.membershipPackage.membershipPackageResponse
 import com.gracielo.projectta.data.model.membershipTransactionHistory.DataMembershipHistoryResponse
 import com.gracielo.projectta.data.model.nutrientsHistory.NutrientHistoryResponse
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailListResponse
@@ -34,10 +35,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 
 
 class ApiServices {
@@ -395,6 +392,25 @@ class ApiServices {
             carbohydrate = carbohydrate,
             sugar = sugar,
             protein = protein
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+
+    fun maketextdataingredients(id_user:String,  onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.maketextdataingredients(
+            function = "maketextdataingredients",
+            id_user = id_user
         ).enqueue(
             object : Callback<MessageResponse> {
                 override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
@@ -950,6 +966,40 @@ class ApiServices {
             curPassword = curPassword,
             newPassword = newPassword,
             id_users = id_users
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+    fun getMembershipPackage(onResult: (membershipPackageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.getMembershipPackage(
+            function = "GetMembershipPlan"
+        ).enqueue(
+            object : Callback<membershipPackageResponse> {
+                override fun onFailure(call: Call<membershipPackageResponse>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<membershipPackageResponse>, response: Response<membershipPackageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
+    fun UpdateMembershipPlan(id_package:String,newPrice:Int, onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.UpdateMembershipPlan(
+            function = "UpdateMembershipPlan",
+            id_package = id_package,
+            price = newPrice
         ).enqueue(
             object : Callback<MessageResponse> {
                 override fun onFailure(call: Call<MessageResponse>, t: Throwable) {

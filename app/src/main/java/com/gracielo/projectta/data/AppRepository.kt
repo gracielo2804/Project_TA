@@ -1,22 +1,16 @@
 package com.gracielo.projectta.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.paging.*
 import com.gracielo.projectta.data.model.DataIngrdient
-import com.gracielo.projectta.vo.Resource
-import com.gracielo.projectta.data.model.IngredientListResponse
 import com.gracielo.projectta.data.model.favouriteRecipe.DataFavRecipe
 import com.gracielo.projectta.data.source.AppDataSource
 import com.gracielo.projectta.data.source.local.LocalDataSource
-import com.gracielo.projectta.data.source.local.database.AppDao
 import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.data.source.local.entity.IngredientsSearch
 import com.gracielo.projectta.data.source.remote.network.ApiResponses
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.util.AppExecutors
-import java.util.ArrayList
+import com.gracielo.projectta.vo.Resource
 
 open class AppRepository  constructor(remoteRepository: ApiServices,
                       val localDataSource: LocalDataSource,

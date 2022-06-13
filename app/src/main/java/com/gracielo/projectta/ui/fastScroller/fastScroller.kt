@@ -1,19 +1,18 @@
 package com.gracielo.projectta.ui.fastScroller
 
 import android.animation.Animator
-import android.widget.LinearLayout
-import androidx.recyclerview.widget.RecyclerView
-import android.animation.AnimatorSet
-import android.view.LayoutInflater
-import com.gracielo.projectta.R
-import android.view.MotionEvent
-import com.gracielo.projectta.ui.fastScroller.fastScroller
-import android.animation.ObjectAnimator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.gracielo.projectta.R
 
 internal class fastScroller : LinearLayout {
     private var bubble: View? = null

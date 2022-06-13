@@ -1,18 +1,18 @@
 package com.gracielo.projectta.data.source.remote.network
 
-import com.gracielo.projectta.data.model.*
-import com.gracielo.projectta.data.model.listEquipment.AllEquipmentResponse
+import com.gracielo.projectta.data.model.IngredientListResponse
+import com.gracielo.projectta.data.model.MessageResponse
 import com.gracielo.projectta.data.model.addEquipment.EquipmentToolsFromRecipeResponse
 import com.gracielo.projectta.data.model.admin.allMembershipTransaction.AllMembershipResponse
 import com.gracielo.projectta.data.model.admin.allUser.AllUserResponse
 import com.gracielo.projectta.data.model.countIngredients.CountIngredientsResponse
 import com.gracielo.projectta.data.model.favouriteRecipe.FavouriteRecipeResponse
+import com.gracielo.projectta.data.model.listEquipment.AllEquipmentResponse
+import com.gracielo.projectta.data.model.membershipPackage.membershipPackageResponse
 import com.gracielo.projectta.data.model.membershipTransactionHistory.DataMembershipHistoryResponse
 import com.gracielo.projectta.data.model.nutrientsHistory.NutrientHistoryResponse
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailListResponse
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponse
-import com.gracielo.projectta.data.model.recipe.search.RecipeResponse
-import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
 import com.gracielo.projectta.data.model.recipe.searchWithNutrient.SearchRecipeNutrientResponse
 import com.gracielo.projectta.data.model.recipe.similar.SimilarRecipeResponse
 import com.gracielo.projectta.data.model.recipeCount.CountRecipeResponse
@@ -337,9 +337,17 @@ interface ApiEndPoint {
         @Field("function") function: String = "getCountBahanMakanan",
     ): Call<CountIngredientsResponse>
 
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun maketextdataingredients(
+        @Field("function") function: String = "maketextdataingredients",
+        @Field("id_user") id_user: String,
+    ): Call<MessageResponse>
+
     @Streaming
-    @GET("dataIngredient.txt")
-    fun getUserSearchtxtFile():Call<ResponseBody>
+    @GET("dataIngredientsUser/{path}")
+    fun getUserSearchtxtFile(@Path(value ="path") path:String):Call<ResponseBody>
 
     @POST("master.php")
     @FormUrlEncoded
@@ -396,6 +404,20 @@ interface ApiEndPoint {
         @Field("curPassword") curPassword: String,
         @Field("newPassword") newPassword: String,
         @Field("id_users") id_users: String,
+    ): Call<MessageResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun getMembershipPackage(
+        @Field("function") function: String = "GetMembershipPlan",
+    ): Call<membershipPackageResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
+    fun UpdateMembershipPlan(
+        @Field("function") function: String = "UpdateMembershipPlan",
+        @Field("id_package") id_package: String,
+        @Field("price") price: Int,
     ): Call<MessageResponse>
 
 

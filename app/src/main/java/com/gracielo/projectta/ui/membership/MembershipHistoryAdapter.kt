@@ -10,7 +10,6 @@ import com.gracielo.projectta.data.model.membershipTransactionHistory.DataMember
 import com.gracielo.projectta.databinding.MembershipHistoryItemBinding
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.*
 
 class MembershipHistoryAdapter : RecyclerView.Adapter<MembershipHistoryAdapter.ViewHolder>() {
 

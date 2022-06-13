@@ -1,16 +1,9 @@
 package com.gracielo.projectta.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import com.gracielo.projectta.data.AppRepository
-import com.gracielo.projectta.data.source.local.LocalDataSource
-import com.gracielo.projectta.data.source.local.database.AppDao
 import com.gracielo.projectta.data.source.local.entity.Ingredients
-import com.gracielo.projectta.data.source.local.entity.IngredientsSearch
-import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.vo.Resource
 
 class IngredientsViewModel (private val repository: AppRepository) : ViewModel()  {
