@@ -155,6 +155,11 @@ class SettingActivity : AppCompatActivity() {
                         .setMessage("Are you sure you want to logout from this user ?")
                         .setPositiveButton("Yes"
                         ) { _, _ ->
+                            apiServices.updateUser(dataUser){
+                                if(it?.code==1){
+
+                                }
+                            }
                             daily.cancelAlarm(this)
                             userViewModel.delete(dataUser)
                             userViewModel.getUserNutrients().observeOnce(this){userNutrients->

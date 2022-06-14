@@ -31,6 +31,7 @@ import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityRecipeDetailBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
 import com.gracielo.projectta.util.FunHelper
+import com.gracielo.projectta.util.FunHelper.observeOnce
 import com.gracielo.projectta.viewmodel.FavRecipeViewModel
 import com.gracielo.projectta.viewmodel.ShoppingListViewModel
 import com.gracielo.projectta.viewmodel.UserViewModel
@@ -78,35 +79,31 @@ class RecipeDetailActivity : AppCompatActivity() {
         viewModel.getUser().observe(this){
             idUser = it.id
             datauser=it
-        }
-        if(idUser!=""){
             shoppingListViewModel.getShoppingList(idUser).observe(this){
                 Log.d("DataShoppingList",it.toString())
                 listShoppingList.addAll(it)
             }
-            ObserveFavRecipe()
-            if(listFavRecipe.isEmpty()){
-                binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
-                binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
+            if(datauser.tipe!="0"){
+                ObserveFavRecipe()
+                withDelay(1000){
+                    if(listFavRecipe.isEmpty()){
+                        binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
+                        binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
+                    }
+                    else{
+                        for(i in listFavRecipe.indices){
+                            if(listFavRecipe[i].id_recipe==idRecipe){
+                                binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_fill)
+                                binding.imageFavouriteRecipe.setTag(R.drawable.favourite_fill)
+                            }
+                        }
+
+                    }
+                }
+
             }
         }
-        else{
-           withDelay(500){
-               shoppingListViewModel.getShoppingList(idUser).observe(this){
-                    Log.d("DataShoppingList",it.toString())
-                    listShoppingList.addAll(it)
-               }
-               if(datauser.tipe!="0"){
-                   ObserveFavRecipe()
-                   if(listFavRecipe.isEmpty()){
-                       binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
-                       binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
-                   }
-               }
 
-           }
-
-        }
         binding.imageFavouriteRecipe.setOnClickListener {
             if(datauser.tipe=="0"){
                 AlertDialog.Builder(this)
@@ -121,6 +118,7 @@ class RecipeDetailActivity : AppCompatActivity() {
             else{
                 Log.d("ClickImage","Click")
                 if(it.tag==R.drawable.favourite_border){
+                    Log.d("ClickImage","Masuk Add")
                     val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
                     val dataFavRecipe = FavouriteRecipeEntity(idFavRecipe,idUser,recipeDataDetail?.id.toString())
                     favRecipeViewModel.insertFavRecipe(dataFavRecipe)
@@ -131,6 +129,7 @@ class RecipeDetailActivity : AppCompatActivity() {
 
                 }
                 else if(it.tag==R.drawable.favourite_fill){
+                    Log.d("ClickImage","Masuk Remove")
                     val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
                     val dataFavRecipe = FavouriteRecipeEntity(idFavRecipe,idUser,recipeDataDetail?.id.toString())
                     favRecipeViewModel.deleteFavRecipe(dataFavRecipe)
@@ -139,26 +138,6 @@ class RecipeDetailActivity : AppCompatActivity() {
                     binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
                     Toast.makeText(this@RecipeDetailActivity,"Removed From Favourite",Toast.LENGTH_SHORT).show()
                 }
-            }
-            Log.d("ClickImage","Click")
-            if(it.tag==R.drawable.favourite_border){
-                val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
-                val dataFavRecipe = FavouriteRecipeEntity(idFavRecipe,idUser,recipeDataDetail?.id.toString())
-                favRecipeViewModel.insertFavRecipe(dataFavRecipe)
-                apiServices.InsertUpdateFavouriteRecipe(dataFavRecipe){}
-                binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_fill)
-                binding.imageFavouriteRecipe.setTag(R.drawable.favourite_fill)
-                Toast.makeText(this@RecipeDetailActivity,"Added to Favourite",Toast.LENGTH_SHORT).show()
-
-            }
-            else if(it.tag==R.drawable.favourite_fill){
-                val idFavRecipe = "${idUser} - ${recipeDataDetail?.id}"
-                val dataFavRecipe = FavouriteRecipeEntity(idFavRecipe,idUser,recipeDataDetail?.id.toString())
-                favRecipeViewModel.deleteFavRecipe(dataFavRecipe)
-                apiServices.InsertUpdateFavouriteRecipe(dataFavRecipe){}
-                binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
-                binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
-                Toast.makeText(this@RecipeDetailActivity,"Removed From Favourite",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -188,12 +167,10 @@ class RecipeDetailActivity : AppCompatActivity() {
                     apiServices.insertRecipeDetail(recipeDataDetail!!) {}
 
                     var dataIngredients=""
-//                recipeDataDetail?.image = recipeData!!.image
                     binding.imageView6.setOnClickListener {
                         finish()
                     }
                     binding.txtRecipeNameDetail.text = recipeDataDetail?.title
-
                     Glide
                         .with(applicationContext)
                         .load(recipeDataDetail?.image)
@@ -201,7 +178,6 @@ class RecipeDetailActivity : AppCompatActivity() {
                         .placeholder(R.drawable.image_placeholder)
                         .error(R.drawable.image_placeholder)
                         .into(binding.recipeImageDetail)
-
 
 
                     val listIngredientsString = mutableListOf<String>()
@@ -677,7 +653,7 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         }
     }
-    fun ObserveFavRecipe(){
+    private fun ObserveFavRecipe(){
         favRecipeViewModel.getFavRecipe(idUser).observe(this
         ) { listFavRecipeData ->
             if (listFavRecipeData != null) {
@@ -695,6 +671,10 @@ class RecipeDetailActivity : AppCompatActivity() {
                                     Log.d("listFav", "Masuk Sama Favorite")
                                     fav = true
                                 }
+                                if(idRecipe==listFavRecipe[i].id_recipe){
+                                    Log.d("listFav", "Masuk Sama Favorite")
+                                    fav = true
+                                }
                             }
                         }
                         if (fav) {
@@ -704,8 +684,6 @@ class RecipeDetailActivity : AppCompatActivity() {
                             binding.imageFavouriteRecipe.setImageResource(R.drawable.favourite_border)
                             binding.imageFavouriteRecipe.setTag(R.drawable.favourite_border)
                         }
-
-
                     }
                     Status.ERROR -> {
                         Toast.makeText(

@@ -264,7 +264,7 @@ class TestLoginActivity : AppCompatActivity() {
                 }
                 else{
                     binding.pbarLogin.visibility= View.INVISIBLE
-                    Toast.makeText(this, "Login Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Wrong username or password", Toast.LENGTH_SHORT).show()
                 }
             }
         }

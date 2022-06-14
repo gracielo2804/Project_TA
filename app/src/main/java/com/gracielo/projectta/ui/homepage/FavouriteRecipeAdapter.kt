@@ -1,19 +1,23 @@
 package com.gracielo.projectta.ui.homepage
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.model.recipe.RecipeRecommendation
 import com.gracielo.projectta.data.source.local.entity.FavouriteRecipeEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.CardGridLayoutBinding
+import com.gracielo.projectta.ui.recipe.RecipeDetailActivity
 
-class FavouriteRecipeAdapter : RecyclerView.Adapter<FavouriteRecipeAdapter.ViewHolder>() {
+class FavouriteRecipeAdapter(private val callback : FavouriteItemCallback) : RecyclerView.Adapter<FavouriteRecipeAdapter.ViewHolder>() {
 
     private var listData =  ArrayList<FavouriteRecipeEntity>()
     private var apiServices = ApiServices()
@@ -43,6 +47,10 @@ class FavouriteRecipeAdapter : RecyclerView.Adapter<FavouriteRecipeAdapter.ViewH
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .into(imageView)
+            itemView.setOnClickListener {
+                callback.onFavItemClicked(recipe)
+
+            }
         }
         init{
             binding.root.setOnClickListener{onItemClick?.invoke(listData[bindingAdapterPosition])}
@@ -59,5 +67,7 @@ class FavouriteRecipeAdapter : RecyclerView.Adapter<FavouriteRecipeAdapter.ViewH
         val data = listData[position]
         holder.bindRecipe(data)
     }
-
+}
+interface FavouriteItemCallback {
+    fun onFavItemClicked(data: FavouriteRecipeEntity)
 }

@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -53,7 +54,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
 
-class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
+class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemCallback {
 
     private lateinit var binding: ActivityHomeBinding
     private var dataUserNutrients:UserNutrientsEntity? = null
@@ -121,7 +122,7 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
                             listFavRecipe.addAll(dataFavorite!!)
                             binding.txtEmptyFavouriteHome.visibility=View.INVISIBLE
                             binding.rvListFavouriteRecipe.visibility=View.VISIBLE
-                            var adapters = FavouriteRecipeAdapter()
+                            var adapters = FavouriteRecipeAdapter(this)
                             adapters.setData(listFavRecipe)
                             binding.rvListFavouriteRecipe.apply {
                                 layoutManager = LinearLayoutManager(this@HomeActivity,
@@ -656,9 +657,14 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback {
     }
 
     override fun onItemClicked(data: RecipeRecommendation) {
-//        TODO("Not yet implemented")
         val intentt= Intent(this,RecipeDetailActivity::class.java)
         intentt.putExtra("idrecipe",data.recipeId.toString())
+        startActivity(intentt)
+    }
+
+    override fun onFavItemClicked(data: FavouriteRecipeEntity) {
+        val intentt= Intent(this, RecipeDetailActivity::class.java)
+        intentt.putExtra("idrecipe",data.id_recipe)
         startActivity(intentt)
     }
 

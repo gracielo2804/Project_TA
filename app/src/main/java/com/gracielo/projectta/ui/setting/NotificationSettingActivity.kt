@@ -34,8 +34,14 @@ class NotificationSettingActivity : AppCompatActivity() {
 
         val sharedPreference =  getSharedPreferences("Notification Time", Context.MODE_PRIVATE)
         breakfastTime = sharedPreference.getString("Breakfast","")!!
+        var hourBreakfast = breakfastTime.split(":")[0].toInt()
+        var minBreakfast = breakfastTime.split(":")[0].toInt()
         lunchTime = sharedPreference.getString("Lunch","")!!
+        var hourLunch = lunchTime.split(":")[0].toInt()
+        var minLunch = lunchTime.split(":")[0].toInt()
         dinnerTime = sharedPreference.getString("Dinner","")!!
+        var hourdinner = dinnerTime.split(":")[0].toInt()
+        var mindinner = dinnerTime.split(":")[0].toInt()
         notificationstate = sharedPreference.getBoolean("Notification",true)
         binding.txtBreakFastTime.text = breakfastTime
         binding.txtlunchTime.text = lunchTime
@@ -73,14 +79,23 @@ class NotificationSettingActivity : AppCompatActivity() {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
                 cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
-                val hasil = SimpleDateFormat("HH:mm").format(cal.time)
-                binding.txtBreakFastTime.text = hasil
-                breakfastTime = hasil
-                var editor = sharedPreference.edit()
-                editor.remove("Breakfast")
-                editor.putString("Breakfast",hasil)
-                editor.commit()
-                daily.setDailyReminder(this)
+                if(hour>hourLunch||hour>hourdinner||(hour>=hourLunch && minute>minLunch)||(hour>=hourdinner && minute>mindinner)){
+                    Toast.makeText(this,"Breakfast time cannot after lunch time or dinner time",Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    hourBreakfast = hour
+                    minBreakfast = minute
+                    val hasil = SimpleDateFormat("HH:mm").format(cal.time)
+                    binding.txtBreakFastTime.text = hasil
+                    breakfastTime = hasil
+                    var editor = sharedPreference.edit()
+                    editor.remove("Breakfast")
+                    editor.putString("Breakfast",hasil)
+                    editor.commit()
+                    daily.setDailyReminder(this)
+                    Toast.makeText(this,"Breakfast time changed",Toast.LENGTH_SHORT).show()
+                }
+
             }
             TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
         }
@@ -89,14 +104,23 @@ class NotificationSettingActivity : AppCompatActivity() {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
                 cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
-                val hasil = SimpleDateFormat("HH:mm").format(cal.time)
-                binding.txtlunchTime.text = hasil
-                lunchTime = hasil
-                var editor = sharedPreference.edit()
-                editor.remove("Lunch")
-                editor.putString("Lunch",hasil)
-                editor.commit()
-                daily.setDailyReminder(this)
+                if(hour<hourBreakfast||hour>hourdinner||(hour==hourBreakfast && minute<=minBreakfast)||(hour>=hourdinner && minute>mindinner)){
+                    Toast.makeText(this,"Lunch time cannot after dinner time or before breakfast time",Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    hourLunch = hour
+                    minLunch = minute
+                    val hasil = SimpleDateFormat("HH:mm").format(cal.time)
+                    binding.txtlunchTime.text = hasil
+                    lunchTime = hasil
+                    var editor = sharedPreference.edit()
+                    editor.remove("Lunch")
+                    editor.putString("Lunch",hasil)
+                    editor.commit()
+                    daily.setDailyReminder(this)
+                    Toast.makeText(this,"Lunch time changed",Toast.LENGTH_SHORT).show()
+                }
+               
 
             }
             TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
@@ -106,14 +130,24 @@ class NotificationSettingActivity : AppCompatActivity() {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
                 cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
-                val hasil = SimpleDateFormat("HH:mm").format(cal.time)
-                binding.txtdinnerTime.text = hasil
-                dinnerTime = hasil
-                var editor = sharedPreference.edit()
-                editor.remove("Dinner")
-                editor.putString("Dinner",hasil)
-                editor.commit()
-                daily.setDailyReminder(this)
+                if(hour<hourLunch||hour<hourBreakfast||(hour<=hourLunch && minute<minLunch)||(hour<=hourBreakfast && minute<minBreakfast)){
+                    Toast.makeText(this,"Dinner time cannot before lunch time or dinner time",Toast.LENGTH_SHORT).show()
+                }
+                else{
+
+                    hourdinner = hour
+                    mindinner = minute
+                    val hasil = SimpleDateFormat("HH:mm").format(cal.time)
+                    binding.txtdinnerTime.text = hasil
+                    dinnerTime = hasil
+                    var editor = sharedPreference.edit()
+                    editor.remove("Dinner")
+                    editor.putString("Dinner",hasil)
+                    editor.commit()
+                    daily.setDailyReminder(this)
+                    Toast.makeText(this,"Dinner time changed",Toast.LENGTH_SHORT).show()
+                }
+
 
             }
             TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
