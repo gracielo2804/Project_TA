@@ -44,6 +44,7 @@ import com.gracielo.projectta.ui.admin.recipe.AdminRecipeActivity
 import com.gracielo.projectta.ui.admin.pdfMembership.PDFUtilityMembershipBar
 import com.gracielo.projectta.ui.admin.pdfMembership.PDFUtilityMembershipDetail
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.toastfix.toastcompatwrapper.ToastHandler
 import de.codecrafters.tableview.model.TableColumnWeightModel
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter
 import org.apache.pdfbox.io.MemoryUsageSetting
@@ -53,6 +54,7 @@ import org.threeten.bp.format.DateTimeFormatter
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -71,6 +73,7 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
     var startDateString = ""
     var endDateString = ""
     var tipe=0
+    val formatternumber = NumberFormat.getCurrencyInstance(Locale.GERMANY)
 
     private var startDate: Calendar? = null
     private var endDate: Calendar? = null
@@ -94,6 +97,9 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
         AndroidThreeTen.init(this)
         val tableDetailHome =  binding.tableViewAdminHome
         tableDetailHome.visibility = View.INVISIBLE
+        binding.pbarAdminHome.visibility=View.VISIBLE
+        binding.txttotalincome.visibility = View.INVISIBLE
+        binding.layoutConstraintLaporan.visibility=View.INVISIBLE
 
 
         binding.openMembershipMenu.setOnClickListener {
@@ -162,11 +168,11 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
                         && (tanggalData.before(endDate)|| tanggalData.equals(endDate))){
                         Log.d("TanggalTrans","Masuk Filter")
                         dataTransaksiMembershipFilterTanggal.add(dataTransaksiMembership[i])
-
                     }
                 }
                 olahDataTransaksi(dataTransaksiMembershipFilterTanggal)
                 jumlahpendapatan = hitungPendapatan(dataTransaksiMembershipFilterTanggal)
+                binding.txttotalincome.text = "Rp. ${formatternumber.format(jumlahpendapatan).split(",")[0]}"
                 if(dataTransaksiMembershipFilterTanggal.size==0){
                     dataAdapter = dataTransaksiMembership
                 }
@@ -190,35 +196,9 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
 
         apiServices.getAllMembershipTransaction {
             dataTransaksiMembership.addAll(it!!.dataAllMembership)
-        }
-        if(dataTransaksiMembership.size==0){
-            Handler(Looper.getMainLooper()).postDelayed({
-                if(dataTransaksiMembership.size==0){
-                    Log.d("data","DataKosong")
-                }
-                else{
-
-                    olahDataTransaksi(dataTransaksiMembership)
-                    jumlahpendapatan = hitungPendapatan(dataTransaksiMembership)
-                    if(dataTransaksiMembershipFilterTanggal.size==0){
-                        dataAdapter = dataTransaksiMembership
-                    }
-                    else{
-                        dataAdapter = dataTransaksiMembershipFilterTanggal
-                    }
-                    adapters = MembershipDetailReportAdapter(this@AdminHomeActivity,
-                        dataAdapter as ArrayList<DataAllMembership?>
-                    )
-                    adapters.setDatas(dataAdapter)
-                    tableDetailHome.headerAdapter= SimpleTableHeaderAdapter(this@AdminHomeActivity,*TABLE_HEADERS_HOME)
-                    val columnModel = TableColumnWeightModel(6)
-                    tableDetailHome.setDataAdapter(adapters)
-                }
-            },1000)
-        }
-        else {
             olahDataTransaksi(dataTransaksiMembership)
             jumlahpendapatan = hitungPendapatan(dataTransaksiMembership)
+            binding.txttotalincome.text = "Rp. ${formatternumber.format(jumlahpendapatan).split(",")[0]}"
             if(dataTransaksiMembershipFilterTanggal.size==0){
                 dataAdapter = dataTransaksiMembership
             }
@@ -232,9 +212,7 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
             tableDetailHome.headerAdapter= SimpleTableHeaderAdapter(this@AdminHomeActivity,*TABLE_HEADERS_HOME)
             val columnModel = TableColumnWeightModel(6)
             tableDetailHome.setDataAdapter(adapters)
-        }
-
-
+        } //
     }
 
 
@@ -264,6 +242,24 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
                 else if(dataTransaksi[i].idPaket=="4"){counterPackage[3]++}
             }
         }
+
+        binding.txtJumlahBeliAllInOne.text = counterPackage[3].toString()
+        binding.txtJumlahBeliVegetarian.text = counterPackage[1].toString()
+        binding.txtJumlahBeliLowCarb.text = counterPackage[2].toString()
+        binding.txtJumlahBeliBasic.text = counterPackage[0].toString()
+        binding.txtJumlahBeliFailed.text = counterPackage[5].toString()
+        binding.txtJumlahBeliPending.text = counterPackage[4].toString()
+        binding.pbarAdminHome.visibility=View.INVISIBLE
+
+        if(tipe==0){
+            binding.layoutConstraintLaporan.visibility=View.VISIBLE
+        }
+        else{
+            binding.layoutConstraintLaporan.visibility=View.INVISIBLE
+        }
+
+        binding.txttotalincome.visibility = View.VISIBLE
+
         // --> End Prepare Data
 
         // --> Prepare Barchart
@@ -348,7 +344,7 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
             // The dialog is automatically dismissed when a dialog button is clicked.
             .setPositiveButton("Yes"
             ) { _, _ ->
-//                Toast.makeText(this,"Successfully Logout",Toast.LENGTH_SHORT).show()
+//                ToastHandler.getToastInstance(this,"Successfully Logout",Toast.LENGTH_SHORT).show()
                 finish()
 //                viewModel.getUser()?.removeObserver(){}
 
@@ -426,62 +422,64 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
                 return when (item?.itemId) {
                     R.id.item_membership_export -> {
 
-                        var bitmapbars= binding.barChartView.drawToBitmap()
-                        Log.d("Bitmap Size : ","${bitmapbars.width/2} - ${bitmapbars.height/2}")
-                        bitmapbars= Bitmap.createScaledBitmap(bitmapbars,500,673,false)
-                        binding.imageviewadminshow.setImageBitmap(bitmapbars)
-                        val stream = ByteArrayOutputStream()
-                        bitmapbars.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                        val image = stream.toByteArray()
-
-//                        val bitmapBar = loadBitmapFromView(binding.barChartView)
-//                        val baos = ByteArrayOutputStream()
-//                        bitmapBar?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-//                        val imageInByte: ByteArray = baos.toByteArray()
-
-                        val pdfMaker = PDFUtilityMembershipBar
-                        pdfMaker.setImage(image)
-                        binding.pbarAdminHome.visibility = View.VISIBLE
+//                        var bitmapbars= binding.barChartView.drawToBitmap()
+//                        Log.d("Bitmap Size : ","${bitmapbars.width/2} - ${bitmapbars.height/2}")
+//                        bitmapbars= Bitmap.createScaledBitmap(bitmapbars,500,673,false)
+//                        val stream = ByteArrayOutputStream()
+//                        bitmapbars.compress(Bitmap.CompressFormat.PNG, 100, stream)
+//                        val image = stream.toByteArray()
+//
+////                        val bitmapBar = loadBitmapFromView(binding.barChartView)
+////                        val baos = ByteArrayOutputStream()
+////                        bitmapBar?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+////                        val imageInByte: ByteArray = baos.toByteArray()
+//
+//                        val pdfMaker = PDFUtilityMembershipBar
+//                        pdfMaker.setImage(image)
+//                        binding.pbarAdminHome.visibility = View.VISIBLE
                         var tanggal =""
                         val current = LocalDateTime.now()
                         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                         val formatted = current.format(formatter)
-                        println("Current Date and Time is: $formatted")
+//                        println("Current Date and Time is: $formatted")
                         if(dataTransaksiMembershipFilterTanggal.size==0){
                             tanggal ="All Time"
                         }
                         else{
                             tanggal = "$startDateString - $endDateString"
                         }
-                        val path =
-                            "${getExternalFilesDir(null)}${File.separator} membership report.pdf"
-                        try {
-                            pdfMaker.setReportDate(tanggal)
-                            pdfMaker.setCreatedDate(formatted)
-                            pdfMaker.createPdf(
-                                v.context,
-                                this@AdminHomeActivity,
-                                path,
-                                true
-                            )
-
-                        } catch (e: Exception) {
-                            binding.pbarAdminHome.visibility = View.INVISIBLE
-                            e.printStackTrace()
-                            Log.e("PDFNEW", "Error Creating Pdf")
-                            Toast.makeText(v.context, "Error Creating Pdf", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+//                        val path =
+//                            "${getExternalFilesDir(null)}${File.separator} membership report.pdf"
+//                        try {
+//                            pdfMaker.setReportDate(tanggal)
+//                            pdfMaker.setCreatedDate(formatted)
+//                            pdfMaker.createPdf(
+//                                this@AdminHomeActivity,
+//                                this@AdminHomeActivity,
+//                                path,
+//                                true
+//                            )
+//
+//                        } catch (e: Exception) {
+//                            binding.pbarAdminHome.visibility = View.INVISIBLE
+//                            e.printStackTrace()
+//                            Log.e("PDFNEW", "Error Creating Pdf")
+//                            ToastHandler.getToastInstance(this@AdminHomeActivity, "Error Creating Pdf", Toast.LENGTH_SHORT)
+//                                .show()
+//                        }
 
                         val pdfMaker1 = PDFUtilityMembershipDetail
                         binding.pbarAdminHome.visibility = View.VISIBLE
                         var dataMembership = mutableListOf<DataAllMembership>()
                         println("Current Date and Time is: $formatted")
                         if(dataTransaksiMembershipFilterTanggal.size==0){
+                            pdfMaker1.setjumlahincome(jumlahpendapatan)
                             dataMembership.addAll(dataTransaksiMembership)
                             tanggal ="All Time"
                         }
-                        else{
+                        else
+                        {
+                            pdfMaker1.setjumlahincome(jumlahpendapatan)
                             dataMembership.addAll(dataTransaksiMembershipFilterTanggal)
                             tanggal = "$startDateString - $endDateString"
                         }
@@ -501,23 +499,27 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
                             binding.pbarAdminHome.visibility = View.INVISIBLE
                             e.printStackTrace()
                             Log.e("PDFNEW", "Error Creating Pdf")
-                            Toast.makeText(v.context, "Error Creating Pdf", Toast.LENGTH_SHORT)
+
+                            ToastHandler.getToastInstance(this@AdminHomeActivity, "Error Creating Pdf", Toast.LENGTH_SHORT)
                                 .show()
                         }
-                        var mergers = PDFMergerUtility()
-                        val paths1 = "${getExternalFilesDir(null)}${File.separator} PDFMembershipReport.pdf"
-                        val paths2 = "${getExternalFilesDir(null)}${File.separator} newExport.pdf"
-                        mergers.addSource(paths1)
-                        mergers.addSource(paths2)
-                        val p = "${getExternalFilesDir(null)}${File.separator} merged.pdf"
-
-                        val fileOutputStream = FileOutputStream(p)
-                        try {
-                            mergers.destinationStream = fileOutputStream
-                            mergers.mergeDocuments(MemoryUsageSetting.setupTempFileOnly())
-                        } finally {
-                            fileOutputStream.close()
-                        }
+//                        var mergers = PDFMergerUtility()
+//                        val paths1 = "${getExternalFilesDir(null)}${File.separator} membership report.pdf"
+//                        val paths2 = "${getExternalFilesDir(null)}${File.separator} newExport.pdf"
+//                        mergers.addSource(paths1)
+//                        mergers.addSource(paths2)
+//                        val p = "${getExternalFilesDir(null)}${File.separator} merged-membership.pdf"
+//
+//                        val fileOutputStream = FileOutputStream(p)
+//                        try {
+//                            mergers.destinationStream = fileOutputStream
+//                            mergers.mergeDocuments(MemoryUsageSetting.setupTempFileOnly())
+//                            val file:File = File("${getExternalFilesDir(null)}${File.separator} merged-membership.pdf")
+//                            renderPdf(this@AdminHomeActivity,file)
+//
+//                        } finally {
+//                            fileOutputStream.close()
+//                        }
 
                         true
                     }
@@ -526,75 +528,21 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
                         startActivity(intentt)
                         true
                     }
-                    R.id.item_membership_new_export -> {
-//                        val pdfMaker = PDFUtilityMembershipDetail
-//                        binding.pbarAdminHome.visibility = View.VISIBLE
-//                        var dataMembership = mutableListOf<DataAllMembership>()
-//                        var tanggal =""
-//                        val current = LocalDateTime.now()
-//                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//                        val formatted = current.format(formatter)
-//                        println("Current Date and Time is: $formatted")
-//                        if(dataTransaksiMembershipFilterTanggal.size==0){
-//                            dataMembership.addAll(dataTransaksiMembership)
-//                            tanggal ="All Time"
-//                        }
-//                        else{
-//                            dataMembership.addAll(dataTransaksiMembershipFilterTanggal)
-//                            tanggal = "$startDateString - $endDateString"
-//                        }
-//                        val path =
-//                        "${getExternalFilesDir(null)}${File.separator} newExport.pdf"
-//                        try {
-//                            pdfMaker.setReportDate(tanggal)
-//                            pdfMaker.setCreatedDate(formatted)
-//                            pdfMaker.createPdf(
-//                                v.context,
-//                                this@AdminHomeActivity,
-//                                getData(dataMembership),
-//                                path,
-//                                true
-//                            )
-////                            var mergers = PDFMergerUtility()
-////                            val paths1 = "${getExternalFilesDir(null)}${File.separator} PDFMembershipReport.pdf"
-////                            val paths2 = "${getExternalFilesDir(null)}${File.separator} newExport.pdf"
-////                            mergers.addSource(paths1)
-////                            mergers.addSource(paths2)
-////                            val p = "${getExternalFilesDir(null)}${File.separator} merged.pdf"
-////
-////                            val fileOutputStream = FileOutputStream(p)
-////                            try {
-////                                mergers.destinationStream = fileOutputStream
-////                                mergers.mergeDocuments(MemoryUsageSetting.setupTempFileOnly())
-////                            } finally {
-////                                fileOutputStream.close()
-////                            }
-//
-//                        } catch (e: Exception) {
-//                            binding.pbarAdminHome.visibility = View.INVISIBLE
-//                            e.printStackTrace()
-//                            Log.e("PDFNEW", "Error Creating Pdf")
-//                            Toast.makeText(v.context, "Error Creating Pdf", Toast.LENGTH_SHORT)
-//                                .show()
-//                        }
-
-
-
-                        return true
-                    }
                     R.id.item_membership_detail -> {
                         if(tipe==0){
                             tipe=1
                             val item:MenuItem = menu.findItem(R.id.item_membership_detail)
                             item.title = "Transaction Chart"
-                            binding.barChartView.visibility = View.INVISIBLE
+//                            binding.barChartView.visibility = View.INVISIBLE
+                            binding.layoutConstraintLaporan.visibility = View.INVISIBLE
                             binding.tableViewAdminHome.visibility = View.VISIBLE
                         }
                         else{
                             tipe=0
                             val item:MenuItem = menu.findItem(R.id.item_membership_detail)
                             item.title = "Transaction Detail"
-                            binding.barChartView.visibility = View.VISIBLE
+//                            binding.barChartView.visibility = View.VISIBLE
+                            binding.layoutConstraintLaporan.visibility = View.VISIBLE
                             binding.tableViewAdminHome.visibility = View.INVISIBLE
                         }
                         true
@@ -703,8 +651,6 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
             filePath
         )
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.setDataAndType(uri, "application/pdf")
 
@@ -717,8 +663,8 @@ class AdminHomeActivity : AppCompatActivity(), PDFUtilityMembershipDetail.OnDocu
 
     override fun onPDFDocumentClose(file: File?) {
         binding.pbarAdminHome.visibility = View.INVISIBLE
-        Toast.makeText(this,"Pdf Created",Toast.LENGTH_SHORT).show()
-//        renderPdf(this@AdminHomeActivity,file!!)
+        ToastHandler.getToastInstance(this@AdminHomeActivity,"Pdf Created",Toast.LENGTH_SHORT).show()
+        renderPdf(this@AdminHomeActivity,file!!)
     }
 
     private fun getData(dataTransaksi : MutableList<DataAllMembership>): List<Array<String>> {

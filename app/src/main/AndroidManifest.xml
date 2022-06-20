@@ -23,6 +23,9 @@
         android:theme="@style/Theme.Project_TA"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".ui.homepage.AddNutrientsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.setting.NotificationSettingActivity"
             android:exported="false" />
         <activity
@@ -162,7 +165,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <service android:name=".appServices.MyServices"/>
     </application>
 
 </manifest>

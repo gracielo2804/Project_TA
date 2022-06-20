@@ -1,6 +1,8 @@
 package com.gracielo.projectta.ui.equipment
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +15,7 @@ import com.gracielo.projectta.data.source.local.entity.UserEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityListAlatMasakBinding
 import com.gracielo.projectta.ui.ingredients.DataEquipmentAdapter
+import com.gracielo.projectta.ui.setting.SettingActivity
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.util.FunHelper.observeOnce
 import com.gracielo.projectta.viewmodel.UserViewModel
@@ -46,26 +49,23 @@ class ListAlatMasakActivity : AppCompatActivity() {
         dataUser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
         userViewModel.getUser().observeOnce(this){
             dataUser=it
-        }
-
-        apiServices.getAllEquipment {equipment->
-            if(equipment?.code==1){
-                listAllEquipment.addAll(equipment.dataEquipment)
-                for (i in listAllEquipment.indices){
-                    val data = DataEquipmentAdapter(listAllEquipment[i].id,listAllEquipment[i].image,listAllEquipment[i].name,false)
-                    listAllEquipmentAdapters.add(data)
-                }
-                if(dataUser.name!="1"){
+            apiServices.getAllEquipment {equipment->
+                if(equipment?.code==1){
+                    listAllEquipment.addAll(equipment.dataEquipment)
+                    for (i in listAllEquipment.indices){
+                        val data = DataEquipmentAdapter(listAllEquipment[i].id,listAllEquipment[i].image,listAllEquipment[i].name,false)
+                        listAllEquipmentAdapters.add(data)
+                    }
                     setAdapters()
-                }
-                else {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        setAdapters()
-                    },500)
-                }
+//                    Handler(Looper.getMainLooper()).postDelayed({
+//                        adapters.notifyDataSetChanged()
+//                    },500)
 
+                }
             }
         }
+
+
         adapters.onItemClick = {
             it.isSelected=!it.isSelected
             for (i in listAllEquipmentAdapters.indices){
@@ -86,10 +86,32 @@ class ListAlatMasakActivity : AppCompatActivity() {
                 else stringListID+= listId[i]
             }
             apiServices.InsertUpdateuserEquipment(dataUser.id,stringListID){}
-            setResult(Activity.RESULT_OK)
+            val intent = Intent(this, SettingActivity::class.java)
             finish()
+            startActivity(intent)
         }
-
+        binding.imgBackEquipmentList.setOnClickListener {
+            var listId= mutableListOf<String>()
+            for(i in listAllEquipmentAdapters.indices){
+                if(listAllEquipmentAdapters[i].isSelected){listId.add(listAllEquipmentAdapters[i].id)}
+            }
+            var stringListID = ""
+            for (i in listId.indices){
+                if(i < listId.size-1){
+                    stringListID+="${listId[i]}, "
+                }
+                else stringListID+= listId[i]
+            }
+            apiServices.InsertUpdateuserEquipment(dataUser.id,stringListID){}
+            val intent = Intent(this, SettingActivity::class.java)
+            finish()
+            startActivity(intent)
+        }
+    }
+    override fun onBackPressed() {
+        val intent = Intent(this, SettingActivity::class.java)
+        finish()
+        startActivity(intent)
     }
 
     fun setAdapters(){
@@ -103,8 +125,9 @@ class ListAlatMasakActivity : AppCompatActivity() {
                     }
                 }
             }
+            adapters.setData(listAllEquipmentAdapters)
+            adapters.notifyDataSetChanged()
         }
-        adapters.setData(listAllEquipmentAdapters)
-        adapters.notifyDataSetChanged()
+
     }
 }

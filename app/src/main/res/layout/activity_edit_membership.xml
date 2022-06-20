@@ -48,6 +48,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="64dp"
             android:layout_marginTop="4dp"
             android:orientation="vertical">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -88,7 +89,7 @@
                     android:id="@+id/textBasicFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="\u2022 Detect Ingreidients from photo \n\u2022 Get Recipe Recomendation \n\u2022 Save Your Favourite Recipe"
+                    android:text="asd"
                     android:textColor="@color/black"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipBasic"
@@ -130,6 +131,32 @@
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditDetailBasic"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Edit Plan Detail"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtFieldEditBasic">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditDetailBasicPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:textSize="12sp"
+                        android:text="• Detect Ingreidients from photo \n• Get Recipe Recomendation \n asdsad"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <!--                        android:text="• Detect Ingreidients from photo \n• Get Recipe Recomendation-->
+                <!--\n• Save Your Favourite Recipe" -->
                 <ImageView
                     android:id="@+id/imageListBuyMembershipBasic"
                     android:layout_width="100dp"
@@ -182,10 +209,10 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/imageListBuyMembershipLowCarb"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                    app:layout_constraintTop_toBottomOf="@id/textLowCarbFeatures" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/textLowCarbFeatures"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="\u2022 All Basic Plan Features \n\u2022 Get Low Carb Recipe Recomendation"
@@ -207,7 +234,7 @@
                     android:textSize="10sp"
                     app:cornerRadius="100dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                    app:layout_constraintTop_toBottomOf="@id/textLowCarbFeatures" />
 
                 <ImageView
                     android:id="@+id/imageListBuyMembershipLowCarb"
@@ -237,6 +264,30 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditDetailLowCarb"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Edit Plan Detail"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtFieldEditLowCarb">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditDetailLowCarbPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:textSize="12sp"
+                        android:inputType="textMultiLine" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -308,6 +359,31 @@
                         android:ems="10"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditDetailVegetarian"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Edit Plan Detail"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtFieldEditVegetarian">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditDetailVegetarianPlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:textSize="12sp"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:id="@+id/textViewVegetarianFeatures"
                     android:layout_width="wrap_content"
@@ -434,6 +510,30 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtFieldEditDetailAllInOne"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Edit Plan Detail"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtFieldEditAllInOne">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEditDetailAllInOnePlan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:textSize="12sp"
+                        android:inputType="textMultiLine" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView

@@ -253,6 +253,26 @@ class ApiServices {
             }
         )
     }
+    fun searchRecipeWithID(id_user: String,ingredientsParam:String , onResult: (RecipeDetailListResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.searchRecipeWithID(
+            function = "searchRecipe",
+            ingredientsParam = ingredientsParam,
+            id_user = id_user
+        ).enqueue(
+            object : Callback<RecipeDetailListResponse> {
+                override fun onFailure(call: Call<RecipeDetailListResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<RecipeDetailListResponse>, response: Response<RecipeDetailListResponse>) {
+                    val data = response.body()
+                    Log.d("dataapi",data.toString())
+                    onResult(data)
+                }
+            }
+        )
+    }
 
     fun getRecipeDetail(idRecipe:String , onResult: (RecipeDetailResponse?) -> Unit){
         val retrofit = ApiConfig.provideApiService()
@@ -695,6 +715,24 @@ class ApiServices {
             }
         )
     }
+    fun deleteShoppingListUser(id_shopping_list:String,  onResult: (MessageResponse?) -> Unit){
+        val retrofit = ApiConfig.provideApiService()
+        retrofit.deleteShoppingListUser(
+            function = "deleteShoppingListUser",
+            id_shopping_list = id_shopping_list,
+        ).enqueue(
+            object : Callback<MessageResponse> {
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    Log.d("dataapi",t.message.toString())
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                    val data = response.body()
+                    onResult(data)
+                }
+            }
+        )
+    }
     fun getShoppingListUser(id_user: String, onResult: (ShoppingListResponse?) -> Unit){
         val retrofit = ApiConfig.provideApiService()
         retrofit.getShoppingListUser(
@@ -994,12 +1032,13 @@ class ApiServices {
             }
         )
     }
-    fun UpdateMembershipPlan(id_package:String,newPrice:Int, onResult: (MessageResponse?) -> Unit){
+    fun UpdateMembershipPlan(id_package:String,newPrice:Int,description:String, onResult: (MessageResponse?) -> Unit){
         val retrofit = ApiConfig.provideApiService()
         retrofit.UpdateMembershipPlan(
             function = "UpdateMembershipPlan",
             id_package = id_package,
-            price = newPrice
+            price = newPrice,
+            description = description
         ).enqueue(
             object : Callback<MessageResponse> {
                 override fun onFailure(call: Call<MessageResponse>, t: Throwable) {

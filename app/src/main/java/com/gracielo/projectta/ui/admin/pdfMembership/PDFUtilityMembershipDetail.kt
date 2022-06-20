@@ -17,6 +17,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
 import java.lang.NullPointerException
+import java.text.NumberFormat
+import java.util.*
 
 internal object PDFUtilityMembershipDetail {
     private val TAG = PDFUtilityMembershipDetail::class.java.simpleName
@@ -25,9 +27,16 @@ internal object PDFUtilityMembershipDetail {
     private val FONT_SUBTITLE_DATE: Font = Font(Font.FontFamily.TIMES_ROMAN, 12f, Font.NORMAL)
     private val FONT_CELL: Font = Font(Font.FontFamily.TIMES_ROMAN, 12f, Font.NORMAL)
     private val FONT_COLUMN: Font = Font(Font.FontFamily.TIMES_ROMAN, 14f, Font.BOLD)
+    private val FontIncome: Font = Font(Font.FontFamily.TIMES_ROMAN, 16f, Font.BOLD)
     private var reportDate:String = ""
     private var createdDate:String = ""
+    private var jumlahIncome:Int =0
+    val formatternumber = NumberFormat.getCurrencyInstance(Locale.GERMANY)
 
+    @Throws(Exception::class)
+    fun setjumlahincome(jumlah:Int){
+        jumlahIncome=jumlah
+    }
     @Throws(Exception::class)
     fun setReportDate(date:String){
         reportDate = date
@@ -63,6 +72,11 @@ internal object PDFUtilityMembershipDetail {
         addHeader(mContext, document)
         addEmptyLine(document, 1)
         document.add(createDataTable(items))
+        addEmptyLine(document,1)
+        val jumlahIncome = "Total Income : Rp. ${formatternumber.format(jumlahIncome).split(",")[0]}"
+        val paragraph = Paragraph(jumlahIncome, FontIncome)
+        document.add(paragraph)
+
 //        addEmptyLine(document, 2)
 //        document.add(createSignBox())
         document.close()

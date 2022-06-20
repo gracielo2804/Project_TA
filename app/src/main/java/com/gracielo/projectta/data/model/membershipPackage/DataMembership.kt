@@ -10,6 +10,8 @@ data class DataMembership(
     var name: String,
     @SerializedName("price")
     var price: Int,
+    @SerializedName("description")
+    var description: String,
     @SerializedName("updated_at")
     var updatedAt: String
 )

@@ -5,9 +5,6 @@
         android:id="@+id/item_membership_export"
         android:title="Export PDF" />
     <item
-        android:id="@+id/item_membership_new_export"
-        android:title="Export New PDF" />
-    <item
         android:id="@+id/item_membership_edit"
         android:title="Edit Membership Plan" />
     <item

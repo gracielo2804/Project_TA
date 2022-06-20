@@ -2,6 +2,8 @@ package com.gracielo.projectta.ui.recipe
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
@@ -72,164 +74,171 @@ class RecipeSearchResultActivity : AppCompatActivity() {
             minFat=listNutrientParam[9]
         }
 
-        if(paramIngredients!=""){
-            apiServices.searchRecipe(paramIngredients){
-                if(it?.code==1){
-                    dataRecipe= it.data as ArrayList<RecipeDetailResponseItem>
-                    var dataRecipeSearchFilter = mutableListOf<RecipeDetailResponseItem>()
-                    if(dataRecipe.size==0){
-                        pbar.visibility=View.INVISIBLE
-                        binding.rvSearchResult.visibility=View.INVISIBLE
-                        binding.txtEmptySearchRecipeResult.visibility=View.VISIBLE
-                    }
-                    else{
-                        binding.rvSearchResult.visibility=View.VISIBLE
-                        binding.txtEmptySearchRecipeResult.visibility=View.INVISIBLE
-                        dataRecipe.forEach {item->
-                            if(item.image.isNullOrEmpty()){
-                                item.image=""
-                            }
-                            else {
-                                val image = item.image.split("-")
-                                val imageandext =image[1].split(".")
-                                item.image="${image[0]}-636x393.${imageandext[1]}"
-                            }
-                        }
-                        if(listNutrientParam.isNullOrEmpty()){
-
+        Handler(Looper.getMainLooper()).postDelayed({
+            if(paramIngredients!=""){
+                val textAwal =  binding.txtEmptySearchRecipeResult.text.toString()
+                binding.txtEmptySearchRecipeResult.text = "Please Wait..."
+                apiServices.searchRecipeWithID(dataUser.id,paramIngredients){
+                    if(it?.code==1){
+                        dataRecipe= it.data as ArrayList<RecipeDetailResponseItem>
+                        var dataRecipeSearchFilter = mutableListOf<RecipeDetailResponseItem>()
+                        if(dataRecipe.size==0){
+                            binding.txtEmptySearchRecipeResult.text = textAwal
+                            pbar.visibility=View.INVISIBLE
+                            binding.rvSearchResult.visibility=View.INVISIBLE
+                            binding.txtEmptySearchRecipeResult.visibility=View.VISIBLE
                         }
                         else{
+                            binding.txtEmptySearchRecipeResult.text = textAwal
+                            binding.rvSearchResult.visibility=View.VISIBLE
+                            binding.txtEmptySearchRecipeResult.visibility=View.INVISIBLE
                             dataRecipe.forEach {item->
-                                var passCalories=false
-                                var passFat=false
-                                var passCarbohydrate=false
-                                var passSugar=false
-                                var passProtein=false
-                                var StringLog = ""
-                                for(i in item.nutrition!!.nutrients.indices){
-                                    val nutrients = item?.nutrition!!.nutrients[i]
-                                    if(nutrients.name=="Calories"){
-                                        StringLog +="Calories : ${nutrients.amount} - max: $maxCalories - min : $minCalories"
-                                        if(maxCalories>0 && minCalories>0){
-                                            if(nutrients.amount<=maxCalories && nutrients.amount>=minCalories){
+                                if(item.image.isNullOrEmpty()){
+                                    item.image=""
+                                }
+                                else {
+                                    val image = item.image.split("-")
+                                    val imageandext =image[1].split(".")
+                                    item.image="${image[0]}-636x393.${imageandext[1]}"
+                                }
+                            }
+                            if(listNutrientParam.isNullOrEmpty()){
+
+                            }
+                            else{
+                                dataRecipe.forEach {item->
+                                    var passCalories=false
+                                    var passFat=false
+                                    var passCarbohydrate=false
+                                    var passSugar=false
+                                    var passProtein=false
+                                    var StringLog = ""
+                                    for(i in item.nutrition!!.nutrients.indices){
+                                        val nutrients = item?.nutrition!!.nutrients[i]
+                                        if(nutrients.name=="Calories"){
+                                            StringLog +="Calories : ${nutrients.amount} - max: $maxCalories - min : $minCalories"
+                                            if(maxCalories>0 && minCalories>0){
+                                                if(nutrients.amount<=maxCalories && nutrients.amount>=minCalories){
+                                                    passCalories=true
+                                                }
+                                            }
+                                            else if(maxCalories==0 && minCalories==0){
                                                 passCalories=true
                                             }
+                                            else if(maxCalories==0 && minCalories>0){
+                                                if(nutrients.amount>=minCalories)passCalories=true
+                                            }
+                                            else if(maxCalories>=0 && minCalories==0){
+                                                if(nutrients.amount<=maxCalories)passCalories=true
+                                            }
+                                            StringLog +="$passCalories ; "
                                         }
-                                        else if(maxCalories==0 && minCalories==0){
-                                            passCalories=true
-                                        }
-                                        else if(maxCalories==0 && minCalories>0){
-                                            if(nutrients.amount>=minCalories)passCalories=true
-                                        }
-                                        else if(maxCalories>=0 && minCalories==0){
-                                            if(nutrients.amount<=maxCalories)passCalories=true
-                                        }
-                                        StringLog +="$passCalories ; "
-                                    }  
-                                    else if(nutrients.name=="Fat"){
-                                        StringLog +="Fat : ${nutrients.amount} - max: $maxFat - min : $minFat"
-                                        if(maxFat>0 && minFat>0){
-                                            if(nutrients.amount<=maxFat && nutrients.amount>=minFat){
+                                        else if(nutrients.name=="Fat"){
+                                            StringLog +="Fat : ${nutrients.amount} - max: $maxFat - min : $minFat"
+                                            if(maxFat>0 && minFat>0){
+                                                if(nutrients.amount<=maxFat && nutrients.amount>=minFat){
+                                                    passFat=true
+                                                }
+                                            }
+                                            else if(maxFat==0 && minFat==0){
                                                 passFat=true
                                             }
+                                            else if(maxFat==0 && minFat>0){
+                                                if(nutrients.amount>=minFat)passFat=true
+                                            }
+                                            else if(maxFat>=0 && minFat==0){
+                                                if(nutrients.amount<=maxFat)passFat=true
+                                            }
+                                            StringLog +="$passFat ; "
                                         }
-                                        else if(maxFat==0 && minFat==0){
-                                            passFat=true
-                                        }
-                                        else if(maxFat==0 && minFat>0){
-                                            if(nutrients.amount>=minFat)passFat=true
-                                        }
-                                        else if(maxFat>=0 && minFat==0){
-                                            if(nutrients.amount<=maxFat)passFat=true
-                                        }
-                                        StringLog +="$passFat ; "
-                                    }
-                                    else if(nutrients.name=="Carbohydrates"){
-                                        StringLog +="Carbohydrate : ${nutrients.amount} - max: $maxCarbohydrate - min : $minCarbohydrate "
-                                        if(maxCarbohydrate>0 && minCarbohydrate>0){
-                                            if(nutrients.amount<=maxCarbohydrate && nutrients.amount>=minCarbohydrate){
+                                        else if(nutrients.name=="Carbohydrates"){
+                                            StringLog +="Carbohydrate : ${nutrients.amount} - max: $maxCarbohydrate - min : $minCarbohydrate "
+                                            if(maxCarbohydrate>0 && minCarbohydrate>0){
+                                                if(nutrients.amount<=maxCarbohydrate && nutrients.amount>=minCarbohydrate){
+                                                    passCarbohydrate=true
+                                                }
+                                            }
+                                            else if(maxCarbohydrate==0 && minCarbohydrate==0){
                                                 passCarbohydrate=true
                                             }
+                                            else if(maxCarbohydrate==0 && minCarbohydrate>0){
+                                                if(nutrients.amount>=minCarbohydrate)passCarbohydrate=true
+                                            }
+                                            else if(maxCarbohydrate>=0 && minCarbohydrate==0){
+                                                if(nutrients.amount<=maxCarbohydrate)passCarbohydrate=true
+                                            }
+                                            StringLog +="$passCarbohydrate ; "
                                         }
-                                        else if(maxCarbohydrate==0 && minCarbohydrate==0){
-                                            passCarbohydrate=true
-                                        }
-                                        else if(maxCarbohydrate==0 && minCarbohydrate>0){
-                                            if(nutrients.amount>=minCarbohydrate)passCarbohydrate=true
-                                        }
-                                        else if(maxCarbohydrate>=0 && minCarbohydrate==0){
-                                            if(nutrients.amount<=maxCarbohydrate)passCarbohydrate=true
-                                        }
-                                        StringLog +="$passCarbohydrate ; "
-                                    }
 
-                                    else if(nutrients.name=="Sugar"){
-                                        StringLog +="Sugar : ${nutrients.amount} - max: $maxSugar - min : $minSugar "
-                                        if(maxSugar>0 && minSugar>0){
-                                            if(nutrients.amount<=maxSugar && nutrients.amount>=minSugar){
+                                        else if(nutrients.name=="Sugar"){
+                                            StringLog +="Sugar : ${nutrients.amount} - max: $maxSugar - min : $minSugar "
+                                            if(maxSugar>0 && minSugar>0){
+                                                if(nutrients.amount<=maxSugar && nutrients.amount>=minSugar){
+                                                    passSugar=true
+                                                }
+                                            }
+                                            else if(maxSugar==0 && minSugar==0){
                                                 passSugar=true
                                             }
+                                            else if(maxSugar==0 && minSugar>0){
+                                                if(nutrients.amount>=minSugar)passSugar=true
+                                            }
+                                            else if(maxSugar>=0 && minSugar==0){
+                                                if(nutrients.amount<=maxSugar)passSugar=true
+                                            }
+                                            StringLog +="$passSugar ; "
                                         }
-                                        else if(maxSugar==0 && minSugar==0){
-                                            passSugar=true
-                                        }
-                                        else if(maxSugar==0 && minSugar>0){
-                                            if(nutrients.amount>=minSugar)passSugar=true
-                                        }
-                                        else if(maxSugar>=0 && minSugar==0){
-                                            if(nutrients.amount<=maxSugar)passSugar=true
-                                        }
-                                        StringLog +="$passSugar ; "
-                                    }
-                                    else if(nutrients.name=="Protein"){
-                                        StringLog +="Protein : ${nutrients.amount} - max: $maxProtein - min : $minProtein "
-                                        if(maxProtein>0 && minProtein>0){
-                                            if(nutrients.amount<=maxProtein && nutrients.amount>=minProtein){
+                                        else if(nutrients.name=="Protein"){
+                                            StringLog +="Protein : ${nutrients.amount} - max: $maxProtein - min : $minProtein "
+                                            if(maxProtein>0 && minProtein>0){
+                                                if(nutrients.amount<=maxProtein && nutrients.amount>=minProtein){
+                                                    passProtein=true
+                                                }
+                                            }
+                                            else if(maxProtein==0 && minProtein==0){
                                                 passProtein=true
                                             }
+                                            else if(maxProtein==0 && minProtein>0){
+                                                if(nutrients.amount>=minProtein)passProtein=true
+                                            }
+                                            else if(maxProtein>=0 && minProtein==0){
+                                                if(nutrients.amount<=maxProtein)passProtein=true
+                                            }
+                                            StringLog +="$passProtein ; "
                                         }
-                                        else if(maxProtein==0 && minProtein==0){
-                                            passProtein=true
-                                        }
-                                        else if(maxProtein==0 && minProtein>0){
-                                            if(nutrients.amount>=minProtein)passProtein=true
-                                        }
-                                        else if(maxProtein>=0 && minProtein==0){
-                                            if(nutrients.amount<=maxProtein)passProtein=true
-                                        }
-                                        StringLog +="$passProtein ; "
+                                    }
+
+                                    StringLog = "$StringLog ${item.id}"
+                                    Log.d("RecipeNutrients",StringLog)
+
+                                    if(passCalories&&passCarbohydrate&&passFat&&passProtein&&passSugar){
+                                        dataRecipeSearchFilter.add(item)
                                     }
                                 }
-
-                                StringLog = "$StringLog ${item.id}"
-                                Log.d("RecipeNutrients",StringLog)
-
-                                if(passCalories&&passCarbohydrate&&passFat&&passProtein&&passSugar){
-                                    dataRecipeSearchFilter.add(item)
+                                if(dataRecipeSearchFilter.size==0){
+                                    binding.rvSearchResult.visibility=View.INVISIBLE
+                                    binding.txtEmptySearchRecipeResult.visibility=View.VISIBLE
                                 }
+                                dataRecipe.clear()
+                                dataRecipe.addAll(dataRecipeSearchFilter)
                             }
-                            if(dataRecipeSearchFilter.size==0){
-                                binding.rvSearchResult.visibility=View.INVISIBLE
-                                binding.txtEmptySearchRecipeResult.visibility=View.VISIBLE
-                            }
-                            dataRecipe.clear()
-                            dataRecipe.addAll(dataRecipeSearchFilter)
+                            pbar.visibility=View.INVISIBLE
+                            adapters.setData(dataRecipe)
                         }
-                        pbar.visibility=View.INVISIBLE
-                        adapters.setData(dataRecipe)
                     }
                 }
-            }
 
 
-            listIngredientsStringSplit=paramIngredients.split(",+").toMutableList()
-            for (i in listIngredientsStringSplit.indices){
-                if(i < listIngredientsStringSplit.size-1){
-                    listIngredientsSearch+="${listIngredientsStringSplit[i]}, "
+                listIngredientsStringSplit=paramIngredients.split(",+").toMutableList()
+                for (i in listIngredientsStringSplit.indices){
+                    if(i < listIngredientsStringSplit.size-1){
+                        listIngredientsSearch+="${listIngredientsStringSplit[i]}, "
+                    }
+                    else listIngredientsSearch+= listIngredientsStringSplit[i]
                 }
-                else listIngredientsSearch+= listIngredientsStringSplit[i]
             }
-        }
+        },500)
+
 
         adapters.onItemClick = {
             apiServices.insertUserSearchRecipe(dataUser.id,it.id.toString(),listIngredientsSearch,it.title){}

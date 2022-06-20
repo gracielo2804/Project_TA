@@ -60,6 +60,7 @@ class EditProfileActivity : AppCompatActivity() {
 
 
 
+
         binding.btnEditAge.setOnClickListener {
             if(binding.btnEditAge.text=="Edit"){
                 binding.btnEditAge.text="Save"
@@ -107,12 +108,11 @@ class EditProfileActivity : AppCompatActivity() {
             val intentt = Intent(this,ChangePasswordSettingActivity::class.java)
             startActivity(intentt)
         }
-
-
-        Handler(Looper.getMainLooper()).postDelayed({
-
-        },500)
-
+        binding.imgBackEditProfile.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            finish()
+            startActivity(intent)
+        }
 
         dropdown.onItemClickListener = AdapterView.OnItemClickListener{
                 adapterView, view, i, l ->
@@ -121,6 +121,11 @@ class EditProfileActivity : AppCompatActivity() {
             updateDataUser()
 
         }
+    }
+    override fun onBackPressed() {
+        val intent = Intent(this, SettingActivity::class.java)
+        finish()
+        startActivity(intent)
     }
 
     fun updateDataUser(){

@@ -28,9 +28,11 @@ import java.util.*
 class DataIterator(private val file: File) : Iterator<Transaction<NamedItem>> {
 
     companion object {
-
         private val LOGGER = LoggerFactory.getLogger(DataIterator::class.java)
+    }
 
+    init{
+        LOGGER.debug("test")
     }
 
     /**

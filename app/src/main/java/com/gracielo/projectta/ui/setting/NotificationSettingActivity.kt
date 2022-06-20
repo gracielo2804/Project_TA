@@ -53,14 +53,12 @@ class NotificationSettingActivity : AppCompatActivity() {
                 Toast.makeText(this,"Reminder Activated", Toast.LENGTH_SHORT).show()
                 daily.setDailyReminder(this)
                 var editor = sharedPreference.edit()
-                editor.remove("Breakfast")
                 editor.putBoolean("Notification",true)
                 editor.commit()
             } else{
                 Toast.makeText(this,"Reminder Canceled", Toast.LENGTH_SHORT).show()
                 daily.cancelAlarm(this)
                 var editor = sharedPreference.edit()
-                editor.remove("Breakfast")
                 editor.putBoolean("Notification",false)
                 editor.commit()
             }

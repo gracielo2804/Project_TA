@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gracielo.projectta.R
 import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
@@ -39,7 +40,7 @@ import java.io.File
 import java.util.concurrent.Executors
 
 
-class ShoppingListActivity : AppCompatActivity(),PDFUtilityShoppingList.OnDocumentClose {
+class ShoppingListActivity : AppCompatActivity(),PDFUtilityShoppingList.OnDocumentClose,ShoppingListCallback {
 
     private lateinit var binding : ActivityShoppingListBinding
     lateinit var viewModel: UserViewModel
@@ -53,17 +54,18 @@ class ShoppingListActivity : AppCompatActivity(),PDFUtilityShoppingList.OnDocume
     private var listIngredientsSearch = mutableMapOf<String,List<String>>()
     private var listIngredientsDetailSearch = mutableMapOf<String,List<String>>()
 
-    private val adapters = ShoppingListRecipeAdapter()
+    private val adapters = ShoppingListRecipeAdapter(this)
     private var apiServices = ApiServices()
     private var listRecipeName = ArrayList<String>()
     private var listImageRecipe = mutableListOf<ByteArray>()
+    lateinit var rvShoppingList : RecyclerView
 //    private var shoppingList = mutableMapOf<String,List<String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShoppingListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val rvShoppingList = binding.rvShoppingList
+        rvShoppingList = binding.rvShoppingList
         viewModel = obtainUserViewModel(this)
         shoppingListViewModel = obtainShoppingListViewModel(this)
         viewModel.getUser().observe(this){ it ->
@@ -336,8 +338,6 @@ class ShoppingListActivity : AppCompatActivity(),PDFUtilityShoppingList.OnDocume
             binding.rvShoppingList.visibility = View.VISIBLE
             adapters.setData(listRecipe,listRecipeName,listIngredientsSearch,listIngredientsDetailSearch)
         }
-
-
     }
 
     private fun obtainUserViewModel(activity: AppCompatActivity): UserViewModel {
@@ -452,6 +452,55 @@ class ShoppingListActivity : AppCompatActivity(),PDFUtilityShoppingList.OnDocume
     override fun onPDFDocumentClose(file: File?) {
         Toast.makeText(this,"Pdf Created",Toast.LENGTH_SHORT).show()
         renderPdf(this,file!!)
+    }
+
+    override fun onButtonDeleteClicked(recipeData: ShoppingListEntity) {
+        apiServices.deleteShoppingListUser(recipeData.id_shopping_list){
+            if(it?.code==1){
+                shoppingListViewModel.delete(recipeData)
+                Toast.makeText(this,"Recipe Deleted From Shopping List",Toast.LENGTH_SHORT).show()
+                recreate()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    shoppingListViewModel.getShoppingList(idUser).observeOnce(this){
+                        if(!it.isNullOrEmpty()){
+                            Log.d("Entity Shopping List",it.toString())
+                            rvShoppingList.visibility= View.VISIBLE
+                            binding.txtShoppingEmpty.visibility=View.INVISIBLE
+                            Log.d("ShoppingList",it[0].ingredients_list)
+                            for(j in it.indices){
+                                listRecipe.add(it[j])
+                                var rawString = it[j].ingredients_list
+                                val listIngredientsSplit = mutableListOf<String>()
+                                val listIngredientsDetailSplit = mutableListOf<String>()
+                                var ingredientsSplit = rawString.split(";-")
+                                ingredientsSplit.forEach {its->
+                                    val ingredientsValue = its.split(" /? ")
+                                    listIngredientsSplit.add(ingredientsValue[0])
+                                    listIngredientsDetailSplit.add(ingredientsValue[1])
+                                }
+                                listIngredients.put(it[j].recipe_name,listIngredientsSplit)
+                                listIngredientsDetail.put(it[j].recipe_name,listIngredientsDetailSplit)
+                                Log.d("Link Image","https://spoonacular.com/recipeImages/${it[j].id_recipe}-556x370.jpg")
+
+                                var bitmap:Bitmap?=null
+                                Executors.newSingleThreadExecutor().execute {
+                                    bitmap = Glide
+                                        .with(this).asBitmap()
+                                        .load("https://spoonacular.com/recipeImages/${it[j].id_recipe}-556x370.jpg")
+                                        .submit(100, 100).get()
+                                    val baos = ByteArrayOutputStream()
+                                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                                    val imageInByte: ByteArray = baos.toByteArray()
+                                    listImageRecipe.add(imageInByte)
+                                }
+                            }
+                        }
+                    }
+                },500)
+            }
+        }
+
+
     }
 }
 

@@ -97,8 +97,6 @@ class SettingActivity : AppCompatActivity() {
             binding.birthdayUser.text="${it.age} years old"
             binding.textExpired.text=expired[0]
             binding.emailUser.text=it.email
-
-
             refreshEquipment()
             shoppingListViewModel.getShoppingList(it.id).observeOnce(this){list->
                 listShoppingListUser.addAll(list)
@@ -109,17 +107,15 @@ class SettingActivity : AppCompatActivity() {
             layoutManager  = LinearLayoutManager(this@SettingActivity,LinearLayoutManager.HORIZONTAL,false)
             adapter=adapterequipment
         }
-        Handler(Looper.getMainLooper()).postDelayed({
-
-        },500)
-        binding.btnEditEquipmentsSelected.setOnClickListener {
-            val intent = Intent(this,ListAlatMasakActivity::class.java)
-            startActivity(intent)
-        }
-        var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("equipment","masuk finish")
                 refreshEquipment()
             }
+        }
+        binding.btnEditEquipmentsSelected.setOnClickListener {
+            val intent = Intent(this,ListAlatMasakActivity::class.java)
+            resultLauncher.launch(intent)
         }
         rv_setting = binding.rvSettingList
         Handler(Looper.getMainLooper()).postDelayed({
@@ -143,8 +139,6 @@ class SettingActivity : AppCompatActivity() {
         binding.btnEditProfile.setOnClickListener{
             val intent = Intent(this,EditProfileActivity::class.java)
             resultLauncher.launch(intent)
-
-
         }
 
         adapters.onItemClick = {
@@ -266,7 +260,6 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun refreshEquipment(){
-        Log.d("equipmentListSetting","masuk")
         apiServices.getAllEquipment {equipment->
             if(equipment?.code==1) {
                 listAllEquipment.addAll(equipment.dataEquipment)
@@ -296,21 +289,24 @@ class SettingActivity : AppCompatActivity() {
                                 listAllEquipmentAdapters.add(dataeqp)
                             }
                         }
+                        adapterequipment.setData(listAllEquipmentAdapters)
+                        adapterequipment.notifyDataSetChanged()
+                        binding.rvListEquipmentUser.visibility = View.VISIBLE
                     }
                     else if(it?.code==-2){
                         binding.rvListEquipmentUser.visibility= View.INVISIBLE
                         binding.noItemEquipmentUser.visibility= View.VISIBLE
                     }
                 }
-
             }
         }
-        Handler(Looper.getMainLooper()).postDelayed({
-            Log.d("equipmentListSetting",listAllEquipmentAdapters.size.toString())
-            adapterequipment.setData(listAllEquipmentAdapters)
-            adapterequipment.notifyDataSetChanged()
-            Log.d("equipmentListSetting",adapterequipment.itemCount.toString())
-        },500)
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            Log.d("equipmentListSetting",listAllEquipmentAdapters.size.toString())
+//            adapterequipment.setData(listAllEquipmentAdapters)
+//            adapterequipment.notifyDataSetChanged()
+//            binding.rvListEquipmentUser.visibility = View.VISIBLE
+//            Log.d("equipmentListSetting",adapterequipment.itemCount.toString())
+//        },500)
     }
 
 

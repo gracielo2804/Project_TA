@@ -148,4 +148,7 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-support:0.3.0'
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.3.0'
     implementation 'org.tensorflow:tensorflow-lite:2.7.0'
+
+    implementation 'com.toastfix:toastcompatwrapper:1.2.0'
+
 }

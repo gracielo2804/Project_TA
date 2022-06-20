@@ -12,7 +12,7 @@ import com.gracielo.projectta.data.source.local.entity.ShoppingListEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ItemShoppingListBinding
 
-class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.ViewHolder>() {
+class ShoppingListRecipeAdapter(private val callback : ShoppingListCallback): RecyclerView.Adapter<ShoppingListRecipeAdapter.ViewHolder>() {
 
     private var listRecipe = ArrayList<ShoppingListEntity>()
     private var listRecipeName = ArrayList<String>()
@@ -48,6 +48,7 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
         private val binding = ItemShoppingListBinding.bind(itemView)
         private val recipeName = binding.txtRecipeNameShoppingList
         val rvIngredients = binding.rvIngredientsShoppingList
+        val buttondelete= binding.btnDelete
         val ingredientsAdapter = ShoppingListIngredientsAdapter()
 
         fun bindRecipe(recipeData: ShoppingListEntity, position: Int) {
@@ -59,6 +60,9 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_placeholder)
                 .into(binding.imageViewRecipeShoppingList)
+            buttondelete.setOnClickListener {
+                callback.onButtonDeleteClicked(recipeData)
+            }
         }
         init{
             binding.root.setOnClickListener{onItemClick?.invoke(listRecipeName[bindingAdapterPosition])}
@@ -82,5 +86,8 @@ class ShoppingListRecipeAdapter: RecyclerView.Adapter<ShoppingListRecipeAdapter.
             adapter = holder.ingredientsAdapter
         }
     }
+}
 
+interface ShoppingListCallback{
+    fun onButtonDeleteClicked(recipeData: ShoppingListEntity)
 }

@@ -117,6 +117,14 @@ interface ApiEndPoint {
 
     @POST("master.php")
     @FormUrlEncoded
+    fun searchRecipeWithID(
+        @Field("function") function: String = "searchRecipe",
+        @Field("ingredientsParam") ingredientsParam: String,
+        @Field("id_users") id_user: String,
+    ): Call<RecipeDetailListResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
     fun getRecipeDetail(
         @Field("function") function: String = "getRecipeDetail",
         @Field("id_recipe") id_recipe: String
@@ -279,6 +287,13 @@ interface ApiEndPoint {
 
     @POST("master.php")
     @FormUrlEncoded
+    fun deleteShoppingListUser(
+        @Field("function") function: String = "deleteShoppingListUser",
+        @Field("id_shopping_list")id_shopping_list:String,
+    ): Call<MessageResponse>
+
+    @POST("master.php")
+    @FormUrlEncoded
     fun getShoppingListUser(
         @Field("function") function: String = "getShoppingListUser",
         @Field("id_user")id_user:String,
@@ -418,6 +433,7 @@ interface ApiEndPoint {
         @Field("function") function: String = "UpdateMembershipPlan",
         @Field("id_package") id_package: String,
         @Field("price") price: Int,
+        @Field("description") description: String,
     ): Call<MessageResponse>
 
 

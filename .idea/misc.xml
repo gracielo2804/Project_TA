@@ -37,7 +37,8 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout-w936dp/activity_form_input.xml" value="0.12431693989071038" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout-w936dp/activity_test_login.xml" value="0.1133879781420765" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout-w936dp/card_grid_layout_user_most_search.xml" value="0.67" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_home.xml" value="0.2" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_add_nutrients.xml" value="0.25" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_home.xml" value="0.23464912280701755" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_ingredient.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_recipe.xml" value="0.2" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_admin_user_report.xml" value="0.12447916666666667" />
@@ -52,7 +53,7 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_forgot_password_otp_activity.xml" value="0.33" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_form_input.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_history_home.xml" value="0.12552083333333333" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_home.xml" value="0.1" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_ingridients_list.xml" value="0.3093645484949833" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_list_alat_masak.xml" value="0.18" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_login.xml" value="0.25" />
@@ -67,7 +68,7 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_search_recipe_history.xml" value="0.17074275362318841" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_selected_ingredients.xml" value="0.1" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_setting.xml" value="0.3178869323447637" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_shopping_list.xml" value="0.2" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_shopping_list.xml" value="0.12972972972972974" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_shopping_list_detail.xml" value="0.17074275362318841" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_test_login.xml" value="0.33" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/activity_test_upload_image.xml" value="0.18" />
@@ -85,7 +86,7 @@
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/ingridients_item_list_checked.xml" value="0.25" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/ingridients_item_list_delete.xml" value="0.1" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/item_gender.xml" value="0.18" />
-        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/item_shopping_list.xml" value="0.33" />
+        <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/item_shopping_list.xml" value="0.18" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/item_shopping_list_ingredients.xml" value="0.5" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/layout_text.xml" value="0.3554301833568406" />
         <entry key="..\:/_TugasAkhir/Project_TA/app/src/main/res/layout/list_equipment_items.xml" value="0.2" />

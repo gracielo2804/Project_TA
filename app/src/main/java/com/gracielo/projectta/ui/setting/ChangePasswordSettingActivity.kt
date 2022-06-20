@@ -3,6 +3,7 @@ package com.gracielo.projectta.ui.setting
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gracielo.projectta.data.source.local.entity.UserEntity
@@ -99,22 +100,27 @@ class ChangePasswordSettingActivity : AppCompatActivity() {
 
         binding.btnSubmitChangePassword.setOnClickListener {
             if(checkConPassword && passCurPassword && passConpassword && passPassword){
-                Handler(Looper.getMainLooper()).postDelayed({
-                    apiServices.changePassword(
-                        binding.currentPasswordChangePass.text.toString(),
-                        binding.newPasswordChangePass.text.toString(),
-                        dataUser.id
-                    ){
-                        if(it?.code==1){
-                            binding.txtFieldCurrentPasswordChange.error = null
-                            Toast.makeText(this,"Password Updated",Toast.LENGTH_SHORT).show()
-                            finish()
-                        }
-                        else if(it?.code==-2){
-                            binding.txtFieldCurrentPasswordChange.error = "Wrong Password"
-//                            Toast.makeText(this,"Incorrect Password",Toast.LENGTH_SHORT).show()
-                        }
+                binding.btnSubmitChangePassword.isClickable=false
+                binding.pbarChangePass.visibility = View.VISIBLE
+                apiServices.changePassword(
+                    binding.currentPasswordChangePass.text.toString(),
+                    binding.newPasswordChangePass.text.toString(),
+                    dataUser.id
+                ){
+                    binding.btnSubmitChangePassword.isClickable=true
+                    binding.pbarChangePass.visibility = View.GONE
+                    if(it?.code==1){
+                        binding.txtFieldCurrentPasswordChange.error = null
+                        Toast.makeText(this,"Password Updated",Toast.LENGTH_SHORT).show()
+                        finish()
                     }
+                    else if(it?.code==-2){
+                        binding.txtFieldCurrentPasswordChange.error = "Wrong Password"
+//                            Toast.makeText(this,"Incorrect Password",Toast.LENGTH_SHORT).show()
+                    }
+                }
+                Handler(Looper.getMainLooper()).postDelayed({
+
                 },1000)
             }
         }

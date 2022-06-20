@@ -71,85 +71,615 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <View
+      android:id="@+id/viewpemisahheader"
       android:layout_width="match_parent"
       android:layout_height="5dp"
       android:background="@drawable/below_shadow"
       app:layout_constraintBottom_toBottomOf="@id/headerAdminHome"
       app:layout_constraintStart_toStartOf="parent" />
 
-  <TextView
-      android:id="@+id/reportMembershipSubscriptionTitle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:text="Membership Subscription Report"
-      android:textColor="@color/black"
-      android:textStyle="bold"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/headerAdminHome" />
-
-  <TextView
-      android:id="@+id/reportMembershipSubscriptionDate"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:text="All Time"
-      android:textColor="@color/black"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/reportMembershipSubscriptionTitle" />
-
-  <com.google.android.material.button.MaterialButton
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      android:id="@+id/btnSelectDateMembershipSubscriptionReport"
-      style="@style/Widget.MaterialComponents.Button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:backgroundTint="@color/colorPrimary"
-      android:text="Select Date"
-      app:cornerRadius="100dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/headerAdminHome" />
-
-  <View
-      android:id="@+id/pemisahReportChart"
-      android:layout_width="match_parent"
-      android:layout_height="2dp"
-      android:layout_marginHorizontal="16dp"
-      android:layout_marginVertical="4dp"
-      android:background="#f2f2f2"
-      android:paddingHorizontal="-16dp"
-      app:layout_constraintTop_toBottomOf="@id/btnSelectDateMembershipSubscriptionReport" />
-
-  <!--  <com.github.mikephil.charting.charts.HorizontalBarChart-->
-  <!--      android:id="@+id/horizontalbarChart_view"-->
-  <!--      android:layout_width="match_parent"-->
-  <!--      android:layout_height="0dp"-->
-  <!--      app:layout_constraintBottom_toBottomOf="parent"-->
-  <!--      app:layout_constraintStart_toStartOf="parent"-->
-  <!--      app:layout_constraintTop_toBottomOf="@id/headerAdminHome" />-->
-
-  <com.github.mikephil.charting.charts.BarChart
-      android:id="@+id/barChart_view"
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      android:layout_marginTop="8dp"
-      app:layout_constraintBottom_toTopOf="@id/admin_bottom_menu"
-      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/pemisahReportChart"
-      app:layout_constraintVertical_bias="1.0" />
+      app:layout_constraintBottom_toTopOf="@id/admin_bottom_menu"
+      app:layout_constraintTop_toBottomOf="@id/viewpemisahheader">
+    <TextView
+        android:id="@+id/reportMembershipSubscriptionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Membership Subscription Report"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-  <de.codecrafters.tableview.SortableTableView xmlns:table="http://schemas.android.com/apk/res-auto"
-      android:id="@+id/tableViewAdminHome"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      app:layout_constraintBottom_toTopOf="@id/admin_bottom_menu"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/pemisahReportChart"
-      table:tableView_headerColor="@color/colorPrimary"
-      table:tableView_columnCount="6" />
+    <TextView
+        android:id="@+id/reportMembershipSubscriptionDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="All Time"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reportMembershipSubscriptionTitle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:id="@+id/btnSelectDateMembershipSubscriptionReport"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Select Date"
+        app:cornerRadius="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:id="@+id/pemisahReportChart"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="4dp"
+        android:background="#f2f2f2"
+        android:paddingHorizontal="-16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectDateMembershipSubscriptionReport" />
+
+    <!--  <com.github.mikephil.charting.charts.HorizontalBarChart-->
+    <!--      android:id="@+id/horizontalbarChart_view"-->
+    <!--      android:layout_width="match_parent"-->
+    <!--      android:layout_height="0dp"-->
+    <!--      app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--      app:layout_constraintStart_toStartOf="parent"-->
+    <!--      app:layout_constraintTop_toBottomOf="@id/headerAdminHome" />-->
+
+    <TextView
+        android:id="@+id/txtincome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="4dp"
+        android:textSize="15sp"
+        android:text="Total Income :  "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pemisahReportChart"
+        />
+    <TextView
+        android:id="@+id/txttotalincome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="4dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:text="Rp. 000.000"
+        app:layout_constraintStart_toEndOf="@id/txtincome"
+        app:layout_constraintTop_toBottomOf="@+id/pemisahReportChart"
+        />
+
+    <ScrollView
+        android:id="@+id/scrollview_membership_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txttotalincome">
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/layoutConstraintLaporan"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="0dp"
+              android:paddingBottom="8dp"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_weight="1"
+              android:background="@drawable/corner_radius"
+              android:backgroundTint="#FFEF82">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corner_image"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageAllInOneReport"
+                  android:layout_width="47dp"
+                  android:layout_height="44dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/all_in_one" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtAllInOneReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:text="All in One Plan"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+            <TextView
+                android:id="@+id/txtJumlahBeliAllInOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="serif"
+                android:text="12"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtAllInOneReportTitle" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif"
+                android:text="Transaction"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/txtJumlahBeliAllInOne"
+                app:layout_constraintTop_toBottomOf="@+id/txtAllInOneReportTitle" />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_weight="1"
+              android:paddingBottom="8dp"
+              android:background="@drawable/corner_radius"
+              android:backgroundTint="#D5A27B">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutImageLowCarb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corner_image"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageLowCarbReport"
+                  android:layout_width="47dp"
+                  android:layout_height="44dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/carb" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtLowCarbReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:text="Low Carb Plan"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutImageLowCarb" />
+
+            <TextView
+                android:id="@+id/txtJumlahBeliLowCarb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="serif"
+                android:text="12"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtLowCarbReportTitle" />
+
+            <TextView
+                android:id="@+id/txtSatuanJumlahBeliLowCarb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif"
+                android:text="Transaction"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/txtJumlahBeliLowCarb"
+                app:layout_constraintTop_toBottomOf="@+id/txtLowCarbReportTitle" />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_weight="1"
+              android:paddingBottom="8dp"
+              android:background="@drawable/corner_radius"
+              android:backgroundTint="#84FF6F">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutVegetarianImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corner_image"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageVegetarianReport"
+                  android:layout_width="47dp"
+                  android:layout_height="44dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/vege" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtVegetarianReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:text="Vegetarian Plan"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutVegetarianImage" />
+
+            <TextView
+                android:id="@+id/txtJumlahBeliVegetarian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="serif"
+                android:text="12"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtVegetarianReportTitle" />
+
+            <TextView
+                android:id="@+id/textViewVege"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif"
+                android:text="Transaction"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/txtJumlahBeliVegetarian"
+                app:layout_constraintTop_toBottomOf="@+id/txtVegetarianReportTitle" />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_weight="1"
+              android:paddingBottom="8dp"
+              android:background="@drawable/corner_radius"
+              android:backgroundTint="#CFCFCF">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutImageBasic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corner_image"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageBasicReport"
+                  android:layout_width="47dp"
+                  android:layout_height="44dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/basic_plan" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtBasicReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:text="Basic Plan"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutImageBasic" />
+
+            <TextView
+                android:id="@+id/txtJumlahBeliBasic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="serif"
+                android:text="12"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtBasicReportTitle" />
+
+            <TextView
+                android:id="@+id/txtSatuanJumlahBeliBasic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif"
+                android:text="Transaction"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/txtJumlahBeliBasic"
+                app:layout_constraintTop_toBottomOf="@+id/txtBasicReportTitle" />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout1">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_weight="1"
+              android:paddingBottom="8dp"
+              android:background="@drawable/corner_radius"
+              android:backgroundTint="#FFDF3B">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutPendingImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corner_image"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imagePendingReport"
+                  android:layout_width="47dp"
+                  android:layout_height="44dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/pending" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtPendingReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:text="Pending"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutPendingImage" />
+
+            <TextView
+                android:id="@+id/txtJumlahBeliPending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="serif"
+                android:text="12"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPendingReportTitle" />
+
+            <TextView
+                android:id="@+id/textViewPending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif"
+                android:text="Transaction"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/txtJumlahBeliPending"
+                app:layout_constraintTop_toBottomOf="@+id/txtPendingReportTitle" />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_weight="1"
+              android:paddingBottom="8dp"
+              android:background="@drawable/corner_radius"
+              android:backgroundTint="#FF6A6A">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutImageFailed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corner_image"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageFailedReport"
+                  android:layout_width="47dp"
+                  android:layout_height="44dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/error" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtFailedReportTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:text="Failed Plan"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutImageFailed" />
+
+            <TextView
+                android:id="@+id/txtJumlahBeliFailed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="serif"
+                android:text="12"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtFailedReportTitle" />
+
+            <TextView
+                android:id="@+id/txtSatuanJumlahBeliFailed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif"
+                android:text="Transaction"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/txtJumlahBeliFailed"
+                app:layout_constraintTop_toBottomOf="@+id/txtFailedReportTitle" />
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:visibility="gone"
+        android:id="@+id/barChart_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txttotalincome"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <de.codecrafters.tableview.SortableTableView xmlns:table="http://schemas.android.com/apk/res-auto"
+        android:visibility="visible"
+        android:id="@+id/tableViewAdminHome"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txttotalincome"
+        table:tableView_headerColor="@color/colorPrimary"
+        table:tableView_columnCount="6" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
   <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/admin_bottom_menu"

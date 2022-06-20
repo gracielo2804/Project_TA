@@ -7,11 +7,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gracielo.projectta.R
+import com.gracielo.projectta.data.model.listEquipment.DataEquipment
 import com.gracielo.projectta.data.model.recipe.detail.RecipeDetailResponseItem
 import com.gracielo.projectta.data.model.recipe.search.MissedIngredient
 import com.gracielo.projectta.data.model.recipe.search.RecipeResponseItem
@@ -30,6 +34,8 @@ import com.gracielo.projectta.data.source.local.entity.UserNutrientsEntity
 import com.gracielo.projectta.data.source.remote.network.ApiServices
 import com.gracielo.projectta.databinding.ActivityRecipeDetailBinding
 import com.gracielo.projectta.ui.homepage.HomeActivity
+import com.gracielo.projectta.ui.ingredients.DataEquipmentAdapter
+import com.gracielo.projectta.ui.setting.dataEquipmentAdapter
 import com.gracielo.projectta.util.FunHelper
 import com.gracielo.projectta.util.FunHelper.observeOnce
 import com.gracielo.projectta.viewmodel.FavRecipeViewModel
@@ -58,11 +64,14 @@ class RecipeDetailActivity : AppCompatActivity() {
     var hasMissing = false
     lateinit var datauser:UserEntity
     var isFavorite=false
+    var listAllEquipment = ArrayList<DataEquipment>()
+    var listUserEquipment = ArrayList<String>()
+
     companion object
     {
         private const val NOTIFICATION_ID = 1
-        private const val CHANNEL_ID = "channel_01"
-        private const val CHANNEL_NAME = "TugasAkhir channel"
+        const val CHANNEL_ID = "channel_01"
+        const val CHANNEL_NAME = "TugasAkhir channel"
     }
 
 
@@ -71,6 +80,8 @@ class RecipeDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityRecipeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.layoutDetail.visibility = View.INVISIBLE
+        binding.pbarDetailPage.visibility = View.VISIBLE
         datauser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
 
         viewModel = obtainUserViewModel(this)
@@ -100,8 +111,58 @@ class RecipeDetailActivity : AppCompatActivity() {
 
                     }
                 }
-
             }
+
+            apiServices.getAllEquipment {equipment->
+                if(equipment?.code==1) {
+                    listAllEquipment.addAll(equipment.dataEquipment)
+                    for (i in listAllEquipment.indices) {
+                        val data = DataEquipmentAdapter(
+                            listAllEquipment[i].id,
+                            listAllEquipment[i].image,
+                            listAllEquipment[i].name,
+                            false
+                        )
+                    }
+                    apiServices.getUserSelectedEquipment(datauser.id){
+                        if(it?.code==1){
+                            val dataEquipmentUser = it.dataEquipment
+                            var listIdEquipmentUser = dataEquipmentUser.ListIDEquipment.split(", ")
+                            for (i in listIdEquipmentUser.indices){
+                                for (j in listAllEquipment.indices){
+                                    if(listIdEquipmentUser[i]==listAllEquipment[j].id)listUserEquipment.add(listAllEquipment[j].name)
+                                }
+                            }
+
+                            apiServices.getEquipmentFromRecipe(idRecipe){response->
+                                val adapters = DataRecipeEquipmentAdapter()
+                                var listName= mutableListOf<String>()
+                                var listImage= mutableListOf<String>()
+                                if(response!=null){
+                                    for (i in response.data.equipment.indices){
+                                        listName.add(response.data.equipment[i].name)
+                                        listImage.add(response.data.equipment[i].image)
+                                    }
+                                }
+                                if(listName.size>0){
+                                    adapters.setData(listName,listImage,listUserEquipment)
+                                    binding.rvListEquipmentRecipe.apply {
+                                        layoutManager  = LinearLayoutManager(this@RecipeDetailActivity,LinearLayoutManager.HORIZONTAL,false)
+                                        adapter=adapters
+                                    }
+                                    binding.noItemEquipmentRecipe.visibility = View.INVISIBLE
+                                }
+                                else{
+                                    binding.rvListEquipmentRecipe.visibility = View.GONE
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
         }
 
         binding.imageFavouriteRecipe.setOnClickListener {
@@ -161,8 +222,13 @@ class RecipeDetailActivity : AppCompatActivity() {
         if(intent.hasExtra("idrecipe")){
             Log.d("IDRECIPEDETAIL","Masuk acitivty detail")
             idRecipe = intent.getStringExtra("idrecipe").toString()
+
+
+
             apiServices.getRecipeDetail(idRecipe){
                 if(it?.code==1){
+                    binding.layoutDetail.visibility = View.VISIBLE
+                    binding.pbarDetailPage.visibility = View.INVISIBLE
                     recipeDataDetail= it.data
                     apiServices.insertRecipeDetail(recipeDataDetail!!) {}
 
@@ -338,6 +404,8 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         apiServices.getRecipeDetail(idRecipe){
             if(it?.code==1){
+                binding.layoutDetail.visibility = View.VISIBLE
+                binding.pbarDetailPage.visibility = View.INVISIBLE
                 recipeDataDetail= it.data
                 apiServices.insertRecipeDetail(recipeDataDetail!!) {}
 

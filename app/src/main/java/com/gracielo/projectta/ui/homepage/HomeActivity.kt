@@ -101,7 +101,7 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
             PackageManager.DONT_KILL_APP
         )
-        daily.setDailyReminder(this)
+//        daily.setDailyReminder(this)
 
         dataUser = UserEntity("1","1","1","1","0","",1,1,"1",1.1,1,1)
         viewModel = obtainViewModel(this@HomeActivity)
@@ -109,37 +109,58 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
         favRecipeViewModel = helper.obtainFavRecipeViewModel(this)
         viewModel.getUser().observeOnce(this) {
             dataUser = it
+            observeuserNutrient()
             binding.headerHomePageTitle.text = "Hi, ${dataUser.name}"
             shoppingListViewModel.getShoppingList(it.id).observeOnce(this@HomeActivity){list->
                 listShoppingListUser.addAll(list)
             }
-            favRecipeViewModel.getFavRecipe(it.id).observe(this){
-                if (it != null) {
-                    when (it.status) {
-                        Status.SUCCESS -> {
-                            listFavRecipe.clear()
-                            val dataFavorite = it.data
-                            listFavRecipe.addAll(dataFavorite!!)
-                            binding.txtEmptyFavouriteHome.visibility=View.INVISIBLE
-                            binding.rvListFavouriteRecipe.visibility=View.VISIBLE
-                            var adapters = FavouriteRecipeAdapter(this)
-                            adapters.setData(listFavRecipe)
-                            binding.rvListFavouriteRecipe.apply {
-                                layoutManager = LinearLayoutManager(this@HomeActivity,
-                                    LinearLayoutManager.HORIZONTAL,false)
-                                adapter=adapters
+            if(dataUser.tipe=="0"){
+                binding.txtEmptyFavouriteHome.visibility=View.VISIBLE
+                binding.rvListFavouriteRecipe.visibility=View.INVISIBLE
+            }
+            else{
+                favRecipeViewModel.getFavRecipe(it.id).observe(this){
+                    if (it != null) {
+                        when (it.status) {
+                            Status.SUCCESS -> {
+                                listFavRecipe.clear()
+                                val dataFavorite = it.data
+                                listFavRecipe.addAll(dataFavorite!!)
+                                if(listFavRecipe.size==0){
+                                    binding.txtEmptyFavouriteHome.visibility=View.VISIBLE
+                                    binding.rvListFavouriteRecipe.visibility=View.INVISIBLE
+                                }
+                                else{
+                                    binding.txtEmptyFavouriteHome.visibility=View.INVISIBLE
+                                    binding.rvListFavouriteRecipe.visibility=View.VISIBLE
+                                    var adapters = FavouriteRecipeAdapter(this)
+                                    adapters.setData(listFavRecipe)
+                                    binding.rvListFavouriteRecipe.apply {
+                                        layoutManager = LinearLayoutManager(this@HomeActivity,
+                                            LinearLayoutManager.HORIZONTAL,false)
+                                        adapter=adapters
+                                    }
+                                }
+
+
                             }
-                        }
-                        Status.ERROR -> {
-                            Toast.makeText(
-                                this@HomeActivity,
-                                "Check your internet connection",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Status.ERROR -> {
+                                Toast.makeText(
+                                    this@HomeActivity,
+                                    "Check your internet connection",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }
             }
+            binding.btnAddNutrientHome.setOnClickListener {
+                val intentt = Intent(this,AddNutrientsActivity::class.java)
+                startActivity(intentt)
+                finish()
+            }
+
             Handler(Looper.getMainLooper()).postDelayed({
                 for (i in listShoppingListUser.indices){
                     shoppingListViewModel.delete(listShoppingListUser[i])
@@ -175,14 +196,14 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
             },1000)
     //            binding.txtDashboardKalori.text = "0/${dataUser?.kalori}"
         }
-        if(dataUser.height==1){
-            Handler(Looper.getMainLooper()).postDelayed({
-                observeuserNutrient()
-            },500)
-        }
-        else {
-            observeuserNutrient()
-        }
+//        if(dataUser.height==1){
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                observeuserNutrient()
+//            },500)
+//        }
+//        else {
+//            observeuserNutrient()
+//        }
 
 
         val fabAdd = binding.fabAdd
@@ -246,6 +267,7 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
                                                 Confidence()
                                             )
                                             val sortedRules = ruleSet?.sort(sortingRules)
+                                            Log.d("ItemsetApriori",sortedRules.toString())
                                             sortedRules?.forEach {
                                                 var itemsetTemp = it.body.toString()
                                                 var predictTemp = it.head.toString()
@@ -306,14 +328,23 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
                                             aprioriListItemPredict.forEach{
                                                 Log.d("ListItemSetPredictApriori ",it)
                                             }
-                                            for (i in 0..2){
-                                                if(dataUser.tipe=="1"){searchRecommendedBasic(i)}
-                                                else if(dataUser.tipe=="2"){searchRecommendedVege(i)}
-                                                else if(dataUser.tipe=="3"){searchRecommendedLowCarb(i)}
-                                                else if(dataUser.tipe=="4"){searchRecommendedLowCarb(i);searchRecommendedVege(i)}
-
-//                                Log.d("Data Recommendation",recipeRecommendation.toString())
+                                            if(aprioriListItemPredict.size>=3){
+                                                for (i in 0..2){
+                                                    if(dataUser.tipe=="1"){searchRecommendedBasic(i)}
+                                                    else if(dataUser.tipe=="2"){searchRecommendedVege(i)}
+                                                    else if(dataUser.tipe=="3"){searchRecommendedLowCarb(i)}
+                                                    else if(dataUser.tipe=="4"){searchRecommendedLowCarb(i);searchRecommendedVege(i)}
+                                                }
                                             }
+                                            else{
+                                                for (i in aprioriListItemPredict.indices){
+                                                    if(dataUser.tipe=="1"){searchRecommendedBasic(i)}
+                                                    else if(dataUser.tipe=="2"){searchRecommendedVege(i)}
+                                                    else if(dataUser.tipe=="3"){searchRecommendedLowCarb(i)}
+                                                    else if(dataUser.tipe=="4"){searchRecommendedLowCarb(i);searchRecommendedVege(i)}
+                                                }
+                                            }
+
                                             Handler(Looper.getMainLooper()).postDelayed({
                                                 var recipeRecommendationTemp = mutableListOf<RecipeRecommendation>()
                                                 var recipeRecommendationTempIsi = recipeRecommendation
@@ -352,6 +383,7 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
                                                             //Vegetarian
                                                             for(a in recipeRecommendationTempIsi.indices){
                                                                 if(recipeRecommendationTempIsi[a].tipe=="Vegetarian"){
+                                                                    Log.d("datarecipevegerec","masuk cek if vegerec")
                                                                     var checkRemove=false
                                                                     var removeindex=0
                                                                     for(b in recipeRecommendationTemp.indices){
@@ -387,8 +419,9 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
                                                     }
                                                     Log.d("recipeRec", recipeRecommendationTemp.toString())
                                                 }
-                                                recipeRecommendation.clear()
-                                                recipeRecommendation.addAll(recipeRecommendationTemp)
+//                                                recipeRecommendation.clear()
+//                                                recipeRecommendation.addAll(recipeRecommendationTemp)
+
                                                 recomendationAdapter.setData(recipeRecommendation)
                                                 recomendationAdapter.notifyDataSetChanged()
                                             },4000)
@@ -423,6 +456,8 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
                         recipe.image!!,"Basic"
                     )
                     recipeRecommendation.add(newRecommend)
+                    recomendationAdapter.setData(recipeRecommendation)
+                    recomendationAdapter.notifyDataSetChanged()
                 }
             }
 //            if(it?.dataSearchRecommendation?.id!=null){
@@ -444,6 +479,8 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
                         recipe.image!!,"Low Carb"
                     )
                     recipeRecommendation.add(newRecommend)
+                    recomendationAdapter.setData(recipeRecommendation)
+                    recomendationAdapter.notifyDataSetChanged()
                 }
             }
 //            if(it?.dataSearchRecommendation?.id!=null){
@@ -458,14 +495,24 @@ class HomeActivity : AppCompatActivity(), RecommendedItemCallback,FavouriteItemC
     fun searchRecommendedVege(index:Int){
         apiServices.searchRecipeVegetarianRecommendation(aprioriListItemPredict[index]){
             if(it?.code==1){
+                Log.d("datarecipevegerec",it.dataSearchRecommendation.toString())
                 val dataRecomendation = it.dataSearchRecommendation
-                dataRecomendation.forEach {recipe->
-                    val newRecommend= RecipeRecommendation(
-                        recipe.id!!,recipe.title!!,
-                        recipe.image!!,"Vegetarian"
-                    )
-                    recipeRecommendation.add(newRecommend)
+                if(dataRecomendation.isNotEmpty()){
+                    Log.d("datarecipevegerec","masuk not empty")
+                    dataRecomendation.forEach {recipe->
+                        val newRecommend= RecipeRecommendation(
+                            recipe.id!!,recipe.title!!,
+                            recipe.image!!,"Vegetarian"
+                        )
+                        recipeRecommendation.add(newRecommend)
+                        recomendationAdapter.setData(recipeRecommendation)
+                        recomendationAdapter.notifyDataSetChanged()
+                    }
                 }
+                else{
+                    Log.d("datarecipevegerec","masuk empty")
+                }
+
             }
         }
     }
